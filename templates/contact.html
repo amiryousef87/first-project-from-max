@@ -1,7 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-3xl font-bold mb-6">Contact Us</h1>
-<p>Email: info@maxcompany.com</p>
-<p>Phone: +98 123 456 7890</p>
-<p>Address: Mashhad, Iran</p>
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 mt-10">
+  <h1 class="text-4xl font-extrabold text-center mb-8 text-indigo-600">Contact Us</h1>
+  
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Map Section -->
+    <div class="w-full h-80 rounded-lg overflow-hidden shadow-inner">
+      <iframe
+        src="https://www.google.com/maps?q=پیروزی+5,+Mashhad,+Iran&output=embed"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+    <!-- Contact Form -->
+    <form class="bg-indigo-50 p-6 rounded-lg shadow-inner space-y-4">
+      <input type="text" placeholder="Your Name" class="w-full p-3 border border-indigo-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400">
+      <input type="tel" placeholder="Your Phone" class="w-full p-3 border border-indigo-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400">
+      <textarea placeholder="Your Message" class="w-full p-3 border border-indigo-300 rounded h-32 focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+      <button type="submit" class="w-full bg-indigo-600 text-white p-3 font-semibold rounded hover:bg-indigo-700 transition-colors">Send Message</button>
+    </form>
+  </div>
+
+  <!-- Info Section Below -->
+  <div class="mt-6 text-center space-y-2" >
+    <p class="text-lg font-medium" dir="ltr">Email: <a href="mailto:info@maxcompany.com" class="text-indigo-500 hover:underline">info@maxcompany.com</a></p>
+    <p class="text-lg font-medium" dir="ltr">Phone: <a href="tel:+981234567890" class="text-indigo-500 hover:underline">+98 994 208 2136</a></p>
+    <p class="text-lg font-medium" dir="ltr">Address: piroozi 5, Mashhad, Iran</p>
+  </div>
+</div>
 {% endblock %}
