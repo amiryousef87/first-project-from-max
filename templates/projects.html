@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="text-center py-16 px-6 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl shadow-md mb-10">
+  <h1 class="text-4xl md:text-5xl font-bold mb-4">
+    Our Projects
+  </h1>
+  <p class="text-lg md:text-xl mb-6">
+    Here at Max Company, we build cutting-edge applications using **Python, Flask, React.js**, and Full-Stack technologies. Explore some of our highlighted projects below.
+  </p>
+</section>
+</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% for p in projects %}
+    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-lg transition">
+      <h3 class="text-xl font-semibold mb-2 text-[var(--primary)]">{{ p.title }}</h3>
+      <p class="mb-2">{{ p.desc }}</p>
+      <p class="text-sm text-gray-500"><strong>Technologies:</strong> {{ p.tech }}</p>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

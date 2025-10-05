@@ -1,5 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2 class="text-2xl font-bold mb-4">{{ _("About Max") }}</h2>
-  <p>{{ _("Max is a software company focused on modern Python web apps and great UX.") }}</p>
+
+<!-- Hero Section -->
+<section class="py-16 px-6 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl shadow-md mb-10 text-center">
+  <h1 class="text-4xl md:text-5xl font-bold mb-4">About Max Company</h1>
+  <p class="text-lg md:text-xl mb-6">
+    Max Company is a leading software and web development company delivering **cutting-edge digital solutions** with speed, precision, and unmatched quality.
+  </p>
+  <a href="{{ url_for('projects') }}" class="bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition">
+    Explore Our Projects
+  </a>
+</section>
+
+<!-- Core Strengths -->
+<section class="py-12">
+  <h2 class="text-3xl font-bold text-[var(--primary)] mb-8 text-center">Our Core Strengths</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-lg transition">
+      <h3 class="text-xl font-semibold mb-3 text-[var(--primary)]">Fast Delivery</h3>
+      <p>We deliver projects **on time**, efficiently, and with zero compromise on quality. Your deadlines are our priority.</p>
+    </div>
+    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-lg transition">
+      <h3 class="text-xl font-semibold mb-3 text-[var(--primary)]">Modern Technology</h3>
+      <p>Using the latest frameworks like **Python, Flask, Tailwind, and AI-powered tools**, we create highly interactive and robust applications.</p>
+    </div>
+    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-lg transition">
+      <h3 class="text-xl font-semibold mb-3 text-[var(--primary)]">Expert Team</h3>
+      <p>Our team consists of **experienced developers and designers** who focus on UX, UI, and scalable solutions for your business.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-16 px-6 bg-[var(--card)] rounded-xl shadow-md mt-12">
+  <h2 class="text-3xl font-bold text-center mb-6 text-[var(--primary)]">Why Choose Max?</h2>
+  <ul class="space-y-4 max-w-3xl mx-auto text-lg">
+    <li>✅ **Rapid project execution** without sacrificing quality or design.</li>
+    <li>✅ Innovative solutions tailored to **your business needs**.</li>
+    <li>✅ **Modern, responsive designs** that work seamlessly on all devices.</li>
+    <li>✅ Full support from development to deployment and maintenance.</li>
+    <li>✅ Commitment to **exceeding client expectations** every time.</li>
+  </ul>
+</section>
+
+<!-- Call to Action -->
+<section class="text-center py-14 mt-12">
+  <h2 class="text-3xl font-bold mb-4">Ready to Start Your Project?</h2>
+  <p class="text-lg mb-6">Contact Max Company today and let us bring your digital vision to life—**fast, reliable, and beautiful**.</p>
+  <a href="{{ url_for('projects') }}" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+    See Our Work
+  </a>
+</section>
+
 {% endblock %}

@@ -1,29 +1,114 @@
-<!doctype html>
-<html lang="{{ current_lang }}" dir="{{ dir }}">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{ title }} - Max</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <script>
+      // Simple dropdown toggle
+      function toggleDropdown(id) {
+        document.getElementById(id).classList.toggle("hidden");
+      }
+    </script>
   </head>
-  <body id="body-root">
-    <header class="p-4 shadow-sm">
-      <div class="container mx-auto flex items-center justify-between">
-        <a href="{{ url_for('index') }}" class="text-xl font-semibold">Max — Programming</a>
-        <div class="flex items-center gap-3">
-          <a href="{{ url_for('index') }}?lang=en">EN</a>
-          <a href="{{ url_for('index') }}?lang=fa">فارسی</a>
-          <button id="theme-toggle" class="px-3 py-1 rounded border">تم</button>
+  <body id="body-root" class="transition-colors duration-300">
+
+    <!-- Navbar -->
+    <header class="bg-[var(--primary)] text-white shadow-md">
+      <div class="container mx-auto flex items-center justify-between py-4 px-6">
+
+        <!-- Logo -->
+        <a href="{{ url_for('index') }}" class="text-2xl font-bold hover:text-gray-200 transition">
+          Max — Programming
+        </a>
+
+        <!-- Menu Centered -->
+        <nav class="flex-1 flex justify-center items-center gap-6 relative">
+          <a href="{{ url_for('index') }}" class="hover:text-gray-200 transition">Home</a>
+
+          <!-- Dropdown Services -->
+          <div class="relative">
+            <button onclick="toggleDropdown('services-dropdown')" class="hover:text-gray-200 transition">
+              Services ▼
+            </button>
+            <div id="services-dropdown" class="absolute top-full left-0 mt-1 bg-white text-black rounded shadow-lg hidden w-40">
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Web Development</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">UI/UX Design</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">AI & Automation</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Full-Stack Solutions</a>
+            </div>
+          </div>
+
+          <a href="{{ url_for('about') }}" class="hover:text-gray-200 transition">About</a>
+          <a href="{{ url_for('projects') }}" class="hover:text-gray-200 transition">Projects</a>
+
+          <!-- Dropdown Company -->
+          <div class="relative">
+            <button onclick="toggleDropdown('company-dropdown')" class="hover:text-gray-200 transition">
+              Company ▼
+            </button>
+            <div id="company-dropdown" class="absolute top-full left-0 mt-1 bg-white text-black rounded shadow-lg hidden w-40">
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Team</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Careers</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Testimonials</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Blog</a>
+            </div>
+          </div>
+
+          <a href=#" class="hover:text-gray-200 transition">Contact</a>
+        </nav>
+
+        <!-- Language & Theme -->
+        <div class="flex items-center gap-4">
+          <a href="{{ url_for('index') }}?lang=en" class="px-2 py-1 rounded hover:bg-white hover:text-[var(--primary)] transition">EN</a>
+          <button id="theme-toggle" class="px-3 py-1 rounded border border-white hover:bg-white hover:text-[var(--primary)] transition">
+            Theme
+          </button>
         </div>
       </div>
     </header>
-    <main class="container mx-auto py-8">
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-10">
       {% block content %}{% endblock %}
     </main>
-    <footer class="p-4 mt-10 text-center">
-      © {{ _("Max Company") }} - 2025
+
+    <!-- Footer -->
+    <footer class="bg-[var(--primary)] text-white mt-16">
+      <div class="container mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- About -->
+        <div>
+          <h3 class="font-bold text-lg mb-3">Max Company</h3>
+          <p class="text-sm">Max is a modern software company specializing in Python, Flask, React.js, and Full-Stack solutions with exceptional UX/UI.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="font-bold text-lg mb-3">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="{{ url_for('index') }}" class="hover:underline">Home</a></li>
+            <li><a href="{{ url_for('about') }}" class="hover:underline">About</a></li>
+            <li><a href="{{ url_for('projects') }}" class="hover:underline">Projects</a></li>
+            <li><a href="{{ url_for('contact') }}" class="hover:underline">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h3 class="font-bold text-lg mb-3">Contact</h3>
+          <p class="text-sm">Email: info@maxcompany.com</p>
+          <p class="text-sm">Phone: +98 123 456 7890</p>
+          <p class="text-sm">Address: Mashhad, Iran</p>
+        </div>
+      </div>
+
+      <div class="border-t border-white/30 mt-6 pt-4 text-center text-sm">
+        © 2025 Max Company. All rights reserved.
+      </div>
     </footer>
+
     <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
   </body>
 </html>

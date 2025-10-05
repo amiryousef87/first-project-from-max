@@ -3,11 +3,11 @@ function applyTheme(theme) {
   if (theme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     localStorage.setItem('theme', 'dark');
-    toggle.textContent = 'روشن';
+    toggle.textContent = 'light';
   } else {
     document.documentElement.removeAttribute('data-theme');
     localStorage.setItem('theme', 'light');
-    toggle.textContent = 'تاریک';
+    toggle.textContent = 'dark';
   }
 }
 const saved = localStorage.getItem('theme') || 'light';
