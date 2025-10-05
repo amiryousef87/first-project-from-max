@@ -1,0 +1,18 @@
+:root {
+  --bg: #f8fbff;
+  --text: #0f172a;
+  --primary: #0ea5e9;
+  --card: #ffffff;
+}
+[data-theme="dark"] {
+  --bg: #071025;
+  --text: #e6f0fb;
+  --primary: #60a5fa;
+  --card: #082033;
+}
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+a { color: var(--primary); }
+[dir="rtl"] .container { direction: rtl; }
