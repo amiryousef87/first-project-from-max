@@ -1,36 +1,79 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 mt-10">
-  <h1 class="text-4xl font-extrabold text-center mb-8 text-indigo-600">Contact Us</h1>
-  
-  <div class="grid md:grid-cols-2 gap-8">
-    <!-- Map Section -->
-    <div class="w-full h-80 rounded-lg overflow-hidden shadow-inner">
-      <iframe
-        src="https://www.google.com/maps?q=پیروزی+5,+Mashhad,+Iran&output=embed"
-        width="100%"
-        height="100%"
-        style="border:0;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
+{% extends "base.html" %} {% block content %}
 
-    <!-- Contact Form -->
-    <form class="bg-indigo-50 p-6 rounded-lg shadow-inner space-y-4">
-      <input type="text" placeholder="Your Name" class="w-full p-3 border border-indigo-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400">
-      <input type="tel" placeholder="Your Phone" class="w-full p-3 border border-indigo-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400">
-      <textarea placeholder="Your Message" class="w-full p-3 border border-indigo-300 rounded h-32 focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
-      <button type="submit" class="w-full bg-indigo-600 text-white p-3 font-semibold rounded hover:bg-indigo-700 transition-colors">Send Message</button>
-    </form>
+<!-- Contact Hero -->
+<section
+  class="text-center py-16 px-6 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white rounded-2xl shadow-2xl mb-12"
+>
+  <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
+    {{ _("Get in Touch with Max Company") }}
+  </h1>
+  <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">
+    {{ _("Have a project in mind or just want to say hello? Fill out the form
+    below or find us at our office in Mashhad.") }}
+  </p>
+</section>
+
+<!-- Contact Section -->
+<div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 px-6">
+  <!-- Map -->
+  <div class="w-full h-96 rounded-2xl overflow-hidden shadow-lg">
+    <iframe
+      src="https://www.google.com/maps?q=کلاهدوز+10,+Mashhad,+Iran&output=embed"
+      width="100%"
+      height="100%"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="rounded-2xl"
+    ></iframe>
   </div>
 
-  <!-- Info Section Below -->
-  <div class="mt-6 text-center space-y-2" >
-    <p class="text-lg font-medium" dir="ltr">Email: <a href="mailto:info@maxcompany.com" class="text-indigo-500 hover:underline">info@maxcompany.com</a></p>
-    <p class="text-lg font-medium" dir="ltr">Phone: <a href="tel:+981234567890" class="text-indigo-500 hover:underline">+98 994 208 2136</a></p>
-    <p class="text-lg font-medium" dir="ltr">Address: piroozi 5, Mashhad, Iran</p>
-  </div>
+  <!-- Contact Form -->
+  <form class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
+    <h2 class="text-2xl font-bold text-indigo-700 mb-4">
+      {{ _("Send Us a Message") }}
+    </h2>
+    <input
+      type="text"
+      placeholder="{{ _('Your Name') }}"
+      class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+    />
+    <input
+      type="tel"
+      placeholder="{{ _('Your Phone') }}"
+      class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+    />
+    <textarea
+      placeholder="{{ _('Your Message') }}"
+      class="w-full p-4 border border-gray-300 rounded-lg h-36 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+    ></textarea>
+    <button
+      type="submit"
+      class="w-full bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-indigo-700 transition-colors text-lg"
+    >
+      {{ _("Send Message") }}
+    </button>
+  </form>
 </div>
+
+<!-- Info Section -->
+<div class="max-w-4xl mx-auto mt-12 text-center space-y-3">
+  <p class="text-lg font-medium">
+    <strong>Email:</strong>
+    <a href="mailto:info@maxcompany.com" class="text-indigo-500 hover:underline"
+      >info@maxcompany.com</a
+    >
+  </p>
+  <p class="text-lg font-medium">
+    <strong>Phone:</strong>
+    <a href="tel:+989942082136" class="text-indigo-500 hover:underline"
+      >+98 994 208 2136</a
+    >
+  </p>
+  <p class="text-lg font-medium">
+    <strong>Address:</strong> Piroozi 5, Mashhad, Iran
+  </p>
+</div>
+
 {% endblock %}

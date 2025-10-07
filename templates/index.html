@@ -1,71 +1,228 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <!-- Hero Section -->
-<section class="text-center py-16 px-6 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl shadow-md mb-10">
-  <h1 class="text-4xl md:text-5xl font-bold mb-4">
-    {{ _("Welcome to Max Company") }}
+<section
+  class="text-center py-20 px-6 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white rounded-2xl shadow-2xl mb-16"
+>
+  <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+    {{ _("We Build The Future Of Digital Intelligence") }}
   </h1>
-  <p class="text-lg md:text-xl mb-6">
-    {{ _("We craft intelligent, fast, and beautiful digital solutions with Python, Flask, and AI.") }}
+  <p class="text-lg md:text-2xl max-w-3xl mx-auto mb-8 opacity-90">
+    {{ _("At Max Company, we combine innovation, technology, and design to
+    deliver high-performance solutions trusted by global brands.") }}
   </p>
-  <a href="{{ url_for('projects') }}" class="bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition">
-    {{ _("View Our Work") }}
+  <a
+    href="{{ url_for('projects') }}"
+    class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow hover:bg-gray-100 transition text-lg"
+  >
+    {{ _("Explore Our Projects") }}
   </a>
 </section>
 
+<!-- Company Overview -->
+<section class="py-12 text-center">
+  <h2 class="text-3xl font-bold text-[var(--primary)] mb-6">
+    {{ _("About Max Company") }}
+  </h2>
+  <p class="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
+    {{ _("Founded by passionate engineers and designers, Max Company has been at
+    the forefront of digital transformation. From scalable web systems to
+    advanced AI solutions, our team has successfully completed over 150+
+    projects for clients across industries.") }}
+  </p>
+</section>
+
 <!-- Services Section -->
-<section class="py-10">
-  <h2 class="text-3xl font-bold text-center mb-8 text-[var(--primary)]">{{ _("Our Services") }}</h2>
+<section class="py-14 bg-gray-50 rounded-xl shadow-inner">
+  <h2 class="text-3xl font-bold text-center mb-12 text-[var(--primary)]">
+    {{ _("Our Expertise") }}
+  </h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-md transition">
-      <h3 class="text-xl font-semibold mb-3">{{ _("Web Development") }}</h3>
-      <p>{{ _("Building responsive, modern web apps with Flask, Tailwind, and Vue.js.") }}</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+    <!-- Web Development -->
+    <div
+      class="p-8 border rounded-2xl bg-white shadow-sm hover:shadow-lg transition flex flex-col items-start gap-4"
+    >
+      <svg
+        class="w-12 h-12 text-blue-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 7h18M3 12h18M3 17h18"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold mb-1 text-indigo-700">
+        {{ _("Web Development") }}
+      </h3>
+      <p class="text-gray-600">
+        {{ _("High-performance web platforms built with Flask, Vue.js, and
+        modern APIs — optimized for speed and scalability.") }}
+      </p>
     </div>
 
-    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-md transition">
-      <h3 class="text-xl font-semibold mb-3">{{ _("UI/UX Design") }}</h3>
-      <p>{{ _("Designing clean, user-friendly interfaces focused on experience and accessibility.") }}</p>
+    <!-- UI/UX Design -->
+    <div
+      class="p-8 border rounded-2xl bg-white shadow-sm hover:shadow-lg transition flex flex-col items-start gap-4"
+    >
+      <svg
+        class="w-12 h-12 text-pink-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 20l9-8-9-8-9 8 9 8z"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold mb-1 text-indigo-700">
+        {{ _("UI/UX Design") }}
+      </h3>
+      <p class="text-gray-600">
+        {{ _("Human-centered design that blends aesthetics with seamless
+        usability — creating digital experiences users love.") }}
+      </p>
     </div>
 
-    <div class="p-6 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-md transition">
-      <h3 class="text-xl font-semibold mb-3">{{ _("AI & Automation") }}</h3>
-      <p>{{ _("Integrating smart automation and AI models to enhance performance and decision-making.") }}</p>
+    <!-- AI & Automation -->
+    <div
+      class="p-8 border rounded-2xl bg-white shadow-sm hover:shadow-lg transition flex flex-col items-start gap-4"
+    >
+      <svg
+        class="w-12 h-12 text-purple-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 19V6h13v13H9zM3 6h6v13H3V6z"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold mb-1 text-indigo-700">
+        {{ _("AI & Automation") }}
+      </h3>
+      <p class="text-gray-600">
+        {{ _("Custom machine learning models and smart automations that boost
+        performance, precision, and decision-making.") }}
+      </p>
     </div>
   </div>
 </section>
 
 <!-- Featured Projects Section -->
-<section class="py-16">
-  <h2 class="text-3xl font-bold text-center mb-8 text-[var(--primary)]">{{ _("Featured Projects") }}</h2>
+<section class="py-20">
+  <h2 class="text-3xl font-bold text-center mb-12 text-[var(--primary)]">
+    {{ _("Flagship Projects") }}
+  </h2>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="p-5 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-md transition">
-      <h3 class="text-xl font-semibold mb-2 text-[var(--primary)]">{{ _("E-Commerce Platform") }}</h3>
-      <p>{{ _("Custom online store built with Flask backend and modern responsive UI.") }}</p>
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto px-6"
+  >
+    <!-- E-Commerce Intelligence Suite -->
+    <div
+      class="p-6 border rounded-2xl shadow-sm bg-white hover:shadow-md transition flex flex-col gap-4"
+    >
+      <svg
+        class="w-10 h-10 text-green-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 3h18v18H3V3z"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold mb-1 text-indigo-700">
+        {{ _("E-Commerce Intelligence Suite") }}
+      </h3>
+      <p class="text-gray-600">
+        {{ _("Next-gen online retail system integrated with AI analytics and
+        automated inventory management.") }}
+      </p>
     </div>
 
-    <div class="p-5 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-md transition">
-      <h3 class="text-xl font-semibold mb-2 text-[var(--primary)]">{{ _("AI-Powered Dashboard") }}</h3>
-      <p>{{ _("Business analytics dashboard powered by machine learning insights.") }}</p>
+    <!-- AI-Powered Business Dashboard -->
+    <div
+      class="p-6 border rounded-2xl shadow-sm bg-white hover:shadow-md transition flex flex-col gap-4"
+    >
+      <svg
+        class="w-10 h-10 text-orange-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 17v-6h6v6H9z M3 21h18V3H3v18z"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold mb-1 text-indigo-700">
+        {{ _("AI-Powered Business Dashboard") }}
+      </h3>
+      <p class="text-gray-600">
+        {{ _("Real-time data visualization and forecasting powered by deep
+        learning algorithms.") }}
+      </p>
     </div>
 
-    <div class="p-5 border rounded-xl shadow-sm bg-[var(--card)] hover:shadow-md transition">
-      <h3 class="text-xl font-semibold mb-2 text-[var(--primary)]">{{ _("Portfolio Website") }}</h3>
-      <p>{{ _("Elegant personal site designed with Tailwind and Flask.") }}</p>
+    <!-- Corporate Portfolio Platform -->
+    <div
+      class="p-6 border rounded-2xl shadow-sm bg-white hover:shadow-md transition flex flex-col gap-4"
+    >
+      <svg
+        class="w-10 h-10 text-red-500"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold mb-1 text-indigo-700">
+        {{ _("Corporate Portfolio Platform") }}
+      </h3>
+      <p class="text-gray-600">
+        {{ _("A professional multi-language portfolio system designed for
+        corporate visibility and impact.") }}
+      </p>
     </div>
   </div>
 </section>
 
 <!-- Call to Action -->
-<section class="text-center py-14 bg-[var(--card)] rounded-xl shadow mt-12">
-  <h2 class="text-3xl font-bold mb-4">{{ _("Let’s build something amazing together") }}</h2>
-  <p class="text-lg mb-6">{{ _("Contact us to start your next digital project with Max Company.") }}</p>
-  <a href="{{ url_for('about') }}" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
-    {{ _("Get in Touch") }}
+<section
+  class="text-center py-16 bg-gradient-to-r from-indigo-700 to-blue-600 text-white rounded-2xl shadow-lg mt-12"
+>
+  <h2 class="text-4xl font-bold mb-4">{{ _("Partner With Max Company") }}</h2>
+  <p class="text-lg max-w-2xl mx-auto mb-8 opacity-90">
+    {{ _("Join dozens of forward-thinking companies that trust Max Company to
+    design, build, and scale their digital ecosystems.") }}
+  </p>
+  <a
+    href="{{ url_for('about') }}"
+    class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow hover:bg-gray-100 transition text-lg"
+  >
+    {{ _("Start Your Project") }}
   </a>
 </section>
 
 {% endblock %}
-

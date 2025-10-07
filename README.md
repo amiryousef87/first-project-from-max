@@ -45,12 +45,15 @@ Install dependencies:
 bash
 Copy code
 pip install -r requirements.txt
+pip install flask-babel
+
 Running the Application
 To start the Flask development server:
 
 bash
 Copy code
 python app.py
+flask run
 Once the server starts, open your browser and go to:
 
 cpp
