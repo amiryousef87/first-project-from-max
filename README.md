@@ -13,14 +13,14 @@ It includes multiple pages such as the homepage, about page, project showcase, a
 ---
 
 ## Technologies Used
-
-- Python 3.10+
-- Flask
-- Jinja2 Templates
-- Tailwind CSS
-- HTML5 / CSS3
-- Gunicorn (for production deployment)
-
+____________________________________________
+- Python 3.10+                              |
+- Flask                                     |
+- Jinja2 Templates                          |
+- Tailwind CSS                              |
+- HTML5 / CSS3                              |
+- Gunicorn (for production deployment)      |
+____________________________________________|
 ---
 
 ## Installation
