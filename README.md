@@ -1,8 +1,6 @@
 # first-project-from-max
 
 
-# First Project from Max
-
 This project is a modern Flask-based website built by Max, focused on clean design, speed, and practical web development using Python and Flask. It demonstrates how to create a well-structured web app with templates, static files, and modular routing.
 
 ---
