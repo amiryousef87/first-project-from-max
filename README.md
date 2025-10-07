@@ -1,84 +1,81 @@
-# First Project from Max
+این فایل ریدمی درست و تمیز هست
+# first-project-from-max
 
-A modern Flask-based website built by Max, designed with clean UI, fast performance, and practical Python web development in mind. This project demonstrates a structured Flask app with templates, static files, and modular routing.
+
+This project is a modern Flask-based website built by Max, focused on clean design, speed, and practical web development using Python and Flask. It demonstrates how to create a well-structured web app with templates, static files, and modular routing.
 
 ---
 
 ## Overview
 
-This project provides a professional example of a simple but extensible web application using Flask and Tailwind CSS.
-It includes multiple pages: homepage, about page, project showcase, and a contact form.
+The purpose of this project is to provide a professional example of a simple but extensible web application using Flask and Tailwind CSS.  
+It includes multiple pages such as the homepage, about page, project showcase, and a contact form.
 
 ---
 
 ## Technologies Used
 
-* Python 3.10+
-* Flask
-* Jinja2 Templates
-* Tailwind CSS
-* HTML5 / CSS3
-* Gunicorn (for production deployment)
+- Python 3.10+                              
+- Flask                                     
+- Jinja2 Templates                          
+- Tailwind CSS                              
+- HTML5 / CSS3                              
+- Gunicorn (for production deployment)      
 
 ---
 
 ## Installation
 
-Follow these steps to run the project locally:
+To set up the project on your local machine, follow these steps:
 
-1. **Clone the repository**
-
+1. Clone the repository:
    ```bash
    git clone https://github.com/YOUR_USERNAME/first-project-from-max.git
    cd first-project-from-max
-   ```
+Create and activate a virtual environment (recommended):
 
-2. **Create and activate a virtual environment**
+bash
+Copy code
+python -m venv venv
+venv\Scripts\activate     # On Windows
+source venv/bin/activate  # On macOS/Linux
+Install dependencies:
 
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate     # Windows
-   source venv/bin/activate  # macOS/Linux
-   ```
+bash
+Copy code
+pip install -r requirements.txt
+pip install flask-babel
 
-3. **Install dependencies**
+Running the Application
+To start the Flask development server:
 
-   ```bash
-   pip install -r requirements.txt
-   pip install flask-babel
-   ```
-
----
-
-## Running the Application
-
-**Development server**:
-
-```bash
+bash
+Copy code
 python app.py
 flask run
-```
+Once the server starts, open your browser and go to:
 
-Open your browser at [http://127.0.0.1:5000](http://127.0.0.1:5000)
+cpp
+Copy code
+http://127.0.0.1:5000
+For production, use Gunicorn:
 
-**Production (with Gunicorn)**:
-
-```bash
+bash
+Copy code
 gunicorn app:app
-```
 
----
+<br>
+<h4>Home</h4>
+<img width="1903" height="837" alt="image" src="https://github.com/user-attachments/assets/e6463bea-bd9c-4d24-8dad-1bf04717c796" />
+<br>
+<h4>About</h4>
+<img width="1903" height="822" alt="image" src="https://github.com/user-attachments/assets/6753e4a7-4e95-4de0-b67e-6c4e7521df7d" />
+<br>
+<h4>Projects</h4>
+<img width="1903" height="780" alt="image" src="https://github.com/user-attachments/assets/36e84fdf-2497-482b-87aa-4b721072de5e" />
+<br>
+<h4>contact</h4>
+<img width="1903" height="953" alt="image" src="https://github.com/user-attachments/assets/cef2272b-c6e1-40a3-b1b2-a4b27c34b87c" />
 
-## Screenshots
 
-**Home**
-[https://private-user-images.githubusercontent.com/177040748/498231505-e6463bea-bd9c-4d24-8dad-1bf04717c796.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxNTA1LWU2NDYzYmVhLWJkOWMtNGQyNC04ZGFkLTFiZjA0NzE3Yzc5Ni5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00OTc4NmM1ZjZmNGQxNGVmMTQwMzc0MTk5MTJhMmM3YWY4MjY0YWRmNTdkNjQ4Y2Y0MzRkYjJkZjA3NjQyY2YyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.dMJbvFACGlU-W57IO85RXISC5aa8IRyGoNFlU7PIjbQ](https://private-user-images.githubusercontent.com/177040748/498231505-e6463bea-bd9c-4d24-8dad-1bf04717c796.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxNTA1LWU2NDYzYmVhLWJkOWMtNGQyNC04ZGFkLTFiZjA0NzE3Yzc5Ni5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00OTc4NmM1ZjZmNGQxNGVmMTQwMzc0MTk5MTJhMmM3YWY4MjY0YWRmNTdkNjQ4Y2Y0MzRkYjJkZjA3NjQyY2YyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.dMJbvFACGlU-W57IO85RXISC5aa8IRyGoNFlU7PIjbQ)
 
-**About**
-[https://private-user-images.githubusercontent.com/177040748/498231297-6753e4a7-4e95-4de0-b67e-6c4e7521df7d.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxMjk3LTY3NTNlNGE3LTRlOTUtNGRlMC1iNjdlLTZjNGU3NTIxZGY3ZC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mZDhmY2MxYjk2MWIwMWE0ZGQ4MWFkNTZmYmRjOWI3NGM3YTljYzVhNjNlNjEyNzg5YmUxNWI2YjVlZTY4ODM5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.gCP87XMR1gOR9_IPhHFiUk_A-FGOaSjkczDJMs7uC5E](https://private-user-images.githubusercontent.com/177040748/498231297-6753e4a7-4e95-4de0-b67e-6c4e7521df7d.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxMjk3LTY3NTNlNGE3LTRlOTUtNGRlMC1iNjdlLTZjNGU3NTIxZGY3ZC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mZDhmY2MxYjk2MWIwMWE0ZGQ4MWFkNTZmYmRjOWI3NGM3YTljYzVhNjNlNjEyNzg5YmUxNWI2YjVlZTY4ODM5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.gCP87XMR1gOR9_IPhHFiUk_A-FGOaSjkczDJMs7uC5E)
-
-**Projects**
-[https://private-user-images.githubusercontent.com/177040748/498231031-36e84fdf-2497-482b-87aa-4b721072de5e.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxMDMxLTM2ZTg0ZmRmLTI0OTctNDgyYi04N2FhLTRiNzIxMDcyZGU1ZS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01YTNhNDM3YmUwODM0Yzk0ZmVjNTJmYzlkMWE5ZDlhMWRkZDcwZThiODZkZGU0MDJjM2M2MmJhNTczNzJiODE3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.6pVlqwGqDJr5oblVc0mWNi-1kZ7DVQ3HBu5m7eMPqFg](https://private-user-images.githubusercontent.com/177040748/498231031-36e84fdf-2497-482b-87aa-4b721072de5e.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxMDMxLTM2ZTg0ZmRmLTI0OTctNDgyYi04N2FhLTRiNzIxMDcyZGU1ZS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01YTNhNDM3YmUwODM0Yzk0ZmVjNTJmYzlkMWE5ZDlhMWRkZDcwZThiODZkZGU0MDJjM2M2MmJhNTczNzJiODE3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.6pVlqwGqDJr5oblVc0mWNi-1kZ7DVQ3HBu5m7eMPqFg)
-
-**Contact**
-[https://private-user-images.githubusercontent.com/177040748/498231739-cef2272b-c6e1-40a3-b1b2-a4b27c34b87c.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxNzM5LWNlZjIyNzJiLWM2ZTEtNDBhMy1iMWIyLWE0YjI3YzM0Yjg3Yy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1jMWUwYzRiY2Q0NmJjYTUzMDQyMWExYzM5M2Y0MzhlOWJkYTQxZjhlYTRkMDI4YzI3OGU2ZWMzM2MzYjEyMzQ0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.jjaz9Wsp0A1g93w-kSGNn-vFi0Gbk1SchGrI7gYSUro](https://private-user-images.githubusercontent.com/177040748/498231739-cef2272b-c6e1-40a3-b1b2-a4b27c34b87c.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NTk4MzI4ODksIm5iZiI6MTc1OTgzMjU4OSwicGF0aCI6Ii8xNzcwNDA3NDgvNDk4MjMxNzM5LWNlZjIyNzJiLWM2ZTEtNDBhMy1iMWIyLWE0YjI3YzM0Yjg3Yy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAwN1QxMDIzMDlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1jMWUwYzRiY2Q0NmJjYTUzMDQyMWExYzM5M2Y0MzhlOWJkYTQxZjhlYTRkMDI4YzI3OGU2ZWMzM2MzYjEyMzQ0JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.jjaz9Wsp0A1g93w-kSGNn-vFi0Gbk1SchGrI7gYSUro)
