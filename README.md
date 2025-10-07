@@ -62,3 +62,19 @@ For production, use Gunicorn:
 bash
 Copy code
 gunicorn app:app
+
+
+<img width="1903" height="780" alt="image" src="https://github.com/user-attachments/assets/36e84fdf-2497-482b-87aa-4b721072de5e" />
+
+
+<img width="1903" height="822" alt="image" src="https://github.com/user-attachments/assets/6753e4a7-4e95-4de0-b67e-6c4e7521df7d" />
+
+
+<img width="1903" height="837" alt="image" src="https://github.com/user-attachments/assets/e6463bea-bd9c-4d24-8dad-1bf04717c796" />
+
+
+<img width="1903" height="953" alt="image" src="https://github.com/user-attachments/assets/cef2272b-c6e1-40a3-b1b2-a4b27c34b87c" />
+
+
+
+
