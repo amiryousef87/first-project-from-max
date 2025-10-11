@@ -1,4 +1,4 @@
-این فایل ریدمی درست و تمیز هست
+
 # first-project-from-max
 
 
