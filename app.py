@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_babel import Babel, gettext as _
 from config import Config
 
@@ -56,6 +56,17 @@ def projects():
 @app.route("/contact")
 def contact():
     return render_template("contact.html", title="Contact")
+
+
+@app.route('/add-project', methods=['POST'])
+def add_project():
+    title = request.form['title']
+    desc = request.form['desc']
+    tech = request.form['tech']
+    # ذخیره در دیتابیس یا لیست
+    new_project = {'title': title, 'desc': desc, 'tech': tech}
+    return jsonify(new_project)
+
 
 
 if __name__ == "__main__":

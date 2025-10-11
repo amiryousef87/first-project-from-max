@@ -12,19 +12,59 @@
   </p>
 </section>
 
+<!-- Add Project Form -->
+<section class="max-w-3xl mx-auto mb-10 px-6">
+  <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Add New Project</h2>
+  <form id="projectForm" class="space-y-4">
+    <div>
+      <label class="block mb-1 font-medium">Title</label>
+      <input
+        name="title"
+        type="text"
+        required
+        class="w-full border rounded-lg p-2 focus:ring focus:ring-indigo-300"
+      />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium">Description</label>
+      <textarea
+        name="desc"
+        rows="3"
+        required
+        class="w-full border rounded-lg p-2 focus:ring focus:ring-indigo-300"
+      ></textarea>
+    </div>
+    <div>
+      <label class="block mb-1 font-medium"
+        >Technologies (comma separated)</label
+      >
+      <input
+        name="tech"
+        type="text"
+        required
+        class="w-full border rounded-lg p-2 focus:ring focus:ring-indigo-300"
+      />
+    </div>
+    <button
+      type="submit"
+      class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+    >
+      Save
+    </button>
+  </form>
+</section>
+
 <!-- Projects Grid -->
 <div
+  id="projectsGrid"
   class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-6"
 >
   {% for p in projects %}
   <div
     class="relative p-6 border rounded-2xl shadow-md bg-white hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-2 flex flex-col justify-between"
   >
-    <!-- Project Title -->
     <h3 class="text-xl font-semibold mb-3 text-indigo-700">{{ p.title }}</h3>
-    <!-- Description -->
     <p class="text-gray-700 mb-4">{{ p.desc }}</p>
-    <!-- Technologies -->
     <div class="flex flex-wrap gap-2 mt-auto">
       {% for tech in p.tech.split(',') %}
       <span
@@ -34,12 +74,56 @@
       </span>
       {% endfor %}
     </div>
-    <!-- Hover Overlay for Fun Effect -->
     <div
       class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-indigo-200 via-purple-200 to-pink-200 opacity-0 hover:opacity-30 transition-opacity duration-300 pointer-events-none"
     ></div>
   </div>
   {% endfor %}
 </div>
+
+<!-- JavaScript for AJAX Submission -->
+<script>
+  document
+    .getElementById("projectForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+
+      const response = await fetch("/add-project", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const newProject = await response.json();
+        const card = document.createElement("div");
+        card.className =
+          "relative p-6 border rounded-2xl shadow-md bg-white hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-2 flex flex-col justify-between";
+        card.innerHTML = `
+        <h3 class="text-xl font-semibold mb-3 text-indigo-700">${
+          newProject.title
+        }</h3>
+        <p class="text-gray-700 mb-4">${newProject.desc}</p>
+        <div class="flex flex-wrap gap-2 mt-auto">
+          ${newProject.tech
+            .split(",")
+            .map(
+              (t) => `
+            <span class="bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full shadow-sm">
+              ${t.trim()}
+            </span>`
+            )
+            .join("")}
+        </div>
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-indigo-200 via-purple-200 to-pink-200 opacity-0 hover:opacity-30 transition-opacity duration-300 pointer-events-none"></div>
+      `;
+        document.getElementById("projectsGrid").prepend(card);
+        form.reset();
+      } else {
+        alert("Something went wrong while adding the project.");
+      }
+    });
+</script>
 
 {% endblock %}
