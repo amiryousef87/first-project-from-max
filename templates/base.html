@@ -16,6 +16,7 @@
       href="https://cdn.jsdelivr.net/npm/@coreui/icons/css/all.min.css"
       rel="stylesheet"
     />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
     <script>
       tailwind.config = {
@@ -44,11 +45,9 @@
           href="{{ url_for('index') }}"
           class="flex items-center gap-2 text-2xl font-bold"
         >
-          <img
-            src="{{ url_for('static', filename='img/The logo.png') }}"
-            alt="Max Logo"
-            class="w-10 h-10 rounded-full"
-          />
+          <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-crown text-white text-lg"></i>
+          </div>
           <span>Max</span>
         </a>
 
