@@ -5,6 +5,7 @@ from config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 
+
 # تابع انتخاب زبان
 def select_locale():
     lang = request.args.get("lang")
@@ -75,3 +76,4 @@ def add_project():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
