@@ -84,32 +84,3 @@ Once the server starts, open your browser and navigate to:
 [http://127.0.0.1:5000](http://127.0.0.1:5000)
 Production Mode
 For actual deployment, use a WSGI server like Gunicorn:
-
-Bash
-
-gunicorn app:app
-🖼️ Screenshots
-See what the carefully designed application pages look like:
-
-🏠 Home Page
-<p align="center">
-<img alt="Screenshot of the Home Page" src="https://github.com/user-attachments/assets/e6463bea-bd9c-4d24-8dad-1bf04717c796" />
-</p>
-
-
-👤 About Page
-<p align="center">
-<img alt="Screenshot of the About Page" src="https://github.com/user-attachments/assets/6753e4a7-4e95-4de0-b67e-6c4e7521df7d" />
-</p>
-
-
-💼 Projects Showcase
-<p align="center">
-<img alt="Screenshot of the Projects Page" src="https://github.com/user-attachments/assets/36e84fdf-2497-482b-87aa-4b721072de5e" />
-</p>
-
-
-✉️ Contact Form
-<p align="center">
-<img alt="Screenshot of the Contact Page" src="https://github.com/user-attachments/assets/cef2272b-c6e1-40a3-b1b2-a4b27c34b87c" />
-</p>
