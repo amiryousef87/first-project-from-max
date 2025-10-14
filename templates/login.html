@@ -1,509 +1,228 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAX login and Sign Up</title>
-    <link rel="icon" type="icon-x" href="./img/TITANUOM icon.jpg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAX Login and Sign Up</title>
+    <link rel="icon" href="./img/TITANUOM icon.jpg" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        :root {
-            --primary: rgb(221, 0, 255);
-            --secondary: rgb(0, 100, 255);
-            --dark: #121212;
-            --light: #f9fafb;
-            --danger: #ef4444;
-            --bg-dark: #ffffff;
-            --card-dark: #ffffff;
-            --text-light: #000000;
-        }
+      :root {
+        --primary: rgb(221, 0, 255);
+        --secondary: rgb(0, 100, 255);
+        --bg-light: #f5f5f5;
+        --text-dark: #000;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui;
+      }
+      body {
+        background: var(--bg-light);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        width: 100%;
+        max-width: 450px;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+      .header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: #fff;
+        text-align: center;
+        padding: 25px 15px;
+      }
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      .tab-container {
+        display: flex;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab {
+        flex: 1;
+        text-align: center;
+        padding: 15px;
+        cursor: pointer;
+        color: #666;
+        font-weight: 500;
+        transition: 0.3s;
+      }
+      .tab.active {
+        color: var(--primary);
+        border-bottom: 3px solid var(--primary);
+      }
+      .content {
+        padding: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: var(--text-dark);
+      }
+      .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+      .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: 0.3s;
+      }
+      .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+      }
+      .alert {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+      }
+      .alert-danger {
+        background: #fdd;
+        color: #a33;
+        border: 1px solid #f99;
+      }
+      .alert-success {
+        background: #dfd;
+        color: #3a3;
+        border: 1px solid #9f9;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
+      /* واکنشگرایی موبایل */
+      @media (max-width: 500px) {
         .container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-dark);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+          padding: 10px;
         }
-
         .header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px;
-            text-align: center;
+          padding: 20px 10px;
         }
-
-        .header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .tab-container {
-            display: flex;
-            border-bottom: 1px solid #444;
-        }
-
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-            color: #aaa;
-        }
-
-        .tab.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: var(--text-light);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background-color: #ffffff;
-            color: var(--text-light);
-
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-
-        .btn {
-            display: inline-block;
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .backtodashborad {
-            display: inline-block;
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 0px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .backtodashborad-outline {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-        .alert-danger {
-            background-color: #3a1a1a;
-            color: #ff6b6b;
-            border: 1px solid #5c2c2c;
-        }
-
-        .alert-success {
-            background-color: #1a3a2a;
-            color: #6bff8d;
-            border: 1px solid #2c5c3d;
-        }
-
-        .dashboard {
-            display: none;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #444;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-left: 15px;
-            overflow: hidden;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .upload-area {
-            border: 2px dashed #444;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background-color: rgba(67, 97, 238, 0.1);
-        }
-
-        .upload-area i {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .gallery-item {
-            aspect-ratio: 1;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: all 0.3s;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 0;
-            color: #6b7280;
-            grid-column: 1 / -1;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #444;
-        }
+      }
     </style>
-</head>
-
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <h1>Login And Sign Up</h1>
+      <div class="header"><h1>Login And Sign Up</h1></div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <div id="auth-section">
+        <div class="tab-container">
+          <div class="tab active" onclick="switchTab('login')">Login</div>
+          <div class="tab" onclick="switchTab('register')">Register</div>
         </div>
 
-        <!-- بخش ورود/ثبت نام -->
-        <div id="auth-section">
-            <div class="tab-container">
-                <div class="tab active" onclick="switchTab('login')">Login</div>
-                <div class="tab" onclick="switchTab('register')">Register</div>
-            </div>
+        <div class="content">
+          <!-- فرم ورود -->
+          <div id="login-form">
+            <form method="POST" action="{{ url_for('login') }}">
+              <div class="form-group">
+                <label for="login-username">Username</label>
+                <input
+                  type="text"
+                  id="login-username"
+                  name="username"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="login-password">Password</label>
+                <input
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button class="btn" type="submit">Login</button>
+            </form>
+          </div>
 
-            <div class="content">
-                <!-- فرم ورود -->
-                <div id="login-form">
-                    <div class="form-group">
-                        <label for="login-username">UserName</label>
-                        <input type="text" id="login-username" class="form-control"
-                            placeholder="Plese Enter Username...">
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" class="form-control"
-                            placeholder="Plese Enter Password...">
-                    </div>
-                    <button class="btn" onclick="login()">Login</button>
-
-
-                    <div id="login-message"></div>
-                </div>
-
-                <!-- فرم ثبت نام -->
-                <div id="register-form" style="display: none;">
-                    <div class="form-group">
-                        <label for="register-username">UserName</label>
-                        <input type="text" id="register-username" class="form-control"
-                            placeholder="Plese Enter Username...">
-                    </div>
-                    <div class="form-group">
-                        <label for="register-password">Password</label>
-                        <input type="password" id="register-password" class="form-control"
-                            placeholder="Plese Enter Password...">
-                    </div>
-                    <div class="form-group">
-                        <label for="register-email">Email</label>
-                        <input type="email" id="register-email" class="form-control" placeholder="Plese Enter Email...">
-                    </div>
-                    <button class="btn" onclick="register()">Register</button>
-                    <div id="register-message"></div>
-                </div>
-            </div>
+          <!-- فرم ثبت نام -->
+          <div id="register-form" style="display: none">
+            <form method="POST" action="{{ url_for('register') }}">
+              <div class="form-group">
+                <label for="register-username">Username</label>
+                <input
+                  type="text"
+                  id="register-username"
+                  name="username"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="register-password">Password</label>
+                <input
+                  type="password"
+                  id="register-password"
+                  name="password"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="register-email">Email</label>
+                <input
+                  type="email"
+                  id="register-email"
+                  name="email"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button class="btn" type="submit">Register</button>
+            </form>
+          </div>
         </div>
-
-        <!-- پنل کاربری -->
-        <div id="dashboard" class="dashboard">
-            <div class="content">
-                <div class="user-info">
-                    <div>
-                        <h3 id="username-display">UserName</h3>
-                        <p id="user-email"></p>
-                    </div>
-                </div>
-                <div id="upload-message"></div>
-                <button class="btn" onclick="logout()" style="margin-top: 20px;">Exit</button>
-            </div>
-        </div>
-        <a href="dashborad.html">
-            <button class="backtodashborad">
-                Back to Dashboard
-            </button>
-        </a>
+      </div>
     </div>
 
     <script>
-        // مدیریت کاربران در localStorage
-        let users = JSON.parse(localStorage.getItem('titanium-users')) || [];
-        let currentUser = null;
-
-        // تغییر بین تب‌های ورود و ثبت نام
-        function switchTab(tab) {
-            if (tab === 'login') {
-                document.querySelectorAll('.tab')[0].classList.add('active');
-                document.querySelectorAll('.tab')[1].classList.remove('active');
-                document.getElementById('login-form').style.display = 'block';
-                document.getElementById('register-form').style.display = 'none';
-            } else {
-                document.querySelectorAll('.tab')[0].classList.remove('active');
-                document.querySelectorAll('.tab')[1].classList.add('active');
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('register-form').style.display = 'block';
-            }
+      function switchTab(tab) {
+        if (tab === "login") {
+          document.querySelectorAll(".tab")[0].classList.add("active");
+          document.querySelectorAll(".tab")[1].classList.remove("active");
+          document.getElementById("login-form").style.display = "block";
+          document.getElementById("register-form").style.display = "none";
+        } else {
+          document.querySelectorAll(".tab")[0].classList.remove("active");
+          document.querySelectorAll(".tab")[1].classList.add("active");
+          document.getElementById("login-form").style.display = "none";
+          document.getElementById("register-form").style.display = "block";
         }
-
-        // ثبت نام کاربر جدید
-        function register() {
-            const username = document.getElementById('register-username').value;
-            const password = document.getElementById('register-password').value;
-            const email = document.getElementById('register-email').value;
-
-            if (!username || !password || !email) {
-                showMessage('register-message', 'لطفا تمام فیلدها را پر کنید', 'danger');
-                return;
-            }
-
-            if (users.some(user => user.username === username)) {
-                showMessage('register-message', 'این نام کاربری قبلا استفاده شده است', 'danger');
-                return;
-            }
-
-            const newUser = {
-                id: Date.now().toString(),
-                username,
-                password, // در پروژه واقعی باید هش شود
-                email,
-                avatar: null,
-                createdAt: new Date().toISOString()
-            };
-
-            users.push(newUser);
-            localStorage.setItem('titanium-users', JSON.stringify(users));
-
-            showMessage('register-message', 'ثبت نام با موفقیت انجام شد! لطفا وارد شوید', 'success');
-            switchTab('login');
-            document.getElementById('register-form').reset();
-        }
-
-        // ورود کاربر
-        function login() {
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-
-            const user = users.find(user => user.username === username && user.password === password);
-
-            if (user) {
-                currentUser = user;
-                localStorage.setItem('titanium-last-user', user.id);
-                showDashboard();
-            } else {
-                showMessage('login-message', 'نام کاربری یا رمز عبور اشتباه است', 'danger');
-            }
-        }
-
-        // نمایش پنل کاربری
-        function showDashboard() {
-            document.getElementById('auth-section').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-
-            document.getElementById('username-display').textContent = currentUser.username;
-            document.getElementById('user-email').textContent = currentUser.email;
-
-            // نمایش آواتار کاربر
-            const avatarElement = document.getElementById('user-avatar');
-            if (currentUser.avatar) {
-                avatarElement.innerHTML = `<img src="${currentUser.avatar}" alt="آواتار کاربر">`;
-            } else {
-                avatarElement.textContent = currentUser.username.charAt(0).toUpperCase();
-            }
-
-            // نمایش تصویر آپلود شده (اگر وجود دارد)
-            loadUserImage();
-        }
-
-        // آپلود تصویر
-        function handleFileUpload(files) {
-            if (!files || files.length === 0) return;
-
-            const file = files[0];
-            if (!file.type.startsWith('image/')) {
-                showMessage('upload-message', 'فقط فایل‌های تصویری مجاز هستند', 'danger');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const imageData = e.target.result;
-
-                // ذخیره تصویر برای کاربر فعلی
-                currentUser.avatar = imageData;
-
-                // به‌روزرسانی کاربر در localStorage
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                users[userIndex] = currentUser;
-                localStorage.setItem('titanium-users', JSON.stringify(users));
-
-                showMessage('upload-message', 'تصویر با موفقیت آپلود شد!', 'success');
-                loadUserImage();
-
-                // انتقال به صفحه jabe.html پس از 2 ثانیه
-                setTimeout(() => {
-                    window.location.href = 'dashborad.html';
-                }, 2000);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // بارگذاری تصویر کاربر
-
-
-        // خروج کاربر
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('titanium-last-user');
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('auth-section').style.display = 'block';
-            document.getElementById('login-form').reset();
-            document.getElementById('login-message').innerHTML = '';
-            switchTab('login');
-        }
-
-        // نمایش پیام‌ها
-        function showMessage(elementId, message, type) {
-            const element = document.getElementById(elementId);
-            element.innerHTML = `
-                <div class="alert alert-${type}">
-                    ${message}
-                </div>
-            `;
-
-            setTimeout(() => {
-                element.innerHTML = '';
-            }, 5000);
-        }
-
-        // بررسی اگر کاربر قبلا وارد شده بود
-        window.addEventListener('DOMContentLoaded', () => {
-            const lastUser = localStorage.getItem('titanium-last-user');
-            if (lastUser) {
-                const user = users.find(u => u.id === lastUser);
-                if (user) {
-                    currentUser = user;
-                    showDashboard();
-                }
-            }
-        });
+      }
     </script>
-</body>
-
+  </body>
 </html>

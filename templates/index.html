@@ -18,6 +18,27 @@
     {{ _("Explore Our Projects") }}
   </a>
 </section>
+<!-- بخش Call to Action یا بالای Hero Section -->
+<section class="text-center py-16 bg-gradient-to-r from-indigo-700 to-blue-600 text-white rounded-2xl shadow-lg mt-12">
+
+  {% if current_user %}
+    <p class="mb-4 text-lg">Welcome back, {{ current_user.username }}!</p>
+    <a href="{{ url_for('dashboard') }}" class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow hover:bg-gray-100 transition text-lg">
+      Go to Your Dashboard
+    </a>
+  {% else %}
+    <h2 class="text-4xl font-bold mb-4">{{ _("Partner With Max Company") }}</h2>
+    <p class="text-lg max-w-2xl mx-auto mb-8 opacity-90">
+      {{ _("Join dozens of forward-thinking companies that trust Max Company to
+      design, build, and scale their digital ecosystems.") }}
+    </p>
+    <a href="{{ url_for('login') }}" class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow hover:bg-gray-100 transition text-lg">
+      {{ _("Start Your Project") }}
+    </a>
+  {% endif %}
+
+</section>
+
 
 <!-- Company Overview -->
 <section class="py-12 text-center">
