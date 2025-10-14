@@ -35,6 +35,9 @@ def about():
 @app.route("/projects")
 def projects():
     projects_list = [
+        {"title": "Flask Login Form","desc": "A simple and secure login and registration system built using Python Flask with SQLite for data storage.","tech": "Python, Flask, SQLite, html"},
+        {"title": "Reservation System","desc": "Online booking platform with appointment management for clients and admins.","tech": "PHP, HTML, TailwindCSS"},
+        {"title": "TeamVerse","desc": " A collaborative gaming platform connecting players and teams for tournaments and group challenges.","tech": "PHP, TailwindCSS"},
         {"title": "E-Commerce Platform", "desc": "Custom online store with full payment integration.", "tech": "Python, Flask, React.js, TailwindCSS"},
         {"title": "AI-Powered Dashboard", "desc": "Business analytics dashboard with real-time insights.", "tech": "Python, Flask, React.js, Chart.js"},
         {"title": "Portfolio Website", "desc": "Elegant personal site for professionals.", "tech": "Python, Flask, TailwindCSS"},
