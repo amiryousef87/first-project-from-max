@@ -58,6 +58,11 @@ def projects():
 def contact():
     return render_template("contact.html", title="Contact")
 
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashborad.html", title="Dashboard")
+
+
 @app.route('/add-project', methods=['POST'])
 def add_project():
     title = request.form['title']
