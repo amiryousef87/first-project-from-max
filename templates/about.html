@@ -2,99 +2,206 @@
 
 <!-- Hero Section -->
 <section
-  class="py-16 px-6 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white rounded-2xl shadow-2xl mb-12 text-center"
+  class="py-20 px-6 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white rounded-2xl shadow-2xl mb-16 text-center"
 >
-  <h1 class="text-4xl md:text-5xl font-bold mb-4">About Max Company</h1>
-  <p class="text-lg md:text-xl mb-6 max-w-3xl mx-auto opacity-90">
-    Max Company is a leading software and web development company delivering
-    <strong>cutting-edge digital solutions</strong> with speed, precision, and
-    unmatched quality.
-  </p>
-  <a
-    href="{{ url_for('projects') }}"
-    class="bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition"
-  >
-    Explore Our Projects
-  </a>
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-6">About Max Company</h1>
+    <p class="text-xl md:text-2xl mb-6 leading-relaxed opacity-90">
+      Max Company is a global leader in software engineering and AI-driven
+      design solutions, empowering businesses to innovate faster and smarter.
+    </p>
+    <p class="text-lg opacity-80 mb-8">
+      We build digital ecosystems that combine intelligence, automation, and
+      design — enabling organizations to achieve more with technology.
+    </p>
+    <a
+      href="{{ url_for('projects') }}"
+      class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl shadow hover:bg-gray-100 transition text-lg"
+    >
+      Explore Our Projects
+    </a>
+  </div>
 </section>
 
-<!-- Core Strengths -->
-<section class="py-12 max-w-7xl mx-auto px-6">
-  <h2 class="text-3xl font-bold text-indigo-700 mb-10 text-center">
-    Our Core Strengths
-  </h2>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div
-      class="p-6 border rounded-2xl shadow-md bg-white hover:shadow-xl transition flex flex-col h-full"
-    >
-      <h3 class="text-xl font-semibold mb-3 text-indigo-600">Fast Delivery</h3>
-      <p class="text-gray-700 flex-grow">
-        We deliver projects <strong>on time</strong>, efficiently, and with zero
-        compromise on quality. Your deadlines are our priority.
+<!-- Our Story -->
+<section class="py-16 max-w-6xl mx-auto px-6 text-center">
+  <h2 class="text-3xl font-bold text-indigo-700 mb-8">Our Story</h2>
+  <div class="grid md:grid-cols-2 gap-10 text-left">
+    <div>
+      <p class="text-gray-700 text-lg mb-4 leading-relaxed">
+        Founded in 2021, <strong>Max Company</strong> started as a small but
+        ambitious digital studio. Today, it stands as a trusted partner for
+        companies across industries — from startups to enterprises.
+      </p>
+      <p class="text-gray-700 text-lg mb-4 leading-relaxed">
+        Our mission has always been to simplify complex technology. We believe
+        in <strong>clarity, usability, and efficiency</strong> — the pillars
+        that drive every solution we craft.
       </p>
     </div>
-    <div
-      class="p-6 border rounded-2xl shadow-md bg-white hover:shadow-xl transition flex flex-col h-full"
-    >
-      <h3 class="text-xl font-semibold mb-3 text-indigo-600">
-        Modern Technology
-      </h3>
-      <p class="text-gray-700 flex-grow">
-        Using the latest frameworks like
-        <strong>Python, Flask, Tailwind, and AI-powered tools</strong>, we
-        create highly interactive and robust applications.
+    <div>
+      <p class="text-gray-700 text-lg mb-4 leading-relaxed">
+        From early prototypes to enterprise-scale systems, we’ve built digital
+        products that <strong>transform workflows</strong> and deliver
+        measurable impact.
       </p>
-    </div>
-    <div
-      class="p-6 border rounded-2xl shadow-md bg-white hover:shadow-xl transition flex flex-col h-full"
-    >
-      <h3 class="text-xl font-semibold mb-3 text-indigo-600">Expert Team</h3>
-      <p class="text-gray-700 flex-grow">
-        Our team consists of
-        <strong>experienced developers and designers</strong> who focus on UX,
-        UI, and scalable solutions for your business.
+      <p class="text-gray-700 text-lg leading-relaxed">
+        Every project we take is backed by strategy, creativity, and a
+        dedication to quality. Because technology should not only work — it
+        should inspire.
       </p>
     </div>
   </div>
 </section>
 
-<!-- Why Choose Us -->
-<section class="py-16 px-6 bg-indigo-50 rounded-2xl shadow-md mt-12">
-  <h2 class="text-3xl font-bold text-center mb-8 text-indigo-700">
-    Why Choose Max?
+<!-- Core Values -->
+<section class="py-20 bg-gray-50 rounded-xl shadow-inner mt-12">
+  <h2 class="text-3xl font-bold text-center mb-12 text-[var(--primary)]">
+    Our Core Values
   </h2>
-  <ul class="space-y-4 max-w-3xl mx-auto text-lg text-gray-700">
-    <li>
-      ✅ <strong>Rapid project execution</strong> without sacrificing quality or
-      design.
-    </li>
-    <li>
-      ✅ Innovative solutions tailored to <strong>your business needs</strong>.
-    </li>
-    <li>
-      ✅ <strong>Modern, responsive designs</strong> that work seamlessly on all
-      devices.
-    </li>
-    <li>✅ Full support from development to deployment and maintenance.</li>
-    <li>
-      ✅ Commitment to <strong>exceeding client expectations</strong> every
-      time.
-    </li>
-  </ul>
+  <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto px-6">
+    <div
+      class="p-8 bg-white border rounded-2xl shadow hover:shadow-lg transition flex flex-col items-start gap-3"
+    >
+      <i class="fas fa-bolt text-yellow-500 text-3xl"></i>
+      <h3 class="text-xl font-semibold text-indigo-700">Innovation</h3>
+      <p class="text-gray-600 text-base leading-relaxed">
+        We push boundaries to create solutions that redefine industries.
+      </p>
+    </div>
+    <div
+      class="p-8 bg-white border rounded-2xl shadow hover:shadow-lg transition flex flex-col items-start gap-3"
+    >
+      <i class="fas fa-users text-blue-500 text-3xl"></i>
+      <h3 class="text-xl font-semibold text-indigo-700">Teamwork</h3>
+      <p class="text-gray-600 text-base leading-relaxed">
+        Our diverse team collaborates closely to turn bold ideas into reality.
+      </p>
+    </div>
+    <div
+      class="p-8 bg-white border rounded-2xl shadow hover:shadow-lg transition flex flex-col items-start gap-3"
+    >
+      <i class="fas fa-handshake text-green-500 text-3xl"></i>
+      <h3 class="text-xl font-semibold text-indigo-700">Integrity</h3>
+      <p class="text-gray-600 text-base leading-relaxed">
+        We build lasting relationships on trust, respect, and transparency.
+      </p>
+    </div>
+    <div
+      class="p-8 bg-white border rounded-2xl shadow hover:shadow-lg transition flex flex-col items-start gap-3"
+    >
+      <i class="fas fa-award text-purple-500 text-3xl"></i>
+      <h3 class="text-xl font-semibold text-indigo-700">Excellence</h3>
+      <p class="text-gray-600 text-base leading-relaxed">
+        Every detail matters — we deliver beyond expectations.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Technologies & Tools -->
+<section class="py-20 px-6 text-center">
+  <h2 class="text-3xl font-bold text-indigo-700 mb-10">
+    Technologies & Tools We Use
+  </h2>
+  <div class="flex flex-wrap justify-center gap-4 text-gray-700 text-base">
+    {% for tech in ["Python", "Flask", "Django", "Tailwind CSS", "React.js",
+    "Docker", "REST APIs", "PostgreSQL", "AI/ML", "TensorFlow", "FastAPI",
+    "GitHub Actions", "Linux Servers", "Redis", "Celery"] %}
+    <span
+      class="px-4 py-2 border rounded-xl bg-gray-100 shadow-sm hover:bg-white transition"
+      >{{ tech }}</span
+    >
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Our Achievements -->
+<section class="py-16 bg-white text-center max-w-6xl mx-auto px-6">
+  <h2 class="text-3xl font-bold text-indigo-700 mb-8">Our Achievements</h2>
+  <div class="grid md:grid-cols-4 gap-10">
+    <div>
+      <h3 class="text-5xl font-extrabold text-blue-600">150+</h3>
+      <p class="text-gray-600 mt-2 text-lg">Projects Delivered</p>
+    </div>
+    <div>
+      <h3 class="text-5xl font-extrabold text-blue-600">40+</h3>
+      <p class="text-gray-600 mt-2 text-lg">Active Clients</p>
+    </div>
+    <div>
+      <h3 class="text-5xl font-extrabold text-blue-600">5+</h3>
+      <p class="text-gray-600 mt-2 text-lg">Years Experience</p>
+    </div>
+    <div>
+      <h3 class="text-5xl font-extrabold text-blue-600">100%</h3>
+      <p class="text-gray-600 mt-2 text-lg">Client Satisfaction</p>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<
+<section
+  class="py-20 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-center rounded-2xl shadow-xl mt-20"
+>
+  <h2 class="text-3xl font-bold mb-8">Meet Our Team</h2>
+  <p class="text-lg mb-12 opacity-90 max-w-3xl mx-auto">
+    Behind every great product is a great team. Our engineers, designers, and
+    strategists work together to create extraordinary results.
+  </p>
+
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+    {% for member in [ {'name': 'Amir Yousef', 'role': 'Lead Developer',
+    'photo': 'amiryouseftousi.jpg'}, {'name': 'Arman Sadeghi', 'role': 'UI/UX
+    Designer', 'photo': None}, {'name': 'Alireza Nagafi', 'role': 'AI Engineer',
+    'photo': None} ] %}
+    <div
+      class="bg-white text-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition"
+    >
+      <div
+        class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4 shadow-md"
+      >
+        {% if member.photo %}
+        <img
+          src="{{ url_for('static', filename='img/' ~ member.photo) }}"
+          alt="{{ member.name }}"
+          class="w-full h-full object-cover"
+        />
+        {% else %}
+        <div
+          class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"
+        >
+          <i class="fas fa-user text-white text-2xl"></i>
+        </div>
+        {% endif %}
+      </div>
+      <h3 class="text-xl font-semibold mb-1">{{ member.name }}</h3>
+      <p class="text-indigo-600 font-medium">{{ member.role }}</p>
+      <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+        Dedicated to excellence and driven by innovation, {{ member.name }}
+        plays a key role in shaping the technology and experience behind Max
+        Company’s success.
+      </p>
+    </div>
+    {% endfor %}
+  </div>
 </section>
 
 <!-- Call to Action -->
-<section class="text-center py-14 mt-12">
-  <h2 class="text-3xl font-bold mb-4">Ready to Start Your Project?</h2>
-  <p class="text-lg mb-6 max-w-2xl mx-auto text-gray-700">
-    Contact Max Company today and let us bring your digital vision to
-    life—<strong>fast, reliable, and beautiful</strong>.
+<section class="text-center py-20 mt-16">
+  <h2 class="text-4xl font-bold mb-4 text-indigo-700">
+    Let’s Create Something Exceptional
+  </h2>
+  <p class="text-lg mb-6 max-w-3xl mx-auto text-gray-700 leading-relaxed">
+    Partner with Max Company and bring your digital ideas to life. We combine
+    strategy, design, and cutting-edge technology to deliver experiences that
+    matter.
   </p>
   <a
-    href="{{ url_for('projects') }}"
-    class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition"
+    href="{{ url_for('contact') }}"
+    class="bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl shadow hover:bg-blue-700 transition text-lg"
   >
-    See Our Work
+    Contact Us
   </a>
 </section>
 

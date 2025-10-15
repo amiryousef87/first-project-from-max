@@ -1,35 +1,34 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+{% block content %}
 
-<!-- Contact Hero -->
+<!-- ===== Contact Hero Section ===== -->
 <section
   class="text-center py-16 px-6 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white rounded-2xl shadow-2xl mb-12"
 >
   <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
     {{ _("Get in Touch with Max Company") }}
   </h1>
-  <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">
-    {{ _("Have a project in mind or just want to say hello? Fill out the form
-    below or find us at our office in Mashhad.") }}
-  </p>
 </section>
 
-<!-- Contact Section -->
-<div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 px-6">
-  <!-- Map -->
-  <div class="w-full h-96 rounded-2xl overflow-hidden shadow-lg">
-    <iframe
-      src="https://www.google.com/maps?q=کلاهدوز+10,+Mashhad,+Iran&output=embed"
-      width="100%"
-      height="100%"
-      style="border: 0"
-      allowfullscreen=""
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      class="rounded-2xl"
-    ></iframe>
+<!-- ===== Contact Grid Layout ===== -->
+<div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 px-6 mb-10">
+
+  <!-- Text / Info (TXT) -->
+  <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col justify-center">
+    <h2 class="text-3xl font-bold text-indigo-700 mb-4">
+      {{ _("We’d love to hear from you!") }}
+    </h2>
+    <p class="text-lg text-gray-700 leading-relaxed">
+      {{ _("Whether you have a project in mind or just want to chat about ideas, feel free to reach out. We’re always open to collaborations and new opportunities.") }}
+    </p>
+    <div class="mt-6 space-y-2 text-gray-800">
+      <p><strong>Email:</strong> info@maxcompany.com</p>
+      <p><strong>Phone:</strong> +98 994 208 2136</p>
+      <p><strong>Address:</strong> kolahdoz 10, Mashhad, Iran</p>
+    </div>
   </div>
 
-  <!-- Contact Form -->
+  <!-- Contact Form (SEND MSG) -->
   <form class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
     <h2 class="text-2xl font-bold text-indigo-700 mb-4">
       {{ _("Send Us a Message") }}
@@ -57,23 +56,20 @@
   </form>
 </div>
 
-<!-- Info Section -->
-<div class="max-w-4xl mx-auto mt-12 text-center space-y-3">
-  <p class="text-lg font-medium">
-    <strong>Email:</strong>
-    <a href="mailto:info@maxcompany.com" class="text-indigo-500 hover:underline"
-      >info@maxcompany.com</a
-    >
-  </p>
-  <p class="text-lg font-medium">
-    <strong>Phone:</strong>
-    <a href="tel:+989942082136" class="text-indigo-500 hover:underline"
-      >+98 994 208 2136</a
-    >
-  </p>
-  <p class="text-lg font-medium">
-    <strong>Address:</strong> Piroozi 5, Mashhad, Iran
-  </p>
+<!-- ===== Map Section (MAP) ===== -->
+<div class="max-w-7xl mx-auto px-6">
+  <div class="w-full h-96 rounded-2xl overflow-hidden shadow-lg">
+    <iframe
+      src="https://www.google.com/maps?q=کلاهدوز+10,+Mashhad,+Iran&output=embed"
+      width="100%"
+      height="100%"
+      style="border:0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="rounded-2xl"
+    ></iframe>
+  </div>
 </div>
 
 {% endblock %}

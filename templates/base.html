@@ -3,12 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="512x512"
-      href="{{ url_for('static', filename='img/The logo.png') }}"
-    />
     <title>Max</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,8 +20,23 @@
         theme: {
           extend: {
             colors: {
-              primary: "#6366f1",
-              secondary: "#9333ea",
+              // رنگ متن برای هدر و فوتر شفاف (Transparent)
+              codeBlue: "#FF7F00", // نارنجی پرانرژی
+              codeBlack: "#000000", // مشکی خالص (فقط برای حالت Mobile Menu و Borderها باقی می‌ماند)
+            },
+            animation: {
+              "fade-in": "fadeIn 0.8s ease-out forwards",
+              "slide-up": "slideUp 0.8s ease-out forwards",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: 0 },
+                "100%": { opacity: 1 },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(20px)", opacity: 0 },
+                "100%": { transform: "translateY(0)", opacity: 1 },
+              },
             },
           },
         },
@@ -36,143 +45,221 @@
   </head>
 
   <body class="bg-gray-50 text-gray-800">
-    <!-- 🔥 Navbar -->
     <header
-      class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg sticky top-0 z-50"
+      class="bg-transparent text-codeBlue shadow-lg sticky top-0 z-50 animate-slide-up"
     >
       <div
         class="container mx-auto flex items-center justify-between py-4 px-6"
       >
-        <!-- Logo -->
         <a
           href="{{ url_for('index') }}"
-          class="flex items-center gap-2 text-2xl font-bold"
+          class="flex items-center gap-2 text-2xl font-bold hover:scale-105 transition-transform duration-300"
         >
-
-
-          <!-- <span>Max</span> -->
+          <i class="fas fa-code text-3xl"></i>
         </a>
 
-        <!-- Hamburger Button (Mobile) -->
         <button
           id="menu-btn"
           class="md:hidden flex flex-col gap-1 focus:outline-none"
         >
-          <span class="block w-6 h-0.5 bg-white rounded"></span>
-          <span class="block w-6 h-0.5 bg-white rounded"></span>
-          <span class="block w-6 h-0.5 bg-white rounded"></span>
+          <span class="block w-6 h-0.5 bg-codeBlue rounded"></span>
+          <span class="block w-6 h-0.5 bg-codeBlue rounded"></span>
+          <span class="block w-6 h-0.5 bg-codeBlue rounded"></span>
         </button>
 
-        <!-- Desktop Menu -->
-        <nav class="hidden md:flex gap-8 text-lg items-center">
-          <a href="{{ url_for('index') }}" class="hover:text-yellow-300"
+        <nav class="hidden md:flex gap-8 text-lg items-center font-medium">
+          <a
+            href="{{ url_for('index') }}"
+            class="hover:text-white transition-colors duration-300 hover:scale-105"
             >Home</a
           >
-          <a href="{{ url_for('about') }}" class="hover:text-yellow-300"
+          <a
+            href="{{ url_for('about') }}"
+            class="hover:text-white transition-colors duration-300 hover:scale-105"
             >About</a
           >
-          <a href="{{ url_for('projects') }}" class="hover:text-yellow-300"
+          <a
+            href="{{ url_for('projects') }}"
+            class="hover:text-white transition-colors duration-300 hover:scale-105"
             >Projects</a
           >
-          <a href="{{ url_for('contact') }}" class="hover:text-yellow-300"
+          <a
+            href="{{ url_for('contact') }}"
+            class="hover:text-white transition-colors duration-300 hover:scale-105"
             >Contact</a
           >
-          <a href="{{ url_for('dashboard') }}" class="hover:text-yellow-300"
+          <a
+            href="{{ url_for('dashboard') }}"
+            class="hover:text-white transition-colors duration-300 hover:scale-105"
             >Dashboard</a
           >
         </nav>
       </div>
 
-      <!-- 🌈 Mobile Menu -->
       <div
         id="mobile-menu"
-        class="fixed top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-700 text-white flex flex-col items-center justify-center gap-8 text-xl transform translate-x-full transition-transform duration-500 ease-in-out"
+        class="fixed top-0 left-0 w-full h-full bg-codeBlack text-codeBlue flex flex-col items-center justify-center gap-8 text-xl transform translate-x-full transition-transform duration-500 ease-in-out"
       >
-        <a href="{{ url_for('index') }}" class="hover:text-yellow-300">Home</a>
-        <a href="{{ url_for('about') }}" class="hover:text-yellow-300">About</a>
-        <a href="{{ url_for('projects') }}" class="hover:text-yellow-300"
+        <a
+          href="{{ url_for('index') }}"
+          class="hover:text-white transition-colors duration-300"
+          >Home</a
+        >
+        <a
+          href="{{ url_for('about') }}"
+          class="hover:text-white transition-colors duration-300"
+          >About</a
+        >
+        <a
+          href="{{ url_for('projects') }}"
+          class="hover:text-white transition-colors duration-300"
           >Projects</a
         >
-        <a href="{{ url_for('contact') }}" class="hover:text-yellow-300"
+        <a
+          href="{{ url_for('contact') }}"
+          class="hover:text-white transition-colors duration-300"
           >Contact</a
         >
-        <a href="{{ url_for('dashboard') }}" class="hover:text-yellow-300"
-            >Dashboard</a
-          >
+        <a
+          href="{{ url_for('dashboard') }}"
+          class="hover:text-white transition-colors duration-300"
+          >Dashboard</a
+        >
         <button
           id="close-menu"
-          class="absolute top-6 right-6 text-3xl hover:text-yellow-300"
+          class="absolute top-6 right-6 text-3xl hover:text-white transition-colors"
         >
           <i class="fa fa-times"></i>
         </button>
       </div>
     </header>
 
-    <!-- 🔹 Main -->
     <main class="container mx-auto py-16 px-4">
       {% block content %}
-      <h1 class="text-4xl font-extrabold text-center text-indigo-600">
+      <h1
+        class="text-4xl font-extrabold text-center text-indigo-600 animate-fade-in"
+      >
         Welcome to Max Company
       </h1>
       <p
-        class="mt-6 text-center text-gray-600 max-w-2xl mx-auto leading-relaxed"
+        class="mt-6 text-center text-gray-600 max-w-2xl mx-auto leading-relaxed animate-fade-in delay-150"
       >
         Max is a modern software company specializing in Full-Stack development,
         AI, and creative UX/UI design.
       </p>
+
+      <section
+        class="py-20 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-center rounded-2xl shadow-xl mt-20"
+      >
+        <h2 class="text-3xl font-bold mb-8 animate-fade-in">Meet Our Team</h2>
+        <p
+          class="text-lg mb-12 opacity-90 max-w-3xl mx-auto animate-fade-in delay-150"
+        >
+          Behind every great product is a great team. Our engineers, designers,
+          and strategists work together to create extraordinary results.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+          {% for member in [ {'name': 'Amir Yousef', 'role': 'Lead Developer',
+          'photo': 'amiryouseftousi.jpg'}, {'name': 'Sara Nouri', 'role': 'UI/UX
+          Designer', 'photo': None}, {'name': 'Ali Rahimi', 'role': 'AI
+          Engineer', 'photo': None} ] %}
+          <div
+            class="bg-white text-gray-800 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-2xl hover:scale-105 animate-fade-in"
+          >
+            <div
+              class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4 shadow-md"
+            >
+              {% if member.photo %}
+              <img
+                src="{{ url_for('static', filename='img/' ~ member.photo) }}"
+                alt="{{ member.name }}"
+                class="w-full h-full object-cover"
+              />
+              {% else %}
+              <div
+                class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"
+              >
+                <i class="fas fa-user text-white text-2xl"></i>
+              </div>
+              {% endif %}
+            </div>
+            <h3 class="text-xl font-semibold mb-1">{{ member.name }}</h3>
+            <p class="text-indigo-600 font-medium">{{ member.role }}</p>
+            <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+              Dedicated to excellence and driven by innovation, {{ member.name
+              }} plays a key role in shaping the technology and experience
+              behind Max Company’s success.
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
       {% endblock %}
     </main>
 
-    <!-- 🔻 Footer -->
-    <footer
-      class="bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-700 text-white mt-16"
-    >
+    <footer class="bg-transparent text-codeBlue mt-16 animate-slide-up">
       <div
         class="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8"
       >
-        <div>
-          <h3 class="text-2xl font-bold mb-4 text-yellow-300">Max Company</h3>
+        <div class="flex flex-col items-start md:items-start gap-4">
+          <div class="flex items-center gap-3">
+            <i class="fas fa-code text-3xl"></i>
+            <h3 class="text-2xl font-bold text-codeBlue">Max Company</h3>
+          </div>
           <p class="text-sm opacity-90">
             We create next-gen software using Python, Flask, React.js, and AI
             with beautiful UX/UI.
           </p>
-          <div class="flex gap-4 mt-4">
-            <a href="#" class="hover:text-yellow-300"
+          <div class="flex gap-4 mt-2">
+            <a
+              href="#"
+              class="hover:text-white transition-colors duration-300 hover:scale-110"
               ><i class="fa fa-github text-2xl"></i
             ></a>
-            <a href="#" class="hover:text-yellow-300"
+            <a
+              href="#"
+              class="hover:text-white transition-colors duration-300 hover:scale-110"
               ><i class="fa fa-linkedin text-2xl"></i
             ></a>
-            <a href="#" class="hover:text-yellow-300"
+            <a
+              href="#"
+              class="hover:text-white transition-colors duration-300 hover:scale-110"
               ><i class="fa fa-youtube text-2xl"></i
             ></a>
           </div>
         </div>
 
         <div>
-          <h3
-            class="text-xl font-semibold mb-4 border-b border-yellow-300 pb-1"
-          >
+          <h3 class="text-xl font-semibold mb-4 border-b border-codeBlue pb-1">
             Quick Links
           </h3>
           <ul class="space-y-2">
             <li>
-              <a href="{{ url_for('index') }}" class="hover:text-yellow-300"
+              <a
+                href="{{ url_for('index') }}"
+                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
                 >Home</a
               >
             </li>
             <li>
-              <a href="{{ url_for('about') }}" class="hover:text-yellow-300"
+              <a
+                href="{{ url_for('about') }}"
+                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
                 >About</a
               >
             </li>
             <li>
-              <a href="{{ url_for('projects') }}" class="hover:text-yellow-300"
+              <a
+                href="{{ url_for('projects') }}"
+                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
                 >Projects</a
               >
             </li>
             <li>
-              <a href="{{ url_for('contact') }}" class="hover:text-yellow-300"
+              <a
+                href="{{ url_for('contact') }}"
+                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
                 >Contact</a
               >
             </li>
@@ -180,33 +267,33 @@
         </div>
 
         <div>
-          <h3
-            class="text-xl font-semibold mb-4 border-b border-yellow-300 pb-1"
-          >
+          <h3 class="text-xl font-semibold mb-4 border-b border-codeBlue pb-1">
             Contact
           </h3>
           <ul class="space-y-2 text-sm opacity-90">
             <li>
-              <i class="fa fa-envelope mr-2 text-yellow-300"></i>
+              <i class="fa fa-envelope mr-2 text-codeBlue"></i>
               info@maxcompany.com
             </li>
             <li>
-              <i class="fa fa-phone mr-2 text-yellow-300"></i> +98 994 208 2136
+              <i class="fa fa-phone mr-2 text-codeBlue"></i> +98 994 208 2136
             </li>
             <li>
-              <i class="fa fa-map-marker mr-2 text-yellow-300"></i> Mashhad,
-              Iran
+              <i class="fa fa-map-marker mr-2 text-codeBlue"></i> Mashhad, Iran
             </li>
           </ul>
         </div>
       </div>
-      <div class="border-t border-white/20 mt-8 pt-4 text-center text-sm">
-        © 2025 <span class="font-semibold text-yellow-300">Max Company</span>.
-        All rights reserved.
+
+      <div
+        class="border-t border-codeBlue/40 mt-8 pt-4 text-center text-sm flex flex-col md:flex-row justify-center gap-2 items-center"
+      >
+        <span>© 2025</span>
+        <span class="font-semibold text-codeBlue">Max Company</span>
+        <span>All rights reserved.</span>
       </div>
     </footer>
 
-    <!-- 🔸 Scripts -->
     <script>
       const menuBtn = document.getElementById("menu-btn");
       const mobileMenu = document.getElementById("mobile-menu");
