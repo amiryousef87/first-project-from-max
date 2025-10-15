@@ -1,0 +1,76 @@
+,
+        {
+            "title": "E-Commerce Platform",
+            "desc": "Custom online store with full payment integration.",
+            "tech": "Python, Flask, React.js, TailwindCSS",
+        },
+        {
+            "title": "AI-Powered Dashboard",
+            "desc": "Business analytics dashboard with real-time insights.",
+            "tech": "Python, Flask, React.js, Chart.js",
+        },
+        {
+            "title": "Portfolio Website",
+            "desc": "Elegant personal site for professionals.",
+            "tech": "Python, Flask, TailwindCSS",
+        },
+        {
+            "title": "Inventory Management System",
+            "desc": "Full-stack solution for tracking products and orders.",
+            "tech": "Python, Flask, React.js, PostgreSQL",
+        },
+        {
+            "title": "Social Media Platform",
+            "desc": "Scalable web app for sharing content and connecting users.",
+            "tech": "Python, Flask, React.js, Socket.IO",
+        },
+        {
+            "title": "Task Automation App",
+            "desc": "Automates repetitive business tasks for efficiency.",
+            "tech": "Python, Flask, Celery, Redis",
+        },
+        {
+            "title": "Company CRM System",
+            "desc": "Customer relationship management for enterprise clients.",
+            "tech": "Python, Flask, React.js, SQLAlchemy",
+        },
+        {
+            "title": "Blog & CMS Platform",
+            "desc": "Dynamic content management system for blogs and articles.",
+            "tech": "Python, Flask, React.js, TailwindCSS",
+        },
+        {
+            "title": "Event Booking Platform",
+            "desc": "Complete system for booking events and ticket management.",
+            "tech": "Python, Flask, React.js, Stripe API",
+        },
+        {
+            "title": "Online Learning Platform",
+            "desc": "E-learning solution with courses, quizzes, and certificates.",
+            "tech": "Python, Flask, React.js, PostgreSQL",
+        },
+        {
+            "title": "Project Management Tool",
+            "desc": "Organize teams, tasks, and timelines efficiently.",
+            "tech": "Python, Flask, React.js, TailwindCSS",
+        },
+        {
+            "title": "IoT Device Dashboard",
+            "desc": "Monitor and manage IoT devices remotely.",
+            "tech": "Python, Flask, React.js, MQTT",
+        },
+        {
+            "title": "Real Estate Listing Platform",
+            "desc": "Property management and listing platform for agents.",
+            "tech": "Python, Flask, React.js, PostgreSQL",
+        },
+        {
+            "title": "Healthcare Management System",
+            "desc": "Manage patients, appointments, and medical records.",
+            "tech": "Python, Flask, React.js, SQLAlchemy",
+        },
+        {
+            "title": "FinTech Payment App",
+            "desc": "Secure financial transactions and account management.",
+            "tech": "Python, Flask, React.js, Stripe API",
+        },
