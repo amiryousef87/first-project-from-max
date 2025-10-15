@@ -12,6 +12,7 @@ from flask_login import (
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 app.secret_key = "your_secret_key_here"
 
 # دیتابیس SQLite
