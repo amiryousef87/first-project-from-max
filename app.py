@@ -1,4 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+import os
+from io import BytesIO
+import re
+
+from flask import Flask, render_template, redirect, url_for, request, flash, Response
 from flask_babel import Babel, gettext as _
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -9,40 +13,44 @@ from flask_login import (
     current_user,
     UserMixin,
 )
-from io import BytesIO
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import numpy as np
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
+
 from sqlalchemy import text
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename, safe_join
 
+import numpy as np
+import matplotlib
 
-import os
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'static'), template_folder=os.path.join(BASE_DIR, 'templates'))
+app = Flask(
+    __name__,
+    static_folder=os.path.join(BASE_DIR, "static"),
+    template_folder=os.path.join(BASE_DIR, "templates"),
+)
 app.secret_key = "your_secret_key_here"
 
 # Upload configuration for project zip files
-UPLOAD_RELATIVE = os.path.join('uploads', 'projects')
-UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'projects')
-ALLOWED_EXTENSIONS = {'.zip'}
+UPLOAD_RELATIVE = os.path.join("uploads", "projects")
+UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads", "projects")
+ALLOWED_EXTENSIONS = {".zip"}
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Certificates upload folder
-CERT_UPLOAD_REL = os.path.join('uploads', 'certificates')
-CERT_UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'certificates')
-CERT_ALLOWED_EXT = {'.pdf', '.png', '.jpg', '.jpeg'}
+CERT_UPLOAD_REL = os.path.join("uploads", "certificates")
+CERT_UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads", "certificates")
+CERT_ALLOWED_EXT = {".pdf", ".png", ".jpg", ".jpeg"}
 if not os.path.exists(CERT_UPLOAD_FOLDER):
     os.makedirs(CERT_UPLOAD_FOLDER, exist_ok=True)
 
 # Avatar upload folder (user profile pictures)
-AVATAR_REL = os.path.join('uploads', 'avatars')
-AVATAR_UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'avatars')
-AVATAR_ALLOWED_EXT = {'.png', '.jpg', '.jpeg', '.gif'}
+AVATAR_REL = os.path.join("uploads", "avatars")
+AVATAR_UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads", "avatars")
+AVATAR_ALLOWED_EXT = {".png", ".jpg", ".jpeg", ".gif"}
 if not os.path.exists(AVATAR_UPLOAD_FOLDER):
     os.makedirs(AVATAR_UPLOAD_FOLDER, exist_ok=True)
 
@@ -100,7 +108,6 @@ class Project(db.Model):
     desc = db.Column(db.Text, nullable=True)
     tech = db.Column(db.String(300), nullable=True)
     project_file = db.Column(db.String(300), nullable=True)
-
 
 
 @login_manager.user_loader
@@ -211,7 +218,7 @@ def projects():
             "title": "FinTech Payment App",
             "desc": "Secure financial transactions and account management.",
             "tech": "Python, Flask, React.js, Stripe API",
-        }
+        },
     ]
     return render_template("projects.html", projects=projects_list)
 
@@ -228,35 +235,36 @@ def projects_dashboard():
 @app.route("/dashboard/projects/add", methods=["POST"])
 @login_required
 def add_project():
-    title = request.form.get('title')
-    desc = request.form.get('desc')
-    tech = request.form.get('tech')
+    title = request.form.get("title")
+    desc = request.form.get("desc")
+    tech = request.form.get("tech")
     # Handle uploaded zip file (optional)
-    project_file = request.files.get('project_file')
+    project_file = request.files.get("project_file")
     saved_filename = None
     if project_file and project_file.filename:
         filename = secure_filename(project_file.filename)
         ext = os.path.splitext(filename)[1].lower()
         if ext not in ALLOWED_EXTENSIONS:
-            flash(_('Only .zip files are allowed for project uploads.'), 'danger')
-            return redirect(url_for('projects_dashboard'))
+            flash(_("Only .zip files are allowed for project uploads."), "danger")
+            return redirect(url_for("projects_dashboard"))
         # make filename unique
         import time
+
         unique_name = f"{int(time.time())}_{filename}"
         dest_path = os.path.join(UPLOAD_FOLDER, unique_name)
         project_file.save(dest_path)
         saved_filename = unique_name
     if not title:
-        flash(_('Title is required'), 'danger')
-        return redirect(url_for('projects_dashboard'))
+        flash(_("Title is required"), "danger")
+        return redirect(url_for("projects_dashboard"))
     p = Project(title=title, desc=desc, tech=tech, project_file=saved_filename)
     db.session.add(p)
     db.session.commit()
-    flash(_('Project added'), 'success')
-    return redirect(url_for('projects_dashboard'))
+    flash(_("Project added"), "success")
+    return redirect(url_for("projects_dashboard"))
 
 
-@app.route('/dashboard/projects/delete/<int:project_id>', methods=['POST'])
+@app.route("/dashboard/projects/delete/<int:project_id>", methods=["POST"])
 @login_required
 def delete_project(project_id):
     p = Project.query.get_or_404(project_id)
@@ -270,8 +278,8 @@ def delete_project(project_id):
             pass
     db.session.delete(p)
     db.session.commit()
-    flash(_('Project deleted'), 'success')
-    return redirect(url_for('projects_dashboard'))
+    flash(_("Project deleted"), "success")
+    return redirect(url_for("projects_dashboard"))
 
 
 @app.route("/tasks")
@@ -280,33 +288,35 @@ def tasks():
     return render_template("tasks.html", user=current_user)
 
 
-
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
+
 
 @app.route("/videos")
 def videos():
     # templates contain `video.html` (singular) so render that to avoid TemplateNotFound
     return render_template("video.html")
 
+
 @app.route("/certificates", methods=["GET", "POST"])
 @login_required
 def certificates():
     # Handle upload when POST
-    if request.method == 'POST':
-        cert_file = request.files.get('certificate')
+    if request.method == "POST":
+        cert_file = request.files.get("certificate")
         if cert_file and cert_file.filename:
             filename = secure_filename(cert_file.filename)
             ext = os.path.splitext(filename)[1].lower()
             if ext not in CERT_ALLOWED_EXT:
-                flash(_('Only PDF/JPG/PNG allowed for certificates.'), 'danger')
-                return redirect(url_for('certificates'))
+                flash(_("Only PDF/JPG/PNG allowed for certificates."), "danger")
+                return redirect(url_for("certificates"))
             import time
+
             unique = f"{int(time.time())}_{filename}"
             cert_file.save(os.path.join(CERT_UPLOAD_FOLDER, unique))
-            flash(_('Certificate uploaded'), 'success')
-            return redirect(url_for('certificates'))
+            flash(_("Certificate uploaded"), "success")
+            return redirect(url_for("certificates"))
 
     # List existing uploaded certificates
     certs = []
@@ -317,27 +327,28 @@ def certificates():
     return render_template("certificate.html", user=current_user, certs=certs)
 
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
     # Show user profile and allow avatar upload
-    if request.method == 'POST':
+    if request.method == "POST":
         # handle text fields as well
-        family_name = request.form.get('family_name')
-        phone = request.form.get('phone')
+        family_name = request.form.get("family_name")
+        phone = request.form.get("phone")
         if family_name is not None:
             current_user.family_name = family_name
         if phone is not None:
             current_user.phone = phone
 
-        avatar_file = request.files.get('avatar')
+        avatar_file = request.files.get("avatar")
         if avatar_file and avatar_file.filename:
             filename = secure_filename(avatar_file.filename)
             ext = os.path.splitext(filename)[1].lower()
             if ext not in AVATAR_ALLOWED_EXT:
-                flash(_('Only image files are allowed (png/jpg/jpeg/gif).'), 'danger')
-                return redirect(url_for('profile'))
+                flash(_("Only image files are allowed (png/jpg/jpeg/gif)."), "danger")
+                return redirect(url_for("profile"))
             import time
+
             unique = f"{int(time.time())}_{filename}"
             dest = os.path.join(AVATAR_UPLOAD_FOLDER, unique)
             avatar_file.save(dest)
@@ -354,11 +365,11 @@ def profile():
 
         try:
             db.session.commit()
-            flash(_('Profile updated.'), 'success')
+            flash(_("Profile updated."), "success")
         except Exception:
-            flash(_('Could not update profile.'), 'danger')
-        return redirect(url_for('profile'))
-    return render_template('profile.html', user=current_user)
+            flash(_("Could not update profile."), "danger")
+        return redirect(url_for("profile"))
+    return render_template("profile.html", user=current_user)
 
 
 @app.route("/courses")
@@ -375,67 +386,78 @@ def charts():
 
 
 # Serve server-side generated charts as PNG images
-@app.route('/chart/<chart_name>.png')
+@app.route("/chart/<chart_name>.png")
 @login_required
 def chart_png(chart_name):
     # Simple demo data - replace with real data as needed
     fig, ax = plt.subplots(figsize=(6, 3))
-    if chart_name == 'activity':
+    if chart_name == "activity":
         x = np.arange(1, 15)
         y = np.random.randint(50, 200, size=x.shape)
-        ax.plot(x, y, color='#0275d8', linewidth=2)
-        ax.fill_between(x, y, color='#0275d8', alpha=0.2)
-        ax.set_title('Activity (last 14 days)')
-        ax.set_xlabel('Day')
-        ax.set_ylabel('Visits')
-    elif chart_name == 'missions':
-        labels = ['Completed', 'Pending', 'Failed']
+        ax.plot(x, y, color="#0275d8", linewidth=2)
+        ax.fill_between(x, y, color="#0275d8", alpha=0.2)
+        ax.set_title("Activity (last 14 days)")
+        ax.set_xlabel("Day")
+        ax.set_ylabel("Visits")
+    elif chart_name == "missions":
+        labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
-        colors = ['#28a745', '#ffc107', '#dc3545']
-        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
-        ax.axis('equal')
-        ax.set_title('Missions Today')
+        colors = ["#28a745", "#ffc107", "#dc3545"]
+        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
+        ax.axis("equal")
+        ax.set_title("Missions Today")
     else:
-        ax.text(0.5, 0.5, 'Chart not found', horizontalalignment='center', verticalalignment='center')
+        ax.text(
+            0.5,
+            0.5,
+            "Chart not found",
+            horizontalalignment="center",
+            verticalalignment="center",
+        )
 
     buf = BytesIO()
     fig.tight_layout()
-    fig.savefig(buf, format='png', dpi=100)
+    fig.savefig(buf, format="png", dpi=100)
     plt.close(fig)
     buf.seek(0)
-    return app.response_class(buf.getvalue(), mimetype='image/png')
+    return app.response_class(buf.getvalue(), mimetype="image/png")
 
 
 # Serve SVG (vector) charts generated by matplotlib
-@app.route('/chart/<chart_name>.svg')
+@app.route("/chart/<chart_name>.svg")
 @login_required
 def chart_svg(chart_name):
     fig, ax = plt.subplots(figsize=(6, 3))
-    if chart_name == 'activity':
+    if chart_name == "activity":
         x = np.arange(1, 15)
         y = np.random.randint(50, 200, size=x.shape)
-        ax.plot(x, y, color='#0275d8', linewidth=2)
-        ax.fill_between(x, y, color='#0275d8', alpha=0.2)
-        ax.set_title('Activity (last 14 days)')
-        ax.set_xlabel('Day')
-        ax.set_ylabel('Visits')
-    elif chart_name == 'missions':
-        labels = ['Completed', 'Pending', 'Failed']
+        ax.plot(x, y, color="#0275d8", linewidth=2)
+        ax.fill_between(x, y, color="#0275d8", alpha=0.2)
+        ax.set_title("Activity (last 14 days)")
+        ax.set_xlabel("Day")
+        ax.set_ylabel("Visits")
+    elif chart_name == "missions":
+        labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
-        colors = ['#28a745', '#ffc107', '#dc3545']
-        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
-        ax.axis('equal')
-        ax.set_title('Missions Today')
+        colors = ["#28a745", "#ffc107", "#dc3545"]
+        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
+        ax.axis("equal")
+        ax.set_title("Missions Today")
     else:
-        ax.text(0.5, 0.5, 'Chart not found', horizontalalignment='center', verticalalignment='center')
+        ax.text(
+            0.5,
+            0.5,
+            "Chart not found",
+            horizontalalignment="center",
+            verticalalignment="center",
+        )
 
     buf = BytesIO()
     fig.tight_layout()
-    fig.savefig(buf, format='svg')
+    fig.savefig(buf, format="svg")
     plt.close(fig)
     buf.seek(0)
-    return app.response_class(buf.getvalue(), mimetype='image/svg+xml')
-
+    return app.response_class(buf.getvalue(), mimetype="image/svg+xml")
 
 
 # ثبت‌نام
@@ -454,7 +476,9 @@ def register():
         flash(_("Email already exists!"), "danger")
         return redirect(url_for("login"))
 
-    new_user = User(username=username, email=email, family_name=family_name, phone=phone)
+    new_user = User(
+        username=username, email=email, family_name=family_name, phone=phone
+    )
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
@@ -476,7 +500,9 @@ def login():
             # if optional family_name/phone provided on login, save them to profile
             try:
                 updated = False
-                if family_name and (not user.family_name or user.family_name != family_name):
+                if family_name and (
+                    not user.family_name or user.family_name != family_name
+                ):
                     user.family_name = family_name
                     updated = True
                 if phone and (not user.phone or user.phone != phone):
@@ -504,15 +530,18 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for("index"))
+
 
 def ensure_project_file_column():
     try:
         with db.engine.begin() as conn:
             res = conn.execute(text("PRAGMA table_info('project')"))
             cols = [r[1] for r in res]
-            if 'project_file' not in cols:
-                conn.execute(text("ALTER TABLE project ADD COLUMN project_file VARCHAR(300)"))
+            if "project_file" not in cols:
+                conn.execute(
+                    text("ALTER TABLE project ADD COLUMN project_file VARCHAR(300)")
+                )
     except Exception:
         pass
 
@@ -522,7 +551,7 @@ def ensure_user_avatar_column():
         with db.engine.begin() as conn:
             res = conn.execute(text("PRAGMA table_info('user')"))
             cols = [r[1] for r in res]
-            if 'avatar' not in cols:
+            if "avatar" not in cols:
                 conn.execute(text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
     except Exception:
         pass
@@ -533,9 +562,11 @@ def ensure_user_contact_columns():
         with db.engine.begin() as conn:
             res = conn.execute(text("PRAGMA table_info('user')"))
             cols = [r[1] for r in res]
-            if 'family_name' not in cols:
-                conn.execute(text("ALTER TABLE user ADD COLUMN family_name VARCHAR(150)"))
-            if 'phone' not in cols:
+            if "family_name" not in cols:
+                conn.execute(
+                    text("ALTER TABLE user ADD COLUMN family_name VARCHAR(150)")
+                )
+            if "phone" not in cols:
                 conn.execute(text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
     except Exception:
         pass
@@ -565,6 +596,39 @@ with app.app_context():
         db.session.commit()
 
 
+# Serve minified CSS on-the-fly for local CSS files under static/css
+@app.route("/minified_css/<path:filename>")
+def minified_css(filename):
+    # restrict to css directory and simple filenames
+    try:
+        # only allow files under static/css (use commonpath to handle Windows paths)
+        css_dir = os.path.join(app.static_folder, "css")
+        # normalize and join safely
+        full = os.path.normpath(os.path.join(css_dir, filename))
+        try:
+            common = os.path.commonpath([css_dir, full])
+        except Exception:
+            return Response("/* forbidden */", mimetype="text/css", status=403)
+        if common != os.path.normpath(css_dir):
+            return Response("/* forbidden */", mimetype="text/css", status=403)
+        if not os.path.exists(full):
+            return Response("/* not found */", mimetype="text/css", status=404)
+        with open(full, "r", encoding="utf-8") as f:
+            css = f.read()
+        # remove comments
+        css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+        # collapse whitespace
+        css = re.sub(r"\s+", " ", css)
+        # remove space around symbols
+        css = re.sub(r"\s*([{};:,>])\s*", r"\1", css)
+        # trim
+        css = css.strip()
+        resp = Response(css, mimetype="text/css")
+        # cache in browser for 1 hour
+        resp.headers["Cache-Control"] = "public, max-age=3600"
+        return resp
+    except Exception:
+        return Response("/* error */", mimetype="text/css", status=500)
 
 
 if __name__ == "__main__":
