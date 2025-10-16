@@ -65,95 +65,98 @@ cd first-project-from-max
 
 ```bash
 python -m venv venv
+# first-project-from-max — updated README
 
-# Activate on Windows
-venv\Scripts\activate
+A compact Flask dashboard demo (multilingual-ready) with server-side charts, file uploads and a small projects & certificates dashboard.
 
-# Activate on macOS/Linux
-source venv/bin/activate
+This README highlights how to run the app locally and where to find important features added since the original project scaffold.
+
+---
+
+## Quick start (Windows)
+
+1. Clone the repo and enter the folder:
+
+```powershell
+git clone https://github.com/amiryousef87/first-project-from-max.git
+cd first-project-from-max
 ```
 
-### 3. Install Dependencies
+2. Create and activate a virtualenv (Windows PowerShell):
 
-```bash
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+3. Install dependencies:
+
+```powershell
 pip install -r requirements.txt
-# If Flask-Babel is missing:
-# pip install flask-babel
 ```
 
-### 4. Run the Application
+4. Run in development mode:
 
-**Development Mode:**
-
-```bash
+```powershell
 python app.py
-# or
-flask run
+# open http://127.0.0.1:5000 in your browser
 ```
 
-Then visit: [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
-**Production Mode:**
-
-```bash
-gunicorn app:app
-```
+Notes:
+- The project uses Flask, Flask-Login, Flask-Babel, and SQLAlchemy. If you hit import errors, ensure the environment is activated and `pip install -r requirements.txt` finished successfully.
 
 ---
 
-## Project Structure
+## What changed / useful routes
 
-```
-first-project-from-max/
-├── app.py              # Main Flask application file
-├── config.py           # Configuration file (languages, settings)
-├── requirements.txt    # Project dependencies
-├── /templates          # HTML templates
-│   ├── base.html       # Base template for inheritance
-│   ├── index.html
-│   ├── about.html
-│   ├── projects.html
-│   ├── contact.html
-│   └── dashboard.html  # Dedicated dashboard page
-└── /static             # Static files (CSS, JS, Images)
-```
+- Dashboard (admin-style): `/dashboard` — main dashboard page
+- Projects (DB-backed dashboard): `/dashboard/projects` — add/delete projects (uploads saved to `static/uploads/projects`)
+- Certificates: `/certificates` — upload and list certificate files (saved to `static/uploads/certificates`)
+- Server-side charts: `/chart/<name>.png` and `/chart/<name>.svg`
+
+Admin seed user (created on first run): username `admin` / password `123456` (for development convenience).
 
 ---
 
-## Localization (Flask-Babel)
+## File uploads
 
-The application supports multiple languages via **Flask-Babel**.
+- Project ZIPs: saved to `static/uploads/projects/` and referenced from project cards
+- Certificates: saved to `static/uploads/certificates/`
 
-Languages are defined in `config.py` under the `LANGUAGES` variable:
-
-```python
-LANGUAGES = ['en', 'fa']
-```
-
-Users can switch languages by appending the `?lang=` parameter to the URL:
-
-Example:  
-[http://127.0.0.1:5000/?lang=fa](http://127.0.0.1:5000/?lang=fa)
+Make sure `static/uploads/projects` and `static/uploads/certificates` exist and are writable by the app.
 
 ---
 
-## Dashboard Page
+## Database notes
 
-The `dashboard.html` file demonstrates:
+- SQLite is used by default (e.g. `sqlite:///users.db`).
+- A small migration helper in `app.py` will add the `project_file` column to the `project` table if it's missing (runs at startup).
 
-- Dynamic data rendering with Jinja2  
-- A clean, responsive design using TailwindCSS  
-- Full integration with Flask routes and application logic  
+If you run into `sqlite3.OperationalError: no such column: project.project_file`, restart the app after ensuring `app.py` has the migration helper and the app will add the column automatically.
+
+---
+
+## CSS and templates
+
+- The projects and certificates views use `static/css/projects-dashboard.css`. If you customize the stylesheet, reload your browser (Ctrl+F5) to clear cached CSS.
+- Templates of interest: `templates/projects_dashboard.html`, `templates/certificate.html`, `templates/dashboard.html` and `templates/base.html`.
+
+---
+
+## Troubleshooting
+
+- Missing packages: ensure virtualenv is active and `pip install -r requirements.txt` completed.
+- Permission errors on upload: check the static/uploads directory permissions.
+- Routes not found/templates: confirm templates exist under `templates/` and that you are visiting the dashboard routes (some pages are dashboard-only and require login).
 
 ---
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome.  
-Feel free to check the issues page or submit a Pull Request.
+PRs and issues welcome. If you change routes or uploads paths, please update this README.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License.
+MIT
