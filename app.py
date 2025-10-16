@@ -385,6 +385,7 @@ def charts():
     return render_template("charts.html", user=current_user)
 
 
+
 # Serve server-side generated charts as PNG images
 @app.route("/chart/<chart_name>.png")
 @login_required
@@ -521,7 +522,7 @@ def login():
 
 # داشبورد
 @app.route("/dashboard")
-@login_required
+# @login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user)
 
@@ -629,6 +630,14 @@ def minified_css(filename):
         return resp
     except Exception:
         return Response("/* error */", mimetype="text/css", status=500)
+
+
+
+
+@app.route("/ai")
+def ai():
+    return render_template("ai.html", user=current_user)
+
 
 
 if __name__ == "__main__":
