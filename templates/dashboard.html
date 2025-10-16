@@ -29,15 +29,37 @@
   <body class="sb-nav-fixed">
     <!-- Top Navbar -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-      <a class="navbar-brand ps-3" href="{{ url_for('dashboard') }}"
-        >Max Dashboard</a
-      >
-      <button
-        class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
-        id="sidebarToggle"
-      >
-        <i class="fas fa-bars"></i>
-      </button>
+      <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <a class="navbar-brand ps-3 me-3" href="{{ url_for('dashboard') }}">Max Dashboard</a>
+          <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+
+        <!-- Right side: user avatar / login -->
+        <div class="d-flex align-items-center ms-auto">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if user and user.avatar %}
+                <img src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}" alt="avatar" class="rounded-circle" style="width:36px;height:36px;object-fit:cover;border:2px solid rgba(255,255,255,0.15);">
+                {% else %}
+                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:14px;border:2px solid rgba(255,255,255,0.08);">
+                  <i class="fas fa-user"></i>
+                </div>
+                {% endif %}
+                <span class="ms-2 d-none d-sm-inline">{{ user.username if user else 'Account' }}</span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
 
     <div id="layoutSidenav">
@@ -47,6 +69,23 @@
           <div class="sb-sidenav-menu">
             <div class="nav">
               <div class="sb-sidenav-menu-heading">My Dashboard</div>
+                  {% if user %}
+                  <div class="px-3 mb-3 text-white">
+                    <div class="d-flex align-items-center gap-2">
+                      {% if user.avatar %}
+                      <img src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+                      {% else %}
+                      <div class="rounded-circle bg-light text-dark d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                        <i class="fas fa-user"></i>
+                      </div>
+                      {% endif %}
+                      <div>
+                        <div class="fw-bold">{{ user.username }}</div>
+                        <div class="small">{{ user.family_name or '' }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
               <a class="nav-link" href="{{ url_for('projects_dashboard') }}">
                 <div class="sb-nav-link-icon"><i class="fas fa-tasks"></i></div>
                 My Projects

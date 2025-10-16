@@ -1,3 +1,117 @@
+# First Project from Max
+
+A production-minded Flask application starter with a multilingual public site and an admin-style dashboard.
+
+This repository demonstrates a pragmatic Flask setup including authentication, file uploads, server-side charts, and a small dashboard for managing projects and certificates.
+
+## Contents
+
+- `app.py` — main Flask application (routes, models, upload handlers)
+- `templates/` — Jinja2 templates for pages and dashboard
+- `static/` — CSS, JS, images, and upload folders (`static/uploads/...`)
+- `requirements.txt` — Python dependencies
+
+## Key features
+
+- User authentication (Flask-Login)
+- Profile pictures (avatar) and profile fields (family name, phone)
+- DB-backed projects with ZIP upload and delete
+- Certificates upload and listing
+- Server-side charts (PNG & SVG) generated with matplotlib
+- Internationalization support via Flask-Babel
+
+## Prerequisites
+
+- Python 3.8+ installed
+- Recommended: use a virtual environment (venv)
+
+## Installation (Windows)
+
+1. Clone the repository and change directory:
+
+```powershell
+git clone https://github.com/amiryousef87/first-project-from-max.git
+cd first-project-from-max
+```
+
+2. Create and activate a virtual environment (PowerShell):
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+3. Install dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+## Running the app (development)
+
+```powershell
+python app.py
+```
+
+Open http://127.0.0.1:5000 in your browser.
+
+Notes:
+- On first run the app creates the SQLite database `users.db` and seeds a default admin user (`admin` / `123456`) for development convenience.
+- If you encounter import errors, ensure your virtual environment is active and dependencies are installed.
+
+## Important routes
+
+Public pages:
+- `/` — Home
+- `/about`, `/contact` — Informational pages
+- `/projects` — Public projects listing (no login required)
+- `/video` — Video examples
+
+Authenticated/dashboard pages (require login):
+- `/login` — Login / Register
+- `/dashboard` — Main dashboard
+- `/dashboard/projects` — Manage dashboard projects (add/delete)
+- `/certificates` — Upload/list certificates
+- `/profile` — Update avatar, family name, phone
+- `/charts` — Charts page
+
+Server-generated charts:
+- `/chart/<name>.png` and `/chart/<name>.svg`
+
+## Uploads and storage
+
+Upload folders are under `static/uploads/`:
+- Projects (zip files): `static/uploads/projects/`
+- Certificates: `static/uploads/certificates/`
+- Avatars: `static/uploads/avatars/`
+
+The app ensures these directories exist at startup, but verify filesystem permissions if uploads fail.
+
+## Database & migrations
+
+- The project uses SQLite by default: `sqlite:///users.db`.
+- A lightweight, safe migration helper in `app.py` will attempt to add missing columns (for example `avatar`, `family_name`, `phone`, or `project_file`) at startup to avoid breaking older databases. If you prefer explicit migrations, consider adding Alembic for production.
+
+## Security and production notes
+
+- `app.secret_key` in `app.py` is a placeholder. Set a strong secret key via environment variable for production.
+- Disable `debug=True` in production and run behind a WSGI server (Gunicorn) and reverse proxy (Nginx).
+- Validate and sanitize uploaded files. The app currently checks extensions for basic validation; use secure file handling and virus scanning on production-critical systems.
+
+## Development tips
+
+- To reset the SQLite DB during development, stop the server and remove `users.db`, then restart the app.
+- Browser caching: after CSS/template changes, use Ctrl+F5 to force reload.
+
+## Contributing
+
+Contributions are welcome. Open an issue or PR describing the change.
+
+If you modify routes or upload paths, update this README accordingly.
+
+## License
+
+This project is released under the MIT License.
 
 # first-project-from-max
 

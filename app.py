@@ -39,6 +39,13 @@ CERT_ALLOWED_EXT = {'.pdf', '.png', '.jpg', '.jpeg'}
 if not os.path.exists(CERT_UPLOAD_FOLDER):
     os.makedirs(CERT_UPLOAD_FOLDER, exist_ok=True)
 
+# Avatar upload folder (user profile pictures)
+AVATAR_REL = os.path.join('uploads', 'avatars')
+AVATAR_UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'avatars')
+AVATAR_ALLOWED_EXT = {'.png', '.jpg', '.jpeg', '.gif'}
+if not os.path.exists(AVATAR_UPLOAD_FOLDER):
+    os.makedirs(AVATAR_UPLOAD_FOLDER, exist_ok=True)
+
 # دیتابیس SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -75,6 +82,9 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
+    avatar = db.Column(db.String(300), nullable=True)
+    family_name = db.Column(db.String(150), nullable=True)
+    phone = db.Column(db.String(50), nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -110,7 +120,6 @@ def about():
 
 
 @app.route("/projects")
-@login_required
 def projects():
     projects_list = [
         {
@@ -308,6 +317,50 @@ def certificates():
     return render_template("certificate.html", user=current_user, certs=certs)
 
 
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    # Show user profile and allow avatar upload
+    if request.method == 'POST':
+        # handle text fields as well
+        family_name = request.form.get('family_name')
+        phone = request.form.get('phone')
+        if family_name is not None:
+            current_user.family_name = family_name
+        if phone is not None:
+            current_user.phone = phone
+
+        avatar_file = request.files.get('avatar')
+        if avatar_file and avatar_file.filename:
+            filename = secure_filename(avatar_file.filename)
+            ext = os.path.splitext(filename)[1].lower()
+            if ext not in AVATAR_ALLOWED_EXT:
+                flash(_('Only image files are allowed (png/jpg/jpeg/gif).'), 'danger')
+                return redirect(url_for('profile'))
+            import time
+            unique = f"{int(time.time())}_{filename}"
+            dest = os.path.join(AVATAR_UPLOAD_FOLDER, unique)
+            avatar_file.save(dest)
+            # remove old avatar if exists
+            try:
+                if current_user.avatar:
+                    old = os.path.join(AVATAR_UPLOAD_FOLDER, current_user.avatar)
+                    if os.path.exists(old):
+                        os.remove(old)
+            except Exception:
+                pass
+            # save new avatar filename in user record
+            current_user.avatar = unique
+
+        try:
+            db.session.commit()
+            flash(_('Profile updated.'), 'success')
+        except Exception:
+            flash(_('Could not update profile.'), 'danger')
+        return redirect(url_for('profile'))
+    return render_template('profile.html', user=current_user)
+
+
 @app.route("/courses")
 @login_required
 def courses():
@@ -390,6 +443,8 @@ def chart_svg(chart_name):
 def register():
     username = request.form.get("username")
     email = request.form.get("email")
+    family_name = request.form.get("family_name")
+    phone = request.form.get("phone")
     password = request.form.get("password")
 
     if User.query.filter_by(username=username).first():
@@ -399,7 +454,7 @@ def register():
         flash(_("Email already exists!"), "danger")
         return redirect(url_for("login"))
 
-    new_user = User(username=username, email=email)
+    new_user = User(username=username, email=email, family_name=family_name, phone=phone)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
@@ -413,9 +468,24 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
+        family_name = request.form.get("family_name")
+        phone = request.form.get("phone")
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
+            # if optional family_name/phone provided on login, save them to profile
+            try:
+                updated = False
+                if family_name and (not user.family_name or user.family_name != family_name):
+                    user.family_name = family_name
+                    updated = True
+                if phone and (not user.phone or user.phone != phone):
+                    user.phone = phone
+                    updated = True
+                if updated:
+                    db.session.commit()
+            except Exception:
+                pass
             next_page = request.args.get("next")
             return redirect(next_page or url_for("dashboard"))
         flash(_("Invalid username or password!"), "danger")
@@ -430,31 +500,67 @@ def dashboard():
     return render_template("dashboard.html", user=current_user)
 
 
-# خروج
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for('index'))
+
+def ensure_project_file_column():
+    try:
+        with db.engine.begin() as conn:
+            res = conn.execute(text("PRAGMA table_info('project')"))
+            cols = [r[1] for r in res]
+            if 'project_file' not in cols:
+                conn.execute(text("ALTER TABLE project ADD COLUMN project_file VARCHAR(300)"))
+    except Exception:
+        pass
+
+
+def ensure_user_avatar_column():
+    try:
+        with db.engine.begin() as conn:
+            res = conn.execute(text("PRAGMA table_info('user')"))
+            cols = [r[1] for r in res]
+            if 'avatar' not in cols:
+                conn.execute(text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
+    except Exception:
+        pass
+
+
+def ensure_user_contact_columns():
+    try:
+        with db.engine.begin() as conn:
+            res = conn.execute(text("PRAGMA table_info('user')"))
+            cols = [r[1] for r in res]
+            if 'family_name' not in cols:
+                conn.execute(text("ALTER TABLE user ADD COLUMN family_name VARCHAR(150)"))
+            if 'phone' not in cols:
+                conn.execute(text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
+    except Exception:
+        pass
+
 
 with app.app_context():
-    db.create_all()  # مطمئن شو جدول‌ها ساخته شدن
-    # Ensure DB schema has the new column (safe migration for SQLite)
-    def ensure_project_file_column():
-        try:
-            with db.engine.begin() as conn:
-                res = conn.execute(text("PRAGMA table_info('project')"))
-                cols = [r[1] for r in res]
-                if 'project_file' not in cols:
-                    conn.execute(text("ALTER TABLE project ADD COLUMN project_file VARCHAR(300)"))
-        except Exception:
-            # if anything goes wrong, skip migration (we don't want startup to fail)
-            pass
+    db.create_all()
+    # Run safe migrations
+    try:
+        ensure_project_file_column()
+    except Exception:
+        pass
+    try:
+        ensure_user_avatar_column()
+    except Exception:
+        pass
+    try:
+        ensure_user_contact_columns()
+    except Exception:
+        pass
 
-    ensure_project_file_column()
+    # Create default admin if missing
     if not User.query.filter_by(username="admin").first():
         admin = User(username="admin", email="admin@example.com")
-        admin.set_password("123456")  # رمز ورود دلخواه
+        admin.set_password("123456")  # default admin password
         db.session.add(admin)
         db.session.commit()
 

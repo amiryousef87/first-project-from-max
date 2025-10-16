@@ -94,6 +94,31 @@
             >Dashboard</a
           >
         </nav>
+
+        <!-- Account / Avatar (shows on all pages) -->
+        <div class="flex items-center gap-3">
+          {% if current_user and current_user.is_authenticated %}
+          <div class="relative">
+            <button id="accountBtn" class="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300" aria-expanded="false">
+              {% if current_user.avatar %}
+              <img src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}" alt="avatar" class="w-10 h-10 rounded-full object-cover border-2 border-orange-400">
+              {% else %}
+              <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-orange-500">
+                <i class="fas fa-user"></i>
+              </div>
+              {% endif %}
+              <span class="hidden sm:inline text-sm text-orange-500">{{ current_user.username }}</span>
+            </button>
+
+            <div id="accountMenu" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg z-50 ring-1 ring-black ring-opacity-5">
+              <a href="{{ url_for('profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+              <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+            </div>
+          </div>
+          {% else %}
+          <a href="{{ url_for('login') }}" class="text-orange-500 hover:text-orange-600">Login</a>
+          {% endif %}
+        </div>
       </div>
 
       <div
@@ -307,6 +332,28 @@
       closeMenu.addEventListener("click", () => {
         mobileMenu.classList.add("translate-x-full");
       });
+      
+      // Account dropdown toggle (header)
+      const accountBtn = document.getElementById('accountBtn');
+      const accountMenu = document.getElementById('accountMenu');
+      if (accountBtn) {
+        accountBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isHidden = accountMenu.classList.contains('hidden');
+          if (isHidden) {
+            accountMenu.classList.remove('hidden');
+          } else {
+            accountMenu.classList.add('hidden');
+          }
+        });
+
+        // close when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!accountBtn.contains(e.target) && !accountMenu.contains(e.target)) {
+            accountMenu.classList.add('hidden');
+          }
+        });
+      }
     </script>
   </body>
 </html>
