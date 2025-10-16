@@ -16,7 +16,7 @@
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="./dashborad.html">Max Dashboard</a>
+    <a class="navbar-brand ps-3" href="{{ url_for('dashboard') }}">Max Dashboard</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
@@ -26,25 +26,25 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading"> داشبورد من</div>
-                        <a class="nav-link" href="./task.html">
+                        <div class="sb-sidenav-menu-heading">My Dashboard</div>
+                        <a class="nav-link" href="{{ url_for('projects_dashboard') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            پروژه‌های‌ من
+                            My Projects
                         </a>
-                        <a class="nav-link" href="./video.html">
+                        <a class="nav-link" href="{{ url_for('videos') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            ویدیو‌های من
+                            Videos
                         </a>
-                        <a class="nav-link" href="./certificate.html">
+                        <a class="nav-link" href="{{ url_for('certificates') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            مدرک های من
+                            My Certificates
                         </a>
-                        <a class="nav-link" href="./packeg.html">
+                        <a class="nav-link" href="{{ url_for('courses') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            دوره‌های من
-                        </a> <a class="nav-link" href="./charts.html">
+                            My Courses
+                        <a class="nav-link" href="{{ url_for('charts') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            نمودار پیشرفت من
+                            Progress Charts
                         </a>
                     </div>
                 </div>
@@ -53,16 +53,58 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">My Certificate</h1>
-                    <p style="border: 1.5px solid gray;width: 35%;"></p>
-                    <br>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Certificates</h1>
+                        <p class="text-gray-600">Upload and manage your certificates here.</p>
+
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white rounded-2xl p-6 shadow-md">
+                                <h3 class="text-lg font-semibold mb-2">Upload Certificate</h3>
+                                <p class="text-sm text-gray-600 mb-4">Accepted: PDF, PNG, JPG</p>
+                                <form method="post" enctype="multipart/form-data" class="flex items-center gap-3">
+                                    <label class="file-pill">
+                                        <i class="fas fa-upload"></i>
+                                        <span class="ml-2">Select file</span>
+                                        <input type="file" name="certificate" accept=".pdf,.png,.jpg,.jpeg" class="hidden" />
+                                    </label>
+                                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-md">Upload</button>
+                                </form>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <div class="bg-white rounded-2xl p-6 shadow-md">
+                                    <h3 class="text-lg font-semibold mb-3">Your Certificates</h3>
+                                    {% if certs and certs|length > 0 %}
+                                    <div class="space-y-3">
+                                        {% for c in certs %}
+                                        <div class="flex items-center justify-between p-3 border rounded-lg">
+                                            <div class="flex items-center gap-3">
+                                                <i class="fas fa-certificate text-2xl text-indigo-500"></i>
+                                                <div>
+                                                    <div class="font-medium">{{ c }}</div>
+                                                    <div class="text-sm text-gray-500">Uploaded</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <a href="{{ url_for('static', filename='uploads/certificates/' ~ c) }}" class="text-sm px-3 py-1 rounded-full border border-gray-200 bg-white shadow-sm" download><i class="fas fa-download mr-2"></i>Download</a>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                        <div class="text-gray-600">No certificates uploaded yet.</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <p class="text-muted">max طراحی و توسعه توسط شرکت </p>
+                        <p class="text-muted">Designed and developed by Max Company</p>
                     </div>
                 </div>
             </footer>

@@ -16,7 +16,7 @@
 <body class="sb-nav-fixed">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="./dashborad.html">Max Dashboard</a>
+        <a class="navbar-brand ps-3" href="{{ url_for('dashboard') }}">Max Dashboard</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
@@ -26,25 +26,25 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading"> داشبورد من</div>
-                        <a class="nav-link" href="./task.html">
+                        <div class="sb-sidenav-menu-heading">My Dashboard</div>
+                        <a class="nav-link" href="{{ url_for('projects_dashboard') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            پروژه‌های‌ من
+                            My Projects
                         </a>
-                        <a class="nav-link" href="./video.html">
+                        <a class="nav-link" href="{{ url_for('videos') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            ویدیو‌های من
+                            Videos
                         </a>
-                        <a class="nav-link" href="./certificate.html">
+                        <a class="nav-link" href="{{ url_for('certificates') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            مدرک های من
+                            My Certificates
                         </a>
-                        <a class="nav-link" href="./packeg.html">
+                        <a class="nav-link" href="{{ url_for('courses') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            دوره‌های من
-                        </a> <a class="nav-link" href="./charts.html">
+                            My Courses
+                        <a class="nav-link" href="{{ url_for('charts') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            نمودار پیشرفت من
+                            Progress Charts
                         </a>
                     </div>
                 </div>
@@ -53,15 +53,34 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">My Video</h1>
+                    <h1 class="mt-4">Videos</h1>
                     <p style="border: 1.5px solid gray; width: 35%; "></p>
                     <br>
+
+                    <!-- Video grid: 3 columns x 5 rows (15 placeholders) -->
+                    <section class="mb-4">
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                            {% for i in range(15) %}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="ratio ratio-16x9 bg-dark d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-play-circle text-white" style="font-size:48px;opacity:0.9"></i>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Video {{ i+1 }}</h5>
+                                        <p class="card-text text-muted">Short description or duration</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
                 </div>
             </main>
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <p class="text-muted">max طراحی و توسعه توسط شرکت </p>
+                        <p class="text-muted">Designed and developed by Max Company</p>
                     </div>
                 </div>
             </footer>

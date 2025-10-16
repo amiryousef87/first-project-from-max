@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- Hero Section + Add Project Form -->
+<section class="mb-8">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+      <h1 class="text-4xl font-extrabold">Projects</h1>
+      <p class="text-gray-600">Manage your dashboard projects here.</p>
+    </div>
+
+    <div class="add-card bg-white rounded-2xl p-4 shadow-md w-full md:w-auto">
+      <form method="post" action="{{ url_for('add_project') }}" class="flex flex-col md:flex-row md:items-center gap-3 items-stretch" enctype="multipart/form-data">
+        <input name="title" required placeholder="Project title" class="form-control px-3 py-2 rounded-md border border-gray-200 shadow-sm flex-1" />
+        <input name="tech" placeholder="Techs (comma separated)" class="form-control px-3 py-2 rounded-md border border-gray-200 shadow-sm hidden md:inline-block md:w-48" />
+        <label class="file-pill flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 text-sm cursor-pointer">
+          <i class="fas fa-file-archive text-gray-600"></i>
+          <span class="file-label text-gray-700">Attach .zip</span>
+          <input id="project_file_input" type="file" name="project_file" accept=".zip" class="hidden" />
+        </label>
+        <button class="btn btn-primary px-3 py-2 rounded-md ml-auto md:ml-0" type="submit">Add</button>
+      </form>
+      <div id="selectedFile" class="mt-2 text-sm text-gray-500"></div>
+    </div>
+  </div>
+
+  <!-- Projects Grid -->
+  <section class="max-w-7xl mx-auto px-6 mb-20">
+    <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      {% if projects|length == 0 %}
+        <div class="col-span-full empty-state bg-white rounded-2xl p-12 shadow-sm">
+          <i class="fas fa-folder-open text-6xl text-indigo-400 mb-4"></i>
+          <h3 class="text-2xl font-semibold">No projects yet</h3>
+          <p class="mt-2 text-gray-600">Add your first project using the form above. Projects you add will be saved to the database.</p>
+        </div>
+      {% else %}
+      {% for p in projects %}
+      <div class="project-card" role="article" aria-label="Project {{ p.title }}">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-sm">
+                <i class="fas fa-folder-open"></i>
+              </div>
+              <h3 class="card-title">{{ p.title }}</h3>
+            </div>
+            <p class="text-gray-600 mb-4">{{ p.desc }}</p>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between">
+          <div class="meta">
+            {% if p.tech %}
+              {% for tech in p.tech.split(',') %}
+              <span class="tech-pill">{{ tech.strip() }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="actions">
+            {% if p.project_file %}
+              <a href="{{ url_for('static', filename='uploads/projects/' ~ p.project_file) }}" class="text-sm px-3 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-50 shadow-sm" download>
+                <i class="fas fa-download mr-2 text-gray-600"></i>Download
+              </a>
+            {% endif %}
+            <form method="post" action="{{ url_for('delete_project', project_id=p.id) }}" onsubmit="return confirm('Delete this project?');">
+              <button class="delete-btn" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+  {% endfor %}
+  {% endif %}
+    </div>
+  </section>
+</section>
+
+{% endblock %}
+
+<script>
+  // show selected filename for project upload
+  (function(){
+    const input = document.getElementById('project_file_input');
+    const label = document.querySelector('.file-label');
+    const selected = document.getElementById('selectedFile');
+    if(!input) return;
+    input.addEventListener('change', function(e){
+      const f = input.files && input.files[0];
+      if(f){
+        label.textContent = f.name;
+        selected.textContent = `Selected: ${f.name}`;
+      } else {
+        label.textContent = 'Attach .zip';
+        selected.textContent = '';
+      }
+    });
+  })();
+</script>

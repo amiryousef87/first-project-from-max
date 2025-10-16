@@ -9,13 +9,35 @@ from flask_login import (
     current_user,
     UserMixin,
 )
+from io import BytesIO
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from sqlalchemy import text
 
 
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'static'), template_folder=os.path.join(BASE_DIR, 'templates'))
 app.secret_key = "your_secret_key_here"
+
+# Upload configuration for project zip files
+UPLOAD_RELATIVE = os.path.join('uploads', 'projects')
+UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'projects')
+ALLOWED_EXTENSIONS = {'.zip'}
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Certificates upload folder
+CERT_UPLOAD_REL = os.path.join('uploads', 'certificates')
+CERT_UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'certificates')
+CERT_ALLOWED_EXT = {'.pdf', '.png', '.jpg', '.jpeg'}
+if not os.path.exists(CERT_UPLOAD_FOLDER):
+    os.makedirs(CERT_UPLOAD_FOLDER, exist_ok=True)
 
 # دیتابیس SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
@@ -59,6 +81,16 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+# Project model for dashboard-managed projects
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    desc = db.Column(db.Text, nullable=True)
+    tech = db.Column(db.String(300), nullable=True)
+    project_file = db.Column(db.String(300), nullable=True)
+
 
 
 @login_manager.user_loader
@@ -175,6 +207,64 @@ def projects():
     return render_template("projects.html", projects=projects_list)
 
 
+# Dashboard-specific projects (separate page from public Projects)
+@app.route("/dashboard/projects")
+@login_required
+def projects_dashboard():
+    # Use DB-backed projects for the dashboard. Show all projects stored in DB.
+    projects = Project.query.order_by(Project.id.desc()).all()
+    return render_template("projects_dashboard.html", projects=projects)
+
+
+@app.route("/dashboard/projects/add", methods=["POST"])
+@login_required
+def add_project():
+    title = request.form.get('title')
+    desc = request.form.get('desc')
+    tech = request.form.get('tech')
+    # Handle uploaded zip file (optional)
+    project_file = request.files.get('project_file')
+    saved_filename = None
+    if project_file and project_file.filename:
+        filename = secure_filename(project_file.filename)
+        ext = os.path.splitext(filename)[1].lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            flash(_('Only .zip files are allowed for project uploads.'), 'danger')
+            return redirect(url_for('projects_dashboard'))
+        # make filename unique
+        import time
+        unique_name = f"{int(time.time())}_{filename}"
+        dest_path = os.path.join(UPLOAD_FOLDER, unique_name)
+        project_file.save(dest_path)
+        saved_filename = unique_name
+    if not title:
+        flash(_('Title is required'), 'danger')
+        return redirect(url_for('projects_dashboard'))
+    p = Project(title=title, desc=desc, tech=tech, project_file=saved_filename)
+    db.session.add(p)
+    db.session.commit()
+    flash(_('Project added'), 'success')
+    return redirect(url_for('projects_dashboard'))
+
+
+@app.route('/dashboard/projects/delete/<int:project_id>', methods=['POST'])
+@login_required
+def delete_project(project_id):
+    p = Project.query.get_or_404(project_id)
+    # remove uploaded file if exists
+    if p.project_file:
+        try:
+            path = os.path.join(UPLOAD_FOLDER, p.project_file)
+            if os.path.exists(path):
+                os.remove(path)
+        except Exception:
+            pass
+    db.session.delete(p)
+    db.session.commit()
+    flash(_('Project deleted'), 'success')
+    return redirect(url_for('projects_dashboard'))
+
+
 @app.route("/tasks")
 @login_required
 def tasks():
@@ -188,18 +278,110 @@ def contact():
 
 @app.route("/videos")
 def videos():
-    return render_template("videos.html")
+    # templates contain `video.html` (singular) so render that to avoid TemplateNotFound
+    return render_template("video.html")
 
-@app.route("/certificates")
+@app.route("/certificates", methods=["GET", "POST"])
 @login_required
 def certificates():
-    return render_template("certificates.html", user=current_user)
+    # Handle upload when POST
+    if request.method == 'POST':
+        cert_file = request.files.get('certificate')
+        if cert_file and cert_file.filename:
+            filename = secure_filename(cert_file.filename)
+            ext = os.path.splitext(filename)[1].lower()
+            if ext not in CERT_ALLOWED_EXT:
+                flash(_('Only PDF/JPG/PNG allowed for certificates.'), 'danger')
+                return redirect(url_for('certificates'))
+            import time
+            unique = f"{int(time.time())}_{filename}"
+            cert_file.save(os.path.join(CERT_UPLOAD_FOLDER, unique))
+            flash(_('Certificate uploaded'), 'success')
+            return redirect(url_for('certificates'))
+
+    # List existing uploaded certificates
+    certs = []
+    try:
+        certs = sorted(os.listdir(CERT_UPLOAD_FOLDER), reverse=True)
+    except Exception:
+        certs = []
+    return render_template("certificate.html", user=current_user, certs=certs)
 
 
 @app.route("/courses")
 @login_required
 def courses():
     return render_template("courses.html", user=current_user)
+
+
+# Charts page (was present as a template but there was no route)
+@app.route("/charts")
+@login_required
+def charts():
+    return render_template("charts.html", user=current_user)
+
+
+# Serve server-side generated charts as PNG images
+@app.route('/chart/<chart_name>.png')
+@login_required
+def chart_png(chart_name):
+    # Simple demo data - replace with real data as needed
+    fig, ax = plt.subplots(figsize=(6, 3))
+    if chart_name == 'activity':
+        x = np.arange(1, 15)
+        y = np.random.randint(50, 200, size=x.shape)
+        ax.plot(x, y, color='#0275d8', linewidth=2)
+        ax.fill_between(x, y, color='#0275d8', alpha=0.2)
+        ax.set_title('Activity (last 14 days)')
+        ax.set_xlabel('Day')
+        ax.set_ylabel('Visits')
+    elif chart_name == 'missions':
+        labels = ['Completed', 'Pending', 'Failed']
+        sizes = [60, 30, 10]
+        colors = ['#28a745', '#ffc107', '#dc3545']
+        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        ax.axis('equal')
+        ax.set_title('Missions Today')
+    else:
+        ax.text(0.5, 0.5, 'Chart not found', horizontalalignment='center', verticalalignment='center')
+
+    buf = BytesIO()
+    fig.tight_layout()
+    fig.savefig(buf, format='png', dpi=100)
+    plt.close(fig)
+    buf.seek(0)
+    return app.response_class(buf.getvalue(), mimetype='image/png')
+
+
+# Serve SVG (vector) charts generated by matplotlib
+@app.route('/chart/<chart_name>.svg')
+@login_required
+def chart_svg(chart_name):
+    fig, ax = plt.subplots(figsize=(6, 3))
+    if chart_name == 'activity':
+        x = np.arange(1, 15)
+        y = np.random.randint(50, 200, size=x.shape)
+        ax.plot(x, y, color='#0275d8', linewidth=2)
+        ax.fill_between(x, y, color='#0275d8', alpha=0.2)
+        ax.set_title('Activity (last 14 days)')
+        ax.set_xlabel('Day')
+        ax.set_ylabel('Visits')
+    elif chart_name == 'missions':
+        labels = ['Completed', 'Pending', 'Failed']
+        sizes = [60, 30, 10]
+        colors = ['#28a745', '#ffc107', '#dc3545']
+        ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+        ax.axis('equal')
+        ax.set_title('Missions Today')
+    else:
+        ax.text(0.5, 0.5, 'Chart not found', horizontalalignment='center', verticalalignment='center')
+
+    buf = BytesIO()
+    fig.tight_layout()
+    fig.savefig(buf, format='svg')
+    plt.close(fig)
+    buf.seek(0)
+    return app.response_class(buf.getvalue(), mimetype='image/svg+xml')
 
 
 
@@ -257,6 +439,19 @@ def logout():
 
 with app.app_context():
     db.create_all()  # مطمئن شو جدول‌ها ساخته شدن
+    # Ensure DB schema has the new column (safe migration for SQLite)
+    def ensure_project_file_column():
+        try:
+            with db.engine.begin() as conn:
+                res = conn.execute(text("PRAGMA table_info('project')"))
+                cols = [r[1] for r in res]
+                if 'project_file' not in cols:
+                    conn.execute(text("ALTER TABLE project ADD COLUMN project_file VARCHAR(300)"))
+        except Exception:
+            # if anything goes wrong, skip migration (we don't want startup to fail)
+            pass
+
+    ensure_project_file_column()
     if not User.query.filter_by(username="admin").first():
         admin = User(username="admin", email="admin@example.com")
         admin.set_password("123456")  # رمز ورود دلخواه
@@ -269,4 +464,8 @@ with app.app_context():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        try:
+            ensure_project_file_column()
+        except Exception:
+            pass
     app.run(debug=True)

@@ -2,16 +2,23 @@
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
-// Area Chart Example
-var ctx = document.getElementById("myAreaChart");
-var myLineChart = new Chart(ctx, {
+// Area Chart Example (render into #activityChart)
+var ctxEl = document.getElementById("activityChart");
+if (ctxEl) {
+  var ctx = ctxEl.getContext('2d');
+  // create gradient
+  var gradient = ctx.createLinearGradient(0, 0, 0, 200);
+  gradient.addColorStop(0, 'rgba(2,117,216,0.35)');
+  gradient.addColorStop(1, 'rgba(2,117,216,0.05)');
+
+  var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
     labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
     datasets: [{
       label: "Sessions",
       lineTension: 0.3,
-      backgroundColor: "rgba(2,117,216,0.2)",
+      backgroundColor: gradient,
       borderColor: "rgba(2,117,216,1)",
       pointRadius: 5,
       pointBackgroundColor: "rgba(2,117,216,1)",
@@ -51,4 +58,5 @@ var myLineChart = new Chart(ctx, {
       display: false
     }
   }
-});
+  });
+}
