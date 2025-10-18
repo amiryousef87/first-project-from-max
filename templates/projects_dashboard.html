@@ -1,96 +1,154 @@
 {% extends "base.html" %} {% block content %}
 
-<!-- Hero Section + Add Project Form -->
-<section class="mb-8">
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-    <div>
-      <h1 class="text-4xl font-extrabold">Projects</h1>
-      <p class="text-gray-600">Manage your dashboard projects here.</p>
+<section class="mb-12">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Header -->
+    <div
+      class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8"
+    >
+      <div>
+        <h1 class="text-4xl font-extrabold text-gray-900">Projects</h1>
+        <p class="text-gray-500 mt-1">Manage your dashboard projects here.</p>
+      </div>
+
+      <!-- Add Project Card iOS Style -->
+      <div
+        class="bg-white/30 backdrop-blur-md rounded-3xl p-6 shadow-md w-full md:w-96 border border-white/20"
+      >
+        <h2
+          class="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900"
+        >
+          <i class="fas fa-plus-circle"></i> Add Project
+        </h2>
+        <form
+          method="post"
+          action="{{ url_for('add_project') }}"
+          class="flex flex-col gap-3"
+          enctype="multipart/form-data"
+        >
+          <input
+            name="title"
+            required
+            placeholder="Project title"
+            class="px-3 py-2 rounded-xl border border-white/40 bg-white/20 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-1 focus:ring-indigo-300"
+          />
+          <input
+            name="tech"
+            placeholder="Techs (comma separated)"
+            class="px-3 py-2 rounded-xl border border-white/40 bg-white/20 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-1 focus:ring-indigo-300"
+          />
+
+          <label
+            class="file-pill flex items-center gap-2 px-3 py-2 rounded-xl border border-white/40 text-gray-900 cursor-pointer hover:bg-white/20 transition"
+          >
+            <i class="fas fa-file-archive"></i>
+            <span class="file-label">Attach .zip</span>
+            <input
+              id="project_file_input"
+              type="file"
+              name="project_file"
+              accept=".zip"
+              class="hidden"
+            />
+          </label>
+
+          <button
+            class="bg-white/50 text-indigo-700 font-semibold px-4 py-2 rounded-xl hover:bg-white/70 transition mt-2 backdrop-blur-sm"
+          >
+            Add Project
+          </button>
+        </form>
+        <div id="selectedFile" class="mt-2 text-sm text-gray-600"></div>
+      </div>
     </div>
 
-    <div class="add-card bg-white rounded-2xl p-4 shadow-md w-full md:w-auto">
-      <form method="post" action="{{ url_for('add_project') }}" class="flex flex-col md:flex-row md:items-center gap-3 items-stretch" enctype="multipart/form-data">
-        <input name="title" required placeholder="Project title" class="form-control px-3 py-2 rounded-md border border-gray-200 shadow-sm flex-1" />
-        <input name="tech" placeholder="Techs (comma separated)" class="form-control px-3 py-2 rounded-md border border-gray-200 shadow-sm hidden md:inline-block md:w-48" />
-        <label class="file-pill flex items-center gap-2 px-3 py-2 rounded-md border border-gray-200 text-sm cursor-pointer">
-          <i class="fas fa-file-archive text-gray-600"></i>
-          <span class="file-label text-gray-700">Attach .zip</span>
-          <input id="project_file_input" type="file" name="project_file" accept=".zip" class="hidden" />
-        </label>
-        <button class="btn btn-primary px-3 py-2 rounded-md ml-auto md:ml-0" type="submit">Add</button>
-      </form>
-      <div id="selectedFile" class="mt-2 text-sm text-gray-500"></div>
-    </div>
-  </div>
-
-  <!-- Projects Grid -->
-  <section class="max-w-7xl mx-auto px-6 mb-20">
-    <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <!-- Projects Grid iOS Style -->
+    <div
+      id="projectsGrid"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
       {% if projects|length == 0 %}
-        <div class="col-span-full empty-state bg-white rounded-2xl p-12 shadow-sm">
-          <i class="fas fa-folder-open text-6xl text-indigo-400 mb-4"></i>
-          <h3 class="text-2xl font-semibold">No projects yet</h3>
-          <p class="mt-2 text-gray-600">Add your first project using the form above. Projects you add will be saved to the database.</p>
-        </div>
-      {% else %}
-      {% for p in projects %}
-      <div class="project-card" role="article" aria-label="Project {{ p.title }}">
-        <div class="flex items-start justify-between">
+      <div
+        class="col-span-full text-center bg-white/30 backdrop-blur-md rounded-3xl p-12 shadow-md border border-white/20"
+      >
+        <i class="fas fa-folder-open text-7xl text-indigo-400 mb-4"></i>
+        <h3 class="text-2xl font-semibold text-gray-900">No projects yet</h3>
+        <p class="mt-2 text-gray-500">
+          Add your first project using the form above. Projects will appear
+          here.
+        </p>
+      </div>
+      {% else %} {% for p in projects %}
+      <div
+        class="project-card bg-white/20 backdrop-blur-md rounded-3xl p-6 shadow-md border border-white/20 transform transition hover:scale-105"
+      >
+        <div class="flex items-start gap-4 mb-4">
+          <div
+            class="w-12 h-12 rounded-xl bg-indigo-200/60 flex items-center justify-center text-indigo-700 text-lg shadow-sm"
+          >
+            <i class="fas fa-folder-open"></i>
+          </div>
           <div>
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-sm">
-                <i class="fas fa-folder-open"></i>
-              </div>
-              <h3 class="card-title">{{ p.title }}</h3>
-            </div>
-            <p class="text-gray-600 mb-4">{{ p.desc }}</p>
+            <h3 class="text-lg font-semibold text-gray-900">{{ p.title }}</h3>
+            <p class="text-gray-500 mt-1">{{ p.desc }}</p>
           </div>
         </div>
 
-        <div class="mt-4 flex items-center justify-between">
-          <div class="meta">
-            {% if p.tech %}
-              {% for tech in p.tech.split(',') %}
-              <span class="tech-pill">{{ tech.strip() }}</span>
-              {% endfor %}
-            {% endif %}
+        <div class="flex flex-wrap items-center justify-between mt-4 gap-2">
+          <div class="flex flex-wrap gap-2">
+            {% if p.tech %} {% for tech in p.tech.split(',') %}
+            <span
+              class="bg-indigo-100/30 text-indigo-700 px-2 py-1 rounded-full text-xs shadow-sm"
+              >{{ tech.strip() }}</span
+            >
+            {% endfor %} {% endif %}
           </div>
-
-          <div class="actions">
+          <div class="flex gap-2">
             {% if p.project_file %}
-              <a href="{{ url_for('static', filename='uploads/projects/' ~ p.project_file) }}" class="text-sm px-3 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-50 shadow-sm" download>
-                <i class="fas fa-download mr-2 text-gray-600"></i>Download
-              </a>
+            <a
+              href="{{ url_for('static', filename='uploads/projects/' ~ p.project_file) }}"
+              class="text-sm px-3 py-1 rounded-full border border-white/30 bg-white/30 text-indigo-700 hover:bg-white/50 shadow-sm flex items-center gap-1"
+              download
+            >
+              <i class="fas fa-download"></i> Download
+            </a>
             {% endif %}
-            <form method="post" action="{{ url_for('delete_project', project_id=p.id) }}" onsubmit="return confirm('Delete this project?');">
-              <button class="delete-btn" type="submit">Delete</button>
+            <form
+              method="post"
+              action="{{ url_for('delete_project', project_id=p.id) }}"
+              onsubmit="return confirm('Delete this project?');"
+            >
+              <button
+                class="text-sm px-3 py-1 rounded-full border border-red-200 bg-red-50 text-red-600 hover:bg-red-100"
+                type="submit"
+              >
+                Delete
+              </button>
             </form>
           </div>
         </div>
       </div>
-  {% endfor %}
-  {% endif %}
+      {% endfor %} {% endif %}
     </div>
-  </section>
+  </div>
 </section>
 
 {% endblock %}
 
 <script>
-  // show selected filename for project upload
-  (function(){
-    const input = document.getElementById('project_file_input');
-    const label = document.querySelector('.file-label');
-    const selected = document.getElementById('selectedFile');
-    if(!input) return;
-    input.addEventListener('change', function(e){
+  (function () {
+    const input = document.getElementById("project_file_input");
+    const label = document.querySelector(".file-label");
+    const selected = document.getElementById("selectedFile");
+    if (!input) return;
+    input.addEventListener("change", function () {
       const f = input.files && input.files[0];
-      if(f){
+      if (f) {
         label.textContent = f.name;
         selected.textContent = `Selected: ${f.name}`;
       } else {
-        label.textContent = 'Attach .zip';
-        selected.textContent = '';
+        label.textContent = "Attach .zip";
+        selected.textContent = "";
       }
     });
   })();

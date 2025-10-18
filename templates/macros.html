@@ -1,0 +1,15 @@
+{% macro lazy_image(path, alt="", classes="") %}
+  <img src="{{ url_for('static', filename=path) }}"
+       alt="{{ alt }}"
+       class="{{ classes }}"
+       loading="lazy">
+{% endmacro %}
+
+{% macro lazy_video(path, classes="", controls=true) %}
+  <video src="{{ url_for('static', filename=path) }}"
+         class="{{ classes }}"
+         {% if controls %}controls{% endif %}
+         loading="lazy">
+    Your browser does not support the video tag.
+  </video>
+{% endmacro %}
