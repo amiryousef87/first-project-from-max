@@ -32,6 +32,12 @@ app = Flask(
 )
 app.secret_key = "your_secret_key_here"
 
+UPLOAD_FOLDER = 'uploads'
+
+# مطمئن شو پوشه وجود دارد
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
 # Upload configuration for project zip files
 UPLOAD_RELATIVE = os.path.join("uploads", "projects")
 UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads", "projects")
@@ -128,9 +134,99 @@ def about():
 
 @app.route("/projects")
 def projects():
-    
+    projects_list = [
+        {
+            "title": "Flask Login Form",
+            "desc": "A simple and secure login and registration system built using Python Flask with SQLite for data storage.",
+            "tech": "Python, Flask, SQLite, html",
+        },
+        {
+            "title": "Reservation System",
+            "desc": "Online booking platform with appointment management for clients and admins.",
+            "tech": "PHP, HTML, TailwindCSS",
+        },
+        {
+            "title": "TeamVerse",
+            "desc": " A collaborative gaming platform connecting players and teams for tournaments and group challenges.",
+            "tech": "PHP, TailwindCSS",
+        },
+        {
+            "title": "E-Commerce Platform",
+            "desc": "Custom online store with full payment integration.",
+            "tech": "Python, Flask, React.js, TailwindCSS",
+        },
+        {
+            "title": "AI-Powered Dashboard",
+            "desc": "Business analytics dashboard with real-time insights.",
+            "tech": "Python, Flask, React.js, Chart.js",
+        },
+        {
+            "title": "Portfolio Website",
+            "desc": "Elegant personal site for professionals.",
+            "tech": "Python, Flask, TailwindCSS",
+        },
+        {
+            "title": "Inventory Management System",
+            "desc": "Full-stack solution for tracking products and orders.",
+            "tech": "Python, Flask, React.js, PostgreSQL",
+        },
+        {
+            "title": "Social Media Platform",
+            "desc": "Scalable web app for sharing content and connecting users.",
+            "tech": "Python, Flask, React.js, Socket.IO",
+        },
+        {
+            "title": "Task Automation App",
+            "desc": "Automates repetitive business tasks for efficiency.",
+            "tech": "Python, Flask, Celery, Redis",
+        },
+        {
+            "title": "Company CRM System",
+            "desc": "Customer relationship management for enterprise clients.",
+            "tech": "Python, Flask, React.js, SQLAlchemy",
+        },
+        {
+            "title": "Blog & CMS Platform",
+            "desc": "Dynamic content management system for blogs and articles.",
+            "tech": "Python, Flask, React.js, TailwindCSS",
+        },
+        {
+            "title": "Event Booking Platform",
+            "desc": "Complete system for booking events and ticket management.",
+            "tech": "Python, Flask, React.js, Stripe API",
+        },
+        {
+            "title": "Online Learning Platform",
+            "desc": "E-learning solution with courses, quizzes, and certificates.",
+            "tech": "Python, Flask, React.js, PostgreSQL",
+        },
+        {
+            "title": "Project Management Tool",
+            "desc": "Organize teams, tasks, and timelines efficiently.",
+            "tech": "Python, Flask, React.js, TailwindCSS",
+        },
+        {
+            "title": "IoT Device Dashboard",
+            "desc": "Monitor and manage IoT devices remotely.",
+            "tech": "Python, Flask, React.js, MQTT",
+        },
+        {
+            "title": "Real Estate Listing Platform",
+            "desc": "Property management and listing platform for agents.",
+            "tech": "Python, Flask, React.js, PostgreSQL",
+        },
+        {
+            "title": "Healthcare Management System",
+            "desc": "Manage patients, appointments, and medical records.",
+            "tech": "Python, Flask, React.js, SQLAlchemy",
+        },
+        {
+            "title": "FinTech Payment App",
+            "desc": "Secure financial transactions and account management.",
+            "tech": "Python, Flask, React.js, Stripe API",
+        },
+    ]
     return render_template("projects.html", projects=projects_list)
-
 
 # Dashboard-specific projects (separate page from public Projects)
 @app.route("/dashboard/projects")
@@ -206,6 +302,14 @@ def contact():
 def videos():
     # templates contain `video.html` (singular) so render that to avoid TemplateNotFound
     return render_template("video.html")
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files.get('video')
+    if file:
+        file.save(f"uploads/{file.filename}")  # مسیر ذخیره فایل
+        flash("Video uploaded successfully!")
+    return redirect(url_for('videos'))
 
 
 @app.route("/certificates", methods=["GET", "POST"])
@@ -431,7 +535,7 @@ def login():
 
 # داشبورد
 @app.route("/dashboard")
-# @login_required
+@login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user)
 
