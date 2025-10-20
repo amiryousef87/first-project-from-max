@@ -10,17 +10,22 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
+      /* --- Modern Color Variables --- */
       :root {
-        --primary: rgb(221, 0, 255);
-        --secondary: rgb(0, 100, 255);
-        --bg-light: #f5f5f5;
-        --text-dark: #000;
+        --primary: #5a00ff; /* Deep Purple */
+        --secondary: #008cff; /* Bright Blue */
+        --bg-light: #f0f4f8; /* Light warm gray */
+        --text-dark: #2c3e50; /* Dark, readable text */
+        --shadow-light: rgba(90, 0, 255, 0.2);
+        --shadow-dark: rgba(0, 0, 0, 0.1);
       }
       * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family: system-ui;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
       }
       body {
         background: var(--bg-light);
@@ -29,23 +34,30 @@
         align-items: center;
         min-height: 100vh;
         padding: 20px;
+        direction: ltr; /* Left-to-right direction */
       }
       .container {
         width: 100%;
-        max-width: 450px;
+        max-width: 420px;
         background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        border-radius: 20px; /* More rounded corners */
+        box-shadow: 0 10px 40px var(--shadow-dark),
+          0 0 0 3px var(--shadow-light); /* Enhanced shadow */
         overflow: hidden;
+        transition: transform 0.4s ease-out;
+      }
+      .container:hover {
+        transform: scale(1.02);
       }
       .header {
         background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: #fff;
         text-align: center;
-        padding: 25px 15px;
+        padding: 30px 15px;
       }
       .header h1 {
         font-size: 1.8rem;
+        letter-spacing: 1px;
       }
       .tab-container {
         display: flex;
@@ -54,81 +66,146 @@
       .tab {
         flex: 1;
         text-align: center;
-        padding: 15px;
+        padding: 18px;
         cursor: pointer;
         color: #666;
-        font-weight: 500;
+        font-weight: 600;
         transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .tab::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        width: 0;
+        background: var(--primary);
+        transition: width 0.3s ease-out;
       }
       .tab.active {
         color: var(--primary);
-        border-bottom: 3px solid var(--primary);
+      }
+      .tab.active::after {
+        width: 100%;
       }
       .content {
-        padding: 20px;
+        padding: 25px;
       }
       .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        position: relative;
       }
       .form-group label {
         display: block;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
         font-weight: 500;
         color: var(--text-dark);
+        font-size: 0.95rem;
+      }
+      .form-control-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
       }
       .form-control {
         width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
+        padding: 14px 15px;
+        padding-left: 45px; /* Space for the icon */
+        border: 2px solid #ddd;
+        border-radius: 12px;
         font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background: #fafafa;
       }
+      .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 5px rgba(90, 0, 255, 0.2);
+        background: #fff;
+      }
+      .input-icon {
+        position: absolute;
+        left: 15px;
+        color: #aaa;
+        transition: color 0.3s;
+      }
+      .form-control:focus + .input-icon {
+        color: var(--primary);
+      }
+      .password-toggle {
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        color: #aaa;
+        font-size: 1.1rem;
+        transition: color 0.3s;
+        z-index: 10;
+      }
+      .password-toggle:hover {
+        color: var(--secondary);
+      }
+
       .btn {
         width: 100%;
-        padding: 12px;
+        padding: 15px;
         background: linear-gradient(135deg, var(--primary), var(--secondary));
         color: #fff;
         border: none;
-        border-radius: 8px;
+        border-radius: 12px;
         cursor: pointer;
-        font-weight: 500;
+        font-weight: 600;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
         transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       }
       .btn:hover {
-        opacity: 0.9;
-        transform: translateY(-2px);
+        opacity: 0.95;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
       }
       .alert {
-        padding: 12px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        font-size: 0.9rem;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        text-align: left;
       }
       .alert-danger {
-        background: #fdd;
-        color: #a33;
-        border: 1px solid #f99;
+        background: #fee;
+        color: #c00;
+        border-left: 5px solid #c00;
       }
       .alert-success {
-        background: #dfd;
-        color: #3a3;
-        border: 1px solid #9f9;
+        background: #eff;
+        color: #080;
+        border-left: 5px solid #080;
       }
 
-      /* واکنشگرایی موبایل */
+      /* Mobile responsiveness */
       @media (max-width: 500px) {
-        .container {
+        body {
           padding: 10px;
+        }
+        .container {
+          box-shadow: none;
+          border-radius: 0;
         }
         .header {
           padding: 20px 10px;
+        }
+        .content {
+          padding: 15px;
         }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="header"><h1>Login And Sign Up</h1></div>
+      <div class="header"><h1>MAX Login & Sign Up</h1></div>
 
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %} {% for category, message in messages %}
@@ -142,75 +219,121 @@
         </div>
 
         <div class="content">
-          <!-- فرم ورود -->
           <div id="login-form">
             <form method="POST" action="{{ url_for('login') }}">
               <div class="form-group">
                 <label for="login-username">Username</label>
-                <input
-                  type="text"
-                  id="login-username"
-                  name="username"
-                  class="form-control"
-                  required
-                />
+                <div class="form-control-wrapper">
+                  <input
+                    type="text"
+                    id="login-username"
+                    name="username"
+                    class="form-control"
+                    required
+                    placeholder="Enter your username"
+                  />
+                  <i class="fas fa-user input-icon"></i>
+                </div>
               </div>
               <div class="form-group">
                 <label for="login-password">Password</label>
-                <input
-                  type="password"
-                  id="login-password"
-                  name="password"
-                  class="form-control"
-                  required
-                />
+                <div class="form-control-wrapper">
+                  <input
+                    type="password"
+                    id="login-password"
+                    name="password"
+                    class="form-control"
+                    required
+                    placeholder="Password"
+                  />
+                  <i class="fas fa-lock input-icon"></i>
+                  <i
+                    class="fas fa-eye-slash password-toggle"
+                    onclick="togglePasswordVisibility('login-password', this)"
+                  ></i>
+                </div>
               </div>
-              <button class="btn" type="submit">Login</button>
+              <button class="btn" type="submit">Log In</button>
             </form>
           </div>
 
-          <!-- فرم ثبت نام -->
           <div id="register-form" style="display: none">
             <form method="POST" action="{{ url_for('register') }}">
               <div class="form-group">
-                <label for="register-family">Family name</label>
-                <input type="text" id="register-family" name="family_name" class="form-control" required />
+                <label for="register-family">Full Name</label>
+                <div class="form-control-wrapper">
+                  <input
+                    type="text"
+                    id="register-family"
+                    name="family_name"
+                    class="form-control"
+                    required
+                    placeholder="e.g., John Smith"
+                  />
+                  <i class="fas fa-id-badge input-icon"></i>
+                </div>
               </div>
               <div class="form-group">
-                <label for="register-phone">Phone</label>
-                <input type="text" id="register-phone" name="phone" class="form-control" required />
+                <label for="register-phone">Phone Number</label>
+                <div class="form-control-wrapper">
+                  <input
+                    type="text"
+                    id="register-phone"
+                    name="phone"
+                    class="form-control"
+                    required
+                    placeholder="(555) 123-4567"
+                  />
+                  <i class="fas fa-phone input-icon"></i>
+                </div>
               </div>
               <div class="form-group">
                 <label for="register-username">Username</label>
-                <input
-                  type="text"
-                  id="register-username"
-                  name="username"
-                  class="form-control"
-                  required
-                />
+                <div class="form-control-wrapper">
+                  <input
+                    type="text"
+                    id="register-username"
+                    name="username"
+                    class="form-control"
+                    required
+                    placeholder="Choose a username"
+                  />
+                  <i class="fas fa-user input-icon"></i>
+                </div>
               </div>
               <div class="form-group">
                 <label for="register-password">Password</label>
-                <input
-                  type="password"
-                  id="register-password"
-                  name="password"
-                  class="form-control"
-                  required
-                />
+                <div class="form-control-wrapper">
+                  <input
+                    type="password"
+                    id="register-password"
+                    name="password"
+                    class="form-control"
+                    required
+                    placeholder="Minimum 8 characters"
+                  />
+                  <i class="fas fa-lock input-icon"></i>
+                  <i
+                    class="fas fa-eye-slash password-toggle"
+                    onclick="togglePasswordVisibility('register-password', this)"
+                  ></i>
+                </div>
               </div>
               <div class="form-group">
                 <label for="register-email">Email</label>
-                <input
-                  type="email"
-                  id="register-email"
-                  name="email"
-                  class="form-control"
-                  required
-                />
+                <div class="form-control-wrapper">
+                  <input
+                    type="email"
+                    id="register-email"
+                    name="email"
+                    class="form-control"
+                    required
+                    placeholder="example@domain.com"
+                  />
+                  <i class="fas fa-envelope input-icon"></i>
+                </div>
               </div>
-              <button class="btn" type="submit">Register</button>
+              <button class="btn" type="submit">Create Account</button>
             </form>
           </div>
         </div>
@@ -219,16 +342,34 @@
 
     <script>
       function switchTab(tab) {
+        const loginTab = document.querySelectorAll(".tab")[0];
+        const registerTab = document.querySelectorAll(".tab")[1];
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+
         if (tab === "login") {
-          document.querySelectorAll(".tab")[0].classList.add("active");
-          document.querySelectorAll(".tab")[1].classList.remove("active");
-          document.getElementById("login-form").style.display = "block";
-          document.getElementById("register-form").style.display = "none";
+          loginTab.classList.add("active");
+          registerTab.classList.remove("active");
+          loginForm.style.display = "block";
+          registerForm.style.display = "none";
         } else {
-          document.querySelectorAll(".tab")[0].classList.remove("active");
-          document.querySelectorAll(".tab")[1].classList.add("active");
-          document.getElementById("login-form").style.display = "none";
-          document.getElementById("register-form").style.display = "block";
+          loginTab.classList.remove("active");
+          registerTab.classList.add("active");
+          loginForm.style.display = "none";
+          registerForm.style.display = "block";
+        }
+      }
+
+      function togglePasswordVisibility(id, icon) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+          input.type = "text";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        } else {
+          input.type = "password";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
         }
       }
     </script>
