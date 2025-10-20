@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="/static/img/favicon.png" type="image/png">
+
     <title>Max</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -64,7 +66,11 @@
           href="{{ url_for('index') }}"
           class="flex items-center gap-2 text-3xl font-bold text-orange-600 hover:scale-110 hover:font-extrabold transition-transform duration-300"
         >
-          <i class="fas fa-code"></i>
+          <img
+            src="/static/img/logo.png"
+            alt="Logo"
+            class="w-12 h-12 rounded-full object-cover"
+          />
         </a>
 
         <!-- Nav links (always visible on all سایزها) -->
