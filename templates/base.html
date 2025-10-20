@@ -20,9 +20,8 @@
         theme: {
           extend: {
             colors: {
-              // رنگ متن برای هدر و فوتر شفاف (Transparent)
-              codeBlue: "#FF7F00", // نارنجی پرانرژی
-              codeBlack: "#000000", // مشکی خالص (فقط برای حالت Mobile Menu و Borderها باقی می‌ماند)
+              codeBlue: "#FF7F00",
+              codeBlack: "#000000",
             },
             animation: {
               "fade-in": "fadeIn 0.8s ease-out forwards",
@@ -42,165 +41,91 @@
         },
       };
     </script>
+
+    <style>
+      /* افکت شیشه‌ای */
+      .glass {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+      }
+    </style>
   </head>
 
-  <body class="bg-gray-50 text-gray-800">
+  <body class="bg-gray-100 text-gray-800">
     <header
-      class="bg-transparent text-codeBlue shadow-lg sticky top-0 z-50 animate-slide-up"
+      class="bg-black/70 backdrop-blur-xl shadow-lg sticky top-0 z-50 animate-slide-up"
     >
       <div
         class="container mx-auto flex items-center justify-between py-4 px-6"
       >
         <a
           href="{{ url_for('index') }}"
-          class="flex items-center gap-2 text-2xl font-bold hover:scale-105 transition-transform duration-300 text-orange-500"
+          class="flex items-center gap-2 text-3xl font-bold text-orange-600 hover:scale-110 hover:font-extrabold transition-transform duration-300"
         >
-          <i class="fas fa-code text-3xl"></i>
+          <i class="fas fa-code"></i>
         </a>
 
-        <button
-          id="menu-btn"
-          class="md:hidden flex flex-col gap-1 focus:outline-none"
-        >
-          <span class="block w-6 h-0.5 bg-orange-500 rounded"></span>
-          <span class="block w-6 h-0.5 bg-orange-500 rounded"></span>
-          <span class="block w-6 h-0.5 bg-orange-500 rounded"></span>
-        </button>
-
-        <nav class="hidden md:flex gap-8 text-lg items-center font-medium">
+        <!-- Nav links (always visible on all سایزها) -->
+        <nav class="flex gap-8 text-lg items-center font-medium">
           <a
             href="{{ url_for('index') }}"
-            class="text-orange-500 hover:text-orange-600 transition-colors duration-300 hover:scale-105"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >Home</a
           >
           <a
             href="{{ url_for('ai') }}"
-            class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >AI Lab</a
           >
           <a
             href="{{ url_for('about') }}"
-            class="text-orange-500 hover:text-orange-600 transition-colors duration-300 hover:scale-105"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >About</a
           >
           <a
             href="{{ url_for('projects') }}"
-            class="text-orange-500 hover:text-orange-600 transition-colors duration-300 hover:scale-105"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >Projects</a
           >
           <a
             href="{{ url_for('contact') }}"
-            class="text-orange-500 hover:text-orange-600 transition-colors duration-300 hover:scale-105"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >Contact</a
           >
           <a
             href="{{ url_for('videos') }}"
-            class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >Videos</a
           >
           <a
             href="{{ url_for('dashboard') }}"
-            class="text-orange-500 hover:text-orange-600 transition-colors duration-300 hover:scale-105"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >Dashboard</a
           >
         </nav>
 
-        <!-- Account / Avatar (shows on all pages) -->
+        <!-- Account -->
         <div class="flex items-center gap-3">
           {% if current_user and current_user.is_authenticated %}
-          <div class="relative">
-            <button
-              id="accountBtn"
-              class="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-300"
-              aria-expanded="false"
-            >
-              {% if current_user.avatar %}
-              <img
-                src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}"
-                alt="avatar"
-                class="w-10 h-10 rounded-full object-cover border-2 border-orange-400"
-              />
-              {% else %}
-              <div
-                class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-orange-500"
-              >
-                <i class="fas fa-user"></i>
-              </div>
-              {% endif %}
-              <span class="hidden sm:inline text-sm text-orange-500"
-                >{{ current_user.username }}</span
-              >
-            </button>
-
-            <div
-              id="accountMenu"
-              class="hidden absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg z-50 ring-1 ring-black ring-opacity-5"
-            >
-              <a
-                href="{{ url_for('profile') }}"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Profile</a
-              >
-              <a
-                href="{{ url_for('logout') }}"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >Logout</a
-              >
-            </div>
-          </div>
+          <a
+            href="{{ url_for('profile') }}"
+            class="text-orange-600 hover:font-extrabold hover:scale-110"
+            >{{ current_user.username }}</a
+          >
           {% else %}
           <a
             href="{{ url_for('login') }}"
-            class="text-orange-500 hover:text-orange-600"
+            class="text-orange-600 hover:font-extrabold hover:scale-110"
             >Login</a
           >
           {% endif %}
         </div>
       </div>
-
-      <div
-        id="mobile-menu"
-        class="fixed top-0 left-0 w-full h-full bg-codeBlack text-codeBlue flex flex-col items-center justify-center gap-8 text-xl transform translate-x-full transition-transform duration-500 ease-in-out"
-      >
-        <a
-          href="{{ url_for('ai') }}"
-          class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
-          >AI Lab</a
-        >
-        <a
-          href="{{ url_for('index') }}"
-          class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
-          >Home</a
-        >
-        <a
-          href="{{ url_for('about') }}"
-          class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
-          >About</a
-        >
-        <a
-          href="{{ url_for('projects') }}"
-          class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
-          >Projects</a
-        >
-        <a
-          href="{{ url_for('contact') }}"
-          class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
-          >Contact</a
-        >
-        <a
-          href="{{ url_for('dashboard') }}"
-          class="text-orange-500 hover:text-orange-600 transition-colors duration-300"
-          >Dashboard</a
-        >
-        <button
-          id="close-menu"
-          class="absolute top-6 right-6 text-3xl hover:text-orange-600 transition-colors"
-        >
-          <i class="fa fa-times"></i>
-        </button>
-      </div>
     </header>
 
+    <!-- ✅ Main content -->
     <main class="container mx-auto py-16 px-4">
       {% block content %}
       <h1
@@ -216,7 +141,7 @@
       </p>
 
       <section
-        class="py-20 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-center rounded-2xl shadow-xl mt-20"
+        class="py-20 glass text-white text-center rounded-2xl shadow-xl mt-20"
       >
         <h2 class="text-3xl font-bold mb-8 animate-fade-in">Meet Our Team</h2>
         <p
@@ -232,7 +157,7 @@
           Designer', 'photo': None}, {'name': 'Ali Rahimi', 'role': 'AI
           Engineer', 'photo': None} ] %}
           <div
-            class="bg-white text-gray-800 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-2xl hover:scale-105 animate-fade-in"
+            class="bg-white/10 backdrop-blur-lg text-gray-100 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-2xl hover:scale-105 animate-fade-in"
           >
             <div
               class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4 shadow-md"
@@ -245,15 +170,15 @@
               />
               {% else %}
               <div
-                class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center"
+                class="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center"
               >
                 <i class="fas fa-user text-white text-2xl"></i>
               </div>
               {% endif %}
             </div>
             <h3 class="text-xl font-semibold mb-1">{{ member.name }}</h3>
-            <p class="text-indigo-600 font-medium">{{ member.role }}</p>
-            <p class="text-gray-600 mt-3 text-sm leading-relaxed">
+            <p class="text-orange-400 font-medium">{{ member.role }}</p>
+            <p class="text-gray-200 mt-3 text-sm leading-relaxed">
               Dedicated to excellence and driven by innovation, {{ member.name
               }} plays a key role in shaping the technology and experience
               behind Max Company’s success.
@@ -265,14 +190,17 @@
       {% endblock %}
     </main>
 
-    <footer class="bg-transparent text-codeBlue mt-16 animate-slide-up">
+    <footer
+      class="bg-white/30 backdrop-blur-xl shadow-lg text-orange-600 mt-16 animate-slide-up"
+    >
       <div
-        class="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8"
+        class="container mx-auto px-6 py-6 md:py-12 grid grid-cols-1 md:grid-cols-3 gap-8"
       >
-        <div class="flex flex-col items-start md:items-start gap-4">
+        <!-- Company Info -->
+        <div class="flex flex-col gap-4">
           <div class="flex items-center gap-3">
             <i class="fas fa-code text-3xl"></i>
-            <h3 class="text-2xl font-bold text-codeBlue">Max Company</h3>
+            <h3 class="text-2xl font-bold text-orange-600">Max Company</h3>
           </div>
           <p class="text-sm opacity-90">
             We create next-gen software using Python, Flask, React.js, and AI
@@ -280,125 +208,92 @@
           </p>
           <div class="flex gap-4 mt-2">
             <a
-              href="#"
-              class="hover:text-white transition-colors duration-300 hover:scale-110"
-              ><i class="fa fa-github text-2xl"></i
-            ></a>
+              href="https://github.com/amiryousef87"
+              target="_blank"
+              class="hover:text-orange-600 transition-all duration-300"
+            >
+              <i class="fab fa-github text-2xl text-gray-800"></i>
+            </a>
             <a
-              href="#"
-              class="hover:text-white transition-colors duration-300 hover:scale-110"
-              ><i class="fa fa-linkedin text-2xl"></i
-            ></a>
-            <a
-              href="#"
-              class="hover:text-white transition-colors duration-300 hover:scale-110"
-              ><i class="fa fa-youtube text-2xl"></i
-            ></a>
+              href="https://www.youtube.com/"
+              target="_blank"
+              class="transition-all duration-300"
+            >
+              <i class="fab fa-youtube text-2xl text-[#FF0000]"></i>
+            </a>
           </div>
         </div>
 
+        <!-- Quick Links -->
         <div>
-          <h3 class="text-xl font-semibold mb-4 border-b border-codeBlue pb-1">
+          <h3
+            class="text-xl font-semibold mb-4 border-b border-orange-600 pb-1"
+          >
             Quick Links
           </h3>
           <ul class="space-y-2">
             <li>
               <a
                 href="{{ url_for('index') }}"
-                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+                class="hover:text-orange-600 transition-all duration-300"
                 >Home</a
               >
             </li>
             <li>
               <a
                 href="{{ url_for('about') }}"
-                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+                class="hover:text-orange-600 transition-all duration-300"
                 >About</a
               >
             </li>
             <li>
               <a
                 href="{{ url_for('projects') }}"
-                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+                class="hover:text-orange-600 transition-all duration-300"
                 >Projects</a
               >
             </li>
             <li>
               <a
                 href="{{ url_for('contact') }}"
-                class="hover:text-white transition-colors duration-300 hover:translate-x-1 inline-block"
+                class="hover:text-orange-600 transition-all duration-300"
                 >Contact</a
               >
             </li>
           </ul>
         </div>
 
+        <!-- Contact Info -->
         <div>
-          <h3 class="text-xl font-semibold mb-4 border-b border-codeBlue pb-1">
+          <h3
+            class="text-xl font-semibold mb-4 border-b border-orange-600 pb-1"
+          >
             Contact
           </h3>
           <ul class="space-y-2 text-sm opacity-90">
-            <li>
-              <i class="fa fa-envelope mr-2 text-codeBlue"></i>
+            <li class="hover:text-orange-600 transition-all duration-300">
+              <i class="fa fa-envelope mr-2 text-orange-600"></i>
               info@maxcompany.com
             </li>
-            <li>
-              <i class="fa fa-phone mr-2 text-codeBlue"></i> +98 994 208 2136
+            <li class="hover:text-orange-600 transition-all duration-300">
+              <i class="fa fa-phone mr-2 text-orange-600"></i> +98 994 208 2136
             </li>
-            <li>
-              <i class="fa fa-map-marker mr-2 text-codeBlue"></i> Mashhad, Iran
+            <li class="hover:text-orange-600 transition-all duration-300">
+              <i class="fa fa-map-marker mr-2 text-orange-600"></i> Mashhad,
+              Iran
             </li>
           </ul>
         </div>
       </div>
 
+      <!-- Footer Bottom -->
       <div
-        class="border-t border-codeBlue/40 mt-8 pt-4 text-center text-sm flex flex-col md:flex-row justify-center gap-2 items-center"
+        class="border-t border-orange-600/40 mt-8 pt-4 text-sm flex flex-col md:flex-row justify-center gap-2 items-center text-center"
       >
         <span>© 2025</span>
-        <span class="font-semibold text-codeBlue">Max Company</span>
+        <span class="font-semibold text-orange-600">Max Company</span>
         <span>All rights reserved.</span>
       </div>
     </footer>
-
-    <script>
-      const menuBtn = document.getElementById("menu-btn");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const closeMenu = document.getElementById("close-menu");
-
-      menuBtn.addEventListener("click", () => {
-        mobileMenu.classList.remove("translate-x-full");
-        mobileMenu.classList.add("translate-x-0");
-      });
-
-      closeMenu.addEventListener("click", () => {
-        mobileMenu.classList.add("translate-x-full");
-      });
-
-      // Account dropdown toggle (header)
-      const accountBtn = document.getElementById("accountBtn");
-      const accountMenu = document.getElementById("accountMenu");
-      if (accountBtn) {
-        accountBtn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const isHidden = accountMenu.classList.contains("hidden");
-          if (isHidden) {
-            accountMenu.classList.remove("hidden");
-          } else {
-            accountMenu.classList.add("hidden");
-          }
-        });
-
-        // close when clicking outside
-        document.addEventListener("click", (e) => {
-          if (
-            !accountBtn.contains(e.target) &&
-            !accountMenu.contains(e.target)
-          ) {
-            accountMenu.classList.add("hidden");
-          }
-        });
-      }
-    </script>
   </body>
 </html>
