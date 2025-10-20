@@ -1,4 +1,4 @@
-# 🚀 First Project from Max
+#  First Project from Max
 
 A production-ready **Flask** application starter with a multilingual public site, admin dashboard, and integrated AI tools.
 
@@ -6,7 +6,7 @@ This repository demonstrates a pragmatic Flask setup including authentication, f
 
 ---
 
-## 📂 Contents
+##  Contents
 
 - `app.py` — Main Flask application (routes, models, upload handlers)
 - `templates/` — Jinja2 templates for pages and dashboard
@@ -15,7 +15,7 @@ This repository demonstrates a pragmatic Flask setup including authentication, f
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 ### Core
 
@@ -36,14 +36,14 @@ This repository demonstrates a pragmatic Flask setup including authentication, f
 
 ---
 
-## ⚙️ Prerequisites
+##  Prerequisites
 
 - Python 3.8+
 - Recommended: use a virtual environment (`venv`)
 
 ---
 
-## 💻 Installation (Windows)
+##  Installation (Windows)
 
 1. Clone the repo:
 
@@ -67,7 +67,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Running the App (Development)
+##  Running the App (Development)
 
 ```powershell
 python app.py
@@ -82,7 +82,7 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## 🗺️ Important Routes
+##  Important Routes
 
 ### Public Pages
 
@@ -103,7 +103,7 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## 📁 Uploads & Storage
+##  Uploads & Storage
 
 Folders under `static/uploads/`:
 
@@ -115,7 +115,7 @@ Folders under `static/uploads/`:
 
 ---
 
-## 🗄️ Database & Migrations
+##  Database & Migrations
 
 - SQLite DB: `sqlite:///users.db`
 - Auto-adds missing columns (avatar, family_name, project_file)
@@ -123,7 +123,7 @@ Folders under `static/uploads/`:
 
 ---
 
-## 🔐 Security & Deployment
+##  Security & Deployment
 
 - Replace `app.secret_key` with a strong key for production
 - Disable `debug=True` in production
@@ -132,7 +132,7 @@ Folders under `static/uploads/`:
 
 ---
 
-## 💡 Development Tips
+##  Development Tips
 
 - Reset DB: delete `users.db` and restart app
 - Clear browser cache after template/CSS changes
@@ -140,7 +140,7 @@ Folders under `static/uploads/`:
 
 ---
 
-## 🤖 AI Integration Ideas
+##  AI Integration Ideas
 
 The `/ai` page can support:
 
@@ -153,14 +153,14 @@ Extend `ai.html` and Flask routes to connect to your AI backend.
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions welcome!  
 If you add new routes or AI features, update this README accordingly.
 
 ---
 
-## 📜 License
+##  License
 
 **MIT License**  
 © 2025 Amiryousef Tousi
