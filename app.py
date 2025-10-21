@@ -228,6 +228,10 @@ def projects():
     ]
     return render_template("projects.html", projects=projects_list)
 
+# @app.route("/projects")
+# def projects():
+
+
 # Dashboard-specific projects (separate page from public Projects)
 @app.route("/dashboard/projects")
 @login_required
