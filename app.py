@@ -131,6 +131,20 @@ def index():
 def about():
     return render_template("about.html")
 
+# ایجاد 50 محصول داینامیک برای تست
+products = []
+for i in range(1, 49):
+    products.append({
+        "name": f"Product {i}",
+        "description": f"This is the description for Product {i}. It is a high-quality plugin to enhance your website.",
+        "price": round(10 + i * 2.5, 2),  # قیمت نمونه
+        "image_url": f"https://placehold.co/400x300/{hex(0x100000 + i*5000)[2:]}/ffffff?text=Product+{i}"
+    })
+
+@app.route("/shop")
+def shop():
+    return render_template("shop.html", products=products)
+
 
 @app.route("/projects")
 def projects():
