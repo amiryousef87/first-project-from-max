@@ -45,19 +45,21 @@
     </script>
 
     <style>
-      /* افکت شیشه‌ای */
+      /* افکت شیشه‌ای سفید با بلور زیاد */
       .glass {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: rgb(255, 255, 255); /* سفید لطیف و نیمه‌شفاف */
+        backdrop-filter: blur(45px) saturate(180%);
+        -webkit-backdrop-filter: blur(45px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255);
+        border-radius: 20px;
+        box-shadow: 0 8px 40px rgba(255, 255, 255);
       }
     </style>
   </head>
 
   <body class="bg-gray-100 text-gray-800">
     <header
-      class="bg-black/70 backdrop-blur-xl shadow-lg sticky top-0 z-50 animate-slide-up"
+      class="bg-white/20 backdrop-blur-3xl border border-white/30 shadow-lg sticky top-0 z-50 animate-slide-up rounded-xl"
     >
       <div
         class="container mx-auto flex items-center justify-between py-4 px-6"
@@ -86,19 +88,9 @@
             >AI Lab</a
           >
           <a
-            href="{{ url_for('about') }}"
+            href="{{ url_for('shop') }}"
             class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
-            >About</a
-          >
-          <a
-            href="{{ url_for('projects') }}"
-            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
-            >Projects</a
-          >
-          <a
-            href="{{ url_for('contact') }}"
-            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
-            >Contact</a
+            >shop</a
           >
           <a
             href="{{ url_for('videos') }}"
@@ -106,9 +98,24 @@
             >Videos</a
           >
           <a
+            href="{{ url_for('projects') }}"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
+            >Projects</a
+          >
+          <a
             href="{{ url_for('dashboard') }}"
             class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
             >Dashboard</a
+          >
+          <a
+            href="{{ url_for('contact') }}"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
+            >Contact</a
+          >
+          <a
+            href="{{ url_for('about') }}"
+            class="text-orange-600 hover:text-orange-500 hover:font-extrabold hover:scale-110 transition-all duration-300"
+            >About</a
           >
         </nav>
 
