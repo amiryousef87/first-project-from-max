@@ -1,179 +1,340 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>داشبورد ادمین</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* تنظیمات RTL برای اطمینان از نمایش صحیح راست به چپ */
+      :root {
+        --sidebar-width: 16rem; /* 256px */
+      }
+      .sidebar {
+        width: var(--sidebar-width);
+      }
+      .sidebar a .material-icons-outlined,
+      .sidebar a .fa {
+        margin-left: 0.75rem; /* mr-3 در Tailwind RTL می‌شود ml-3 */
+      }
+      .dropdown-menu {
+        right: 0;
+        left: auto; /* اطمینان از راست‌چین بودن منوی کشویی */
+      }
+      /* تنظیمات سفارشی برای زیبایی بیشتر */
+      body {
+        font-family: Tahoma, "B Titr", "B Nazanin", Arial, sans-serif; /* فونت‌های فارسی مناسب */
+      }
+    </style>
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
-      <!-- منوی کناری -->
-      <aside class="w-64 bg-blue-800 text-white flex-shrink-0 flex flex-col">
-        <div class="p-6 font-bold text-2xl border-b border-blue-700">
-          <a
-            href="{{ url_for('admin') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
-          >
-            Admin Max
+      <aside
+        class="sidebar bg-indigo-700 text-white flex-shrink-0 flex flex-col shadow-xl"
+      >
+        <div class="p-6 font-extrabold text-3xl border-b border-indigo-600">
+          <a href="{{ url_for('admin') }}" class="flex items-center text-white">
+            Admin <span class="text-indigo-300">Max</span>
           </a>
         </div>
-        <nav class="mt-6 flex-1 overflow-y-auto">
+        <nav class="mt-4 flex-1 overflow-y-auto">
+          <a
+            href="{{ url_for('admin') }}"
+            class="flex items-center px-6 py-3 bg-indigo-800 border-r-4 border-emerald-400 font-semibold transition-all duration-200"
+          >
+            <span class="material-icons-outlined">dashboard</span>
+            داشبورد
+          </a>
           <a
             href="{{ url_for('users') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+            class="flex items-center px-6 py-3 hover:bg-indigo-600 transition-colors duration-200"
           >
-            <span class="material-icons mr-3">people</span> کاربران
+            <span class="material-icons-outlined">people_alt</span> کاربران
           </a>
           <a
             href="{{ url_for('setting') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+            class="flex items-center px-6 py-3 hover:bg-indigo-600 transition-colors duration-200"
           >
-            <span class="material-icons mr-3">settings</span> تنظیمات
-          </a>
-          <a
-            href="{{ url_for('logout') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
-          >
-            <span class="material-icons mr-3">logout</span> خروج
+            <span class="material-icons-outlined">settings</span> تنظیمات
           </a>
         </nav>
+        <div class="p-4 border-t border-indigo-600">
+          <a
+            href="{{ url_for('logout') }}"
+            class="flex items-center px-6 py-3 text-red-300 hover:bg-indigo-600 hover:text-red-100 transition-colors duration-200 rounded-lg"
+          >
+            <span class="material-icons-outlined">logout</span> خروج
+          </a>
+        </div>
       </aside>
 
-      <!-- بخش اصلی -->
-      <main class="flex-1 overflow-y-auto p-8">
-        <!-- هدر و منوی پروفایل -->
+      <main class="flex-1 overflow-y-auto p-6 md:p-8">
         <div class="flex justify-end items-center mb-8 relative">
           <div class="relative group">
             <a
               id="userMenuButton"
-              class="flex items-center p-2 rounded-full hover:bg-gray-200 transition cursor-pointer"
+              class="flex items-center p-2 rounded-full bg-white shadow-md hover:shadow-lg transition cursor-pointer"
             >
               {% if current_user.avatar %}
               <img
                 src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}"
                 alt="avatar"
-                class="rounded-full w-8 h-8 object-cover border-2 border-gray-300"
+                class="rounded-full w-10 h-10 object-cover border-2 border-indigo-400"
               />
               {% else %}
               <div
-                class="rounded-full bg-indigo-500 text-white flex items-center justify-center w-8 h-8 text-sm border-2 border-gray-300"
+                class="rounded-full bg-emerald-500 text-white flex items-center justify-center w-10 h-10 text-lg font-bold border-2 border-emerald-300"
               >
                 {{ current_user.username[0]|upper }}
               </div>
               {% endif %}
-              <span class="ml-2 hidden sm:inline text-sm font-medium"
+              <span
+                class="mx-3 hidden sm:inline text-base font-medium text-gray-700"
                 >{{ current_user.username }}</span
               >
-              <i class="fas fa-angle-down ml-2 text-xs"></i>
+              <i class="fas fa-chevron-down text-sm text-gray-500"></i>
             </a>
             <ul
-              class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden hidden group-hover:block z-50"
+              class="dropdown-menu absolute mt-3 w-48 bg-white text-gray-800 rounded-xl shadow-2xl overflow-hidden hidden group-hover:block z-50 transform origin-top-right transition-all duration-300 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100"
             >
               <li>
                 <a
                   href="{{ url_for('profile') }}"
-                  class="block px-4 py-2 text-sm hover:bg-gray-100"
-                  >پروفایل</a
+                  class="flex items-center px-4 py-3 text-sm hover:bg-gray-100 transition-colors"
                 >
+                  <span class="material-icons-outlined ml-2 text-indigo-500"
+                    >account_circle</span
+                  >
+                  پروفایل
+                </a>
               </li>
               <li><hr class="border-gray-100" /></li>
               <li>
                 <a
                   href="{{ url_for('logout') }}"
-                  class="block px-4 py-2 text-sm hover:bg-gray-100 text-red-500"
-                  >خروج</a
+                  class="flex items-center px-4 py-3 text-sm hover:bg-gray-100 text-red-500 transition-colors"
                 >
+                  <span class="material-icons-outlined ml-2">exit_to_app</span>
+                  خروج
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <!-- کارت‌های آمار -->
-        <div class="grid md:grid-cols-3 gap-6 mb-10">
-          <div class="bg-white shadow rounded-lg p-6">
-            <h2 class="text-gray-500 font-semibold">کل کاربران</h2>
-            <p class="text-2xl font-bold text-blue-600">{{ users|length }}</p>
-          </div>
-          <div class="bg-white shadow rounded-lg p-6">
-            <h2 class="text-gray-500 font-semibold">کاربران فعال</h2>
-            <p class="text-2xl font-bold text-green-600">
-              {{ users|selectattr('is_active')|list|length }}
-            </p>
-          </div>
-          <div class="bg-white shadow rounded-lg p-6">
-            <h2 class="text-gray-500 font-semibold">کاربران غیرفعال</h2>
-            <p class="text-2xl font-bold text-red-600">
-              {{ users|rejectattr('is_active')|list|length }}
-            </p>
-          </div>
-        </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">
+          خلاصه وضعیت داشبورد
+        </h1>
 
-        <!-- جدول کاربران -->
-        <div class="overflow-x-auto shadow-lg rounded-lg bg-white mb-10">
-          <table class="min-w-full text-gray-700">
-            <thead class="bg-blue-600 text-white">
-              <tr>
-                <th class="py-3 px-6 text-left">#</th>
-                <th class="py-3 px-6 text-left">نام کاربری</th>
-                <th class="py-3 px-6 text-left">ایمیل</th>
-                <th class="py-3 px-6 text-left">آخرین ورود</th>
-                <th class="py-3 px-6 text-left">وضعیت</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user in users %}
-              <tr
-                class="border-b hover:bg-gray-50 transition-colors duration-200"
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-6 mb-10">
+          <div
+            class="bg-white shadow-xl rounded-xl p-6 flex items-center justify-between hover:scale-[1.02] transition-transform duration-300 cursor-pointer border-r-4 border-indigo-500"
+          >
+            <div>
+              <h2 class="text-sm text-gray-500 font-semibold uppercase mb-1">
+                کل کاربران
+              </h2>
+              <p class="text-3xl font-extrabold text-indigo-600">
+                {{ users|length }}
+              </p>
+            </div>
+            <div class="bg-indigo-100 text-indigo-500 p-3 rounded-full">
+              <span class="material-icons-outlined text-3xl">group</span>
+            </div>
+          </div>
+
+          <div
+            class="bg-white shadow-xl rounded-xl p-6 flex items-center justify-between hover:scale-[1.02] transition-transform duration-300 cursor-pointer border-r-4 border-emerald-500"
+          >
+            <div>
+              <h2 class="text-sm text-gray-500 font-semibold uppercase mb-1">
+                کاربران فعال
+              </h2>
+              <p class="text-3xl font-extrabold text-emerald-600">
+                {{ users|selectattr('is_active')|list|length }}
+              </p>
+            </div>
+            <div class="bg-emerald-100 text-emerald-500 p-3 rounded-full">
+              <span class="material-icons-outlined text-3xl"
+                >verified_user</span
               >
-                <td class="py-3 px-6">{{ loop.index }}</td>
-                <td class="py-3 px-6">{{ user.username }}</td>
-                <td class="py-3 px-6">{{ user.email }}</td>
-                <td class="py-3 px-6">{{ user.last_login or '---' }}</td>
-                <td class="py-3 px-6">
-                  {% if user.is_active %}
-                  <span class="text-green-600 font-semibold">فعال</span>
-                  {% else %}
-                  <span class="text-red-600 font-semibold">غیرفعال</span>
-                  {% endif %}
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+            </div>
+          </div>
+
+          <div
+            class="bg-white shadow-xl rounded-xl p-6 flex items-center justify-between hover:scale-[1.02] transition-transform duration-300 cursor-pointer border-r-4 border-red-500"
+          >
+            <div>
+              <h2 class="text-sm text-gray-500 font-semibold uppercase mb-1">
+                کاربران غیرفعال
+              </h2>
+              <p class="text-3xl font-extrabold text-red-600">
+                {{ users|rejectattr('is_active')|list|length }}
+              </p>
+            </div>
+            <div class="bg-red-100 text-red-500 p-3 rounded-full">
+              <span class="material-icons-outlined text-3xl">block</span>
+            </div>
+          </div>
+          <div
+            class="bg-white shadow-xl rounded-xl p-6 flex items-center justify-between hover:scale-[1.02] transition-transform duration-300 cursor-pointer border-r-4 border-yellow-500"
+          >
+            <div>
+              <h2 class="text-sm text-gray-500 font-semibold uppercase mb-1">
+                میانگین ورود
+              </h2>
+              <p class="text-3xl font-extrabold text-yellow-600">15.2</p>
+            </div>
+            <div class="bg-yellow-100 text-yellow-500 p-3 rounded-full">
+              <span class="material-icons-outlined text-3xl">trending_up</span>
+            </div>
+          </div>
         </div>
 
-        <!-- پنل لاگ زنده -->
-        <div class="bg-white shadow-lg rounded-lg p-6 mb-10">
-          <h2 class="text-xl font-semibold mb-4">لاگ‌های سیستم</h2>
+        <div class="shadow-2xl rounded-xl bg-white mb-10 overflow-hidden">
+          <h2 class="text-xl font-bold text-gray-800 p-6 border-b">
+            لیست کاربران اخیر
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-gray-700">
+              <thead
+                class="bg-indigo-600 text-white border-b-2 border-indigo-700"
+              >
+                <tr>
+                  <th class="py-4 px-6 text-right font-bold tracking-wider">
+                    #
+                  </th>
+                  <th class="py-4 px-6 text-right font-bold tracking-wider">
+                    نام کاربری
+                  </th>
+                  <th
+                    class="py-4 px-6 text-right font-bold tracking-wider hidden sm:table-cell"
+                  >
+                    ایمیل
+                  </th>
+                  <th
+                    class="py-4 px-6 text-right font-bold tracking-wider hidden md:table-cell"
+                  >
+                    آخرین ورود
+                  </th>
+                  <th class="py-4 px-6 text-right font-bold tracking-wider">
+                    وضعیت
+                  </th>
+                  <th class="py-4 px-6 text-center font-bold tracking-wider">
+                    عملیات
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users %}
+                <tr
+                  class="border-b odd:bg-gray-50 even:bg-white hover:bg-indigo-50 transition-colors duration-200"
+                >
+                  <td class="py-4 px-6 text-sm font-medium">
+                    {{ loop.index }}
+                  </td>
+                  <td class="py-4 px-6 text-sm">{{ user.username }}</td>
+                  <td class="py-4 px-6 text-sm hidden sm:table-cell">
+                    {{ user.email }}
+                  </td>
+                  <td class="py-4 px-6 text-sm hidden md:table-cell">
+                    {{ user.last_login or '---' }}
+                  </td>
+                  <td class="py-4 px-6">
+                    {% if user.is_active %}
+                    <span
+                      class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full"
+                      >فعال</span
+                    >
+                    {% else %}
+                    <span
+                      class="bg-red-100 text-red-800 text-xs font-semibold px-3 py-1 rounded-full"
+                      >غیرفعال</span
+                    >
+                    {% endif %}
+                  </td>
+                  <td class="py-4 px-6 text-center space-x-2 space-x-reverse">
+                    <button
+                      class="text-indigo-600 hover:text-indigo-900 transition-colors"
+                    >
+                      <span class="material-icons-outlined text-lg">edit</span>
+                    </button>
+                    <button
+                      class="text-red-600 hover:text-red-900 transition-colors"
+                    >
+                      <span class="material-icons-outlined text-lg"
+                        >delete</span
+                      >
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-xl p-6">
+          <h2
+            class="text-xl font-bold mb-4 text-gray-800 border-b pb-2 flex justify-between items-center"
+          >
+            <span>لاگ‌های سیستم (زنده)</span>
+            <button
+              onclick="fetchLogs()"
+              class="text-indigo-600 hover:text-indigo-800 flex items-center text-sm"
+            >
+              <span class="material-icons-outlined ml-1 text-base"
+                >refresh</span
+              >
+              بروزرسانی دستی
+            </button>
+          </h2>
           <div
             id="logContainer"
-            class="bg-gray-50 p-3 rounded-lg max-h-64 overflow-y-auto font-mono text-xs text-gray-700"
-          ></div>
+            class="bg-gray-800 p-4 rounded-lg max-h-72 overflow-y-auto font-mono text-xs text-green-300 border border-gray-700"
+          >
+            <p>... در حال بارگیری لاگ‌ها ...</p>
+          </div>
         </div>
       </main>
     </div>
 
     <script>
+      // تابع واکشی لاگ‌ها بدون تغییر باقی می‌ماند
       function fetchLogs() {
         fetch("/api/logs")
           .then((res) => res.json())
           .then((data) => {
             const container = document.getElementById("logContainer");
             container.innerHTML = "";
-            data.forEach((line) => {
-              const p = document.createElement("p");
-              p.textContent = line;
-              container.appendChild(p);
-            });
+            if (data.length === 0) {
+              container.innerHTML =
+                "<p class='text-gray-400'>هیچ لاگی برای نمایش وجود ندارد.</p>";
+            } else {
+              data.forEach((line) => {
+                const p = document.createElement("p");
+                p.textContent = line;
+                container.appendChild(p);
+              });
+            }
             container.scrollTop = container.scrollHeight;
+          })
+          .catch((error) => {
+            const container = document.getElementById("logContainer");
+            container.innerHTML = `<p class='text-red-400'>خطا در بارگیری لاگ‌ها: ${error.message}</p>`;
+            console.error("Error fetching logs:", error);
           });
       }
 
+      // تنظیم به‌روزرسانی خودکار هر 2 ثانیه
       setInterval(fetchLogs, 2000);
       fetchLogs();
     </script>

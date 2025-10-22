@@ -19,7 +19,7 @@ from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename, safe_join
-from models import db, Project, Product
+from models import db, Project, Product, User
 
 import numpy as np
 import matplotlib
@@ -65,7 +65,8 @@ if not os.path.exists(AVATAR_UPLOAD_FOLDER):
 # دیتابیس SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
+
+db.init_app(app)
 
 # مدیریت لاگین
 login_manager = LoginManager()
@@ -109,30 +110,11 @@ def inject_direction():
     return {"current_lang": lang, "dir": "rtl" if lang == "fa" else "ltr"}
 
 
-# مدل کاربر
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
-    avatar = db.Column(db.String(300), nullable=True)
-    family_name = db.Column(db.String(150), nullable=True)
-    phone = db.Column(db.String(50), nullable=True)
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
 
 
 # Project model for dashboard-managed projects
-class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200), nullable=False)
-    desc = db.Column(db.Text, nullable=True)
-    tech = db.Column(db.String(300), nullable=True)
-    project_file = db.Column(db.String(300), nullable=True)
+
 
 
 @login_manager.user_loader
@@ -222,7 +204,7 @@ def ai():
 @login_required
 def get_logs():
     try:
-        with open('system.log', 'r', encoding='utf-8') as f:
+        with open('system.log', 'r', encoding='utf-8', errors='ignore') as f:
             logs = f.readlines()[-50:]
     except FileNotFoundError:
         logs = ["No log file found."]
@@ -232,11 +214,14 @@ def get_logs():
 @app.route("/admin")
 @login_required
 def admin():
-    # آخرین 20 خط لاگ
-    with open('system.log', 'r', encoding='utf-8') as f:
-        logs = f.readlines()[-20:]
+    try:
+        with open('system.log', 'r', encoding='utf-8', errors='ignore') as f:
+            logs = f.readlines()[-20:]
+    except FileNotFoundError:
+        logs = ["No log file found."]
     users = User.query.all()
     return render_template("admin.html", users=users, current_user=current_user, logs=logs)
+
 
 
 @app.route("/dashboard/projects/add", methods=["POST"])
