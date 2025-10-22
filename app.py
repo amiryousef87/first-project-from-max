@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import os
 from io import BytesIO
 import re
@@ -22,7 +23,6 @@ import numpy as np
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(
@@ -131,19 +131,10 @@ def index():
 def about():
     return render_template("about.html")
 
-# ایجاد 50 محصول داینامیک برای تست
-products = []
-for i in range(1, 49):
-    products.append({
-        "name": f"Product {i}",
-        "description": f"This is the description for Product {i}. It is a high-quality plugin to enhance your website.",
-        "price": round(10 + i * 2.5, 2),  # قیمت نمونه
-        "image_url": f"https://placehold.co/400x300/{hex(0x100000 + i*5000)[2:]}/ffffff?text=Product+{i}"
-    })
 
 @app.route("/shop")
 def shop():
-    return render_template("shop.html", products=products)
+    return render_template("shop.html")
 
 
 @app.route("/projects")
@@ -160,29 +151,9 @@ def projects():
             "tech": "PHP, HTML, TailwindCSS",
         },
         {
-            "title": "TeamVerse",
-            "desc": " A collaborative gaming platform connecting players and teams for tournaments and group challenges.",
-            "tech": "PHP, TailwindCSS",
-        },
-        {
-            "title": "E-Commerce Platform",
-            "desc": "Custom online store with full payment integration.",
-            "tech": "Python, Flask, React.js, TailwindCSS",
-        },
-        {
             "title": "AI-Powered Dashboard",
             "desc": "Business analytics dashboard with real-time insights.",
             "tech": "Python, Flask, React.js, Chart.js",
-        },
-        {
-            "title": "Portfolio Website",
-            "desc": "Elegant personal site for professionals.",
-            "tech": "Python, Flask, TailwindCSS",
-        },
-        {
-            "title": "Inventory Management System",
-            "desc": "Full-stack solution for tracking products and orders.",
-            "tech": "Python, Flask, React.js, PostgreSQL",
         },
         {
             "title": "Social Media Platform",
@@ -190,69 +161,59 @@ def projects():
             "tech": "Python, Flask, React.js, Socket.IO",
         },
         {
-            "title": "Task Automation App",
-            "desc": "Automates repetitive business tasks for efficiency.",
-            "tech": "Python, Flask, Celery, Redis",
-        },
-        {
             "title": "Company CRM System",
             "desc": "Customer relationship management for enterprise clients.",
             "tech": "Python, Flask, React.js, SQLAlchemy",
-        },
-        {
-            "title": "Blog & CMS Platform",
-            "desc": "Dynamic content management system for blogs and articles.",
-            "tech": "Python, Flask, React.js, TailwindCSS",
-        },
-        {
-            "title": "Event Booking Platform",
-            "desc": "Complete system for booking events and ticket management.",
-            "tech": "Python, Flask, React.js, Stripe API",
-        },
-        {
-            "title": "Online Learning Platform",
-            "desc": "E-learning solution with courses, quizzes, and certificates.",
-            "tech": "Python, Flask, React.js, PostgreSQL",
-        },
-        {
-            "title": "Project Management Tool",
-            "desc": "Organize teams, tasks, and timelines efficiently.",
-            "tech": "Python, Flask, React.js, TailwindCSS",
         },
         {
             "title": "IoT Device Dashboard",
             "desc": "Monitor and manage IoT devices remotely.",
             "tech": "Python, Flask, React.js, MQTT",
         },
-        {
-            "title": "Real Estate Listing Platform",
-            "desc": "Property management and listing platform for agents.",
-            "tech": "Python, Flask, React.js, PostgreSQL",
-        },
-        {
-            "title": "Healthcare Management System",
-            "desc": "Manage patients, appointments, and medical records.",
-            "tech": "Python, Flask, React.js, SQLAlchemy",
-        },
-        {
-            "title": "FinTech Payment App",
-            "desc": "Secure financial transactions and account management.",
-            "tech": "Python, Flask, React.js, Stripe API",
-        },
     ]
     return render_template("projects.html", projects=projects_list)
 
-# @app.route("/projects")
-# def projects():
 
-
-# Dashboard-specific projects (separate page from public Projects)
 @app.route("/dashboard/projects")
 @login_required
 def projects_dashboard():
     # Use DB-backed projects for the dashboard. Show all projects stored in DB.
     projects = Project.query.order_by(Project.id.desc()).all()
     return render_template("projects_dashboard.html", projects=projects)
+
+
+@app.route("/tasks")
+@login_required
+def tasks():
+    return render_template("tasks.html", user=current_user)
+
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+
+@app.route("/videos")
+def videos():
+    # templates contain `video.html` (singular) so render that to avoid TemplateNotFound
+    return render_template("video.html")
+
+
+@app.route("/courses")
+@login_required
+def courses():
+    return render_template("courses.html", user=current_user)
+
+
+@app.route("/charts")
+@login_required
+def charts():
+    return render_template("charts.html", user=current_user)
+
+
+@app.route("/ai")
+def ai():
+    return render_template("ai.html", user=current_user)
 
 
 @app.route("/dashboard/projects/add", methods=["POST"])
@@ -304,22 +265,6 @@ def delete_project(project_id):
     flash(_("Project deleted"), "success")
     return redirect(url_for("projects_dashboard"))
 
-
-@app.route("/tasks")
-@login_required
-def tasks():
-    return render_template("tasks.html", user=current_user)
-
-
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
-
-
-@app.route("/videos")
-def videos():
-    # templates contain `video.html` (singular) so render that to avoid TemplateNotFound
-    return render_template("video.html")
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -386,7 +331,8 @@ def profile():
             # remove old avatar if exists
             try:
                 if current_user.avatar:
-                    old = os.path.join(AVATAR_UPLOAD_FOLDER, current_user.avatar)
+                    old = os.path.join(AVATAR_UPLOAD_FOLDER,
+                                       current_user.avatar)
                     if os.path.exists(old):
                         os.remove(old)
             except Exception:
@@ -401,20 +347,6 @@ def profile():
             flash(_("Could not update profile."), "danger")
         return redirect(url_for("profile"))
     return render_template("profile.html", user=current_user)
-
-
-@app.route("/courses")
-@login_required
-def courses():
-    return render_template("courses.html", user=current_user)
-
-
-# Charts page (was present as a template but there was no route)
-@app.route("/charts")
-@login_required
-def charts():
-    return render_template("charts.html", user=current_user)
-
 
 
 # Serve server-side generated charts as PNG images
@@ -435,7 +367,8 @@ def chart_png(chart_name):
         labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
         colors = ["#28a745", "#ffc107", "#dc3545"]
-        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors,
+               autopct="%1.1f%%", startangle=140)
         ax.axis("equal")
         ax.set_title("Missions Today")
     else:
@@ -472,7 +405,8 @@ def chart_svg(chart_name):
         labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
         colors = ["#28a745", "#ffc107", "#dc3545"]
-        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors,
+               autopct="%1.1f%%", startangle=140)
         ax.axis("equal")
         ax.set_title("Missions Today")
     else:
@@ -584,7 +518,8 @@ def ensure_user_avatar_column():
             res = conn.execute(text("PRAGMA table_info('user')"))
             cols = [r[1] for r in res]
             if "avatar" not in cols:
-                conn.execute(text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
+                conn.execute(
+                    text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
     except Exception:
         pass
 
@@ -599,7 +534,8 @@ def ensure_user_contact_columns():
                     text("ALTER TABLE user ADD COLUMN family_name VARCHAR(150)")
                 )
             if "phone" not in cols:
-                conn.execute(text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
+                conn.execute(
+                    text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
     except Exception:
         pass
 
@@ -661,14 +597,6 @@ def minified_css(filename):
         return resp
     except Exception:
         return Response("/* error */", mimetype="text/css", status=500)
-
-
-
-
-@app.route("/ai")
-def ai():
-    return render_template("ai.html", user=current_user)
-
 
 
 if __name__ == "__main__":
