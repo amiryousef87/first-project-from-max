@@ -22,3 +22,10 @@ class DashboardData(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref=db.backref('dashboard_data', lazy=True))
+
+
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    desc = db.Column(db.Text, nullable=False)
+    tech = db.Column(db.String(200), nullable=False)

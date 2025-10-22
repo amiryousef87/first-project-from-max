@@ -4,7 +4,7 @@ from io import BytesIO
 import re
 import logging
 
-from flask import Flask, render_template, redirect, url_for, request, flash, Response , jsonify
+from flask import Flask, render_template, redirect, url_for, request, flash, Response, jsonify
 from flask_babel import Babel, gettext as _
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -19,6 +19,7 @@ from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename, safe_join
+from models import db, Project
 
 import numpy as np
 import matplotlib
@@ -169,38 +170,7 @@ def setting():
 
 @app.route("/projects")
 def projects():
-    projects_list = [
-        {
-            "title": "Flask Login Form",
-            "desc": "A simple and secure login and registration system built using Python Flask with SQLite for data storage.",
-            "tech": "Python, Flask, SQLite, html",
-        },
-        {
-            "title": "Reservation System",
-            "desc": "Online booking platform with appointment management for clients and admins.",
-            "tech": "PHP, HTML, TailwindCSS",
-        },
-        {
-            "title": "AI-Powered Dashboard",
-            "desc": "Business analytics dashboard with real-time insights.",
-            "tech": "Python, Flask, React.js, Chart.js",
-        },
-        {
-            "title": "Social Media Platform",
-            "desc": "Scalable web app for sharing content and connecting users.",
-            "tech": "Python, Flask, React.js, Socket.IO",
-        },
-        {
-            "title": "Company CRM System",
-            "desc": "Customer relationship management for enterprise clients.",
-            "tech": "Python, Flask, React.js, SQLAlchemy",
-        },
-        {
-            "title": "IoT Device Dashboard",
-            "desc": "Monitor and manage IoT devices remotely.",
-            "tech": "Python, Flask, React.js, MQTT",
-        },
-    ]
+    projects_list = Project.query.all()
     return render_template("projects.html", projects=projects_list)
 
 
@@ -265,9 +235,6 @@ def admin():
         logs = f.readlines()[-20:]
     users = User.query.all()
     return render_template("admin.html", users=users, current_user=current_user, logs=logs)
-
-
-
 
 
 @app.route("/dashboard/projects/add", methods=["POST"])
