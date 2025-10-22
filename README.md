@@ -1,166 +1,165 @@
-# 🚀 First Project from Max
+# Max Branding Update - به‌روزرسانی برندینگ Max
 
-A production-ready **Flask** application starter with a multilingual public site, admin dashboard, and integrated AI tools.
+## تغییرات اعمال شده
 
-This repository demonstrates a pragmatic Flask setup including authentication, file uploads, server-side charts, an AI page, and a dashboard for managing projects and certificates.
+### 1. تغییر نام سایت به "Max"
+
+- ✅ تغییر title در تمام صفحات
+- ✅ تغییر navbar brand
+- ✅ تغییر footer copyright
+- ✅ تغییر sidebar footer
+- ✅ تغییر base.html title template
+
+### 2. حذف لوگو و اضافه کردن آیکون تاج
+
+- ✅ حذف تصویر لوگو از navbar
+- ✅ اضافه کردن آیکون تاج با گرادیانت طلایی
+- ✅ طراحی مدرن با shadow و border-radius
+
+### 3. آیکون‌های خفن برای صفحه Index
+
+- ✅ **Web Development**: آیکون کد با گرادیانت آبی
+- ✅ **UI/UX Design**: آیکون پالت با گرادیانت صورتی
+- ✅ **AI & Automation**: آیکون ربات با گرادیانت بنفش
+- ✅ **E-Commerce Platform**: آیکون سبد خرید با گرادیانت سبز
+- ✅ **AI Dashboard**: آیکون چارت با گرادیانت نارنجی
+- ✅ **Portfolio Platform**: آیکون کیف با گرادیانت قرمز
+
+### 4. حذف فرم اضافه کردن پروژه
+
+- ✅ حذف کامل فرم Add New Project از صفحه projects.html
+- ✅ حذف JavaScript مربوط به AJAX submission
+- ✅ تمیز کردن کد و حذف فضاهای اضافی
+
+### 5. ایجاد صفحه پروژه‌ها در داشبورد
+
+- ✅ ایجاد `templates/dashboard.html`
+- ✅ طراحی مدرن با استایل رادیانت متحرک
+- ✅ کارت‌های آماری پروژه‌ها
+- ✅ Grid layout برای نمایش پروژه‌ها
+- ✅ Modal برای اضافه کردن پروژه جدید
+- ✅ آیکون‌های FontAwesome برای تمام المان‌ها
+
+## ویژگی‌های صفحه پروژه‌ها
+
+### آمار پروژه‌ها
+
+- **Total Projects**: 12 پروژه
+- **Completed**: 8 پروژه تکمیل شده
+- **In Progress**: 3 پروژه در حال انجام
+- **On Hold**: 1 پروژه متوقف
+
+### کارت‌های پروژه
+
+- طراحی شفاف با backdrop-filter
+- انیمیشن hover و transition
+- Badge های رنگی برای وضعیت
+- دکمه‌های ویرایش و حذف
+- نمایش تکنولوژی‌ها
+- تاریخ سررسید
+
+### Modal اضافه کردن پروژه
+
+- فرم کامل با validation
+- فیلدهای: عنوان، توضیحات، تکنولوژی‌ها، وضعیت، تاریخ سررسید
+- طراحی مدرن با شفافیت
+- JavaScript برای مدیریت فرم
+
+## فایل‌های ایجاد/تغییر یافته
+
+### فایل‌های جدید:
+
+1. `templates/projects-dashboard.html` - صفحه پروژه‌ها در داشبورد
+2. `static/css/projects-dashboard.css` - استایل‌های خاص صفحه پروژه‌ها
+3. `MAX_BRANDING_UPDATE.md` - این فایل مستندات
+
+### فایل‌های تغییر یافته:
+
+1. `templates/dashboard.html` - اضافه کردن لینک پروژه‌ها
+2. `templates/index.html` - آیکون‌های جدید
+3. `templates/projects.html` - حذف فرم اضافه کردن پروژه
+4. `templates/base.html` - تغییر لوگو و اضافه کردن FontAwesome
+
+## آیکون‌های استفاده شده
+
+### FontAwesome Icons:
+
+- `fa-crown` - لوگو Max
+- `fa-code` - Web Development
+- `fa-palette` - UI/UX Design
+- `fa-robot` - AI & Automation
+- `fa-shopping-cart` - E-Commerce
+- `fa-chart-line` - AI Dashboard
+- `fa-briefcase` - Portfolio
+- `fa-project-diagram` - Projects Menu
+- `fa-plus` - Add Project Button
+- `fa-edit` - Edit Project
+- `fa-trash` - Delete Project
+
+## رنگ‌بندی
+
+### گرادیانت‌های آیکون‌ها:
+
+- **آبی**: `from-blue-500 to-blue-600`
+- **صورتی**: `from-pink-500 to-pink-600`
+- **بنفش**: `from-purple-500 to-purple-600`
+- **سبز**: `from-green-500 to-green-600`
+- **نارنجی**: `from-orange-500 to-orange-600`
+- **قرمز**: `from-red-500 to-red-600`
+- **طلایی**: `from-yellow-400 to-orange-500` (لوگو)
+
+### Badge Colors:
+
+- **Success**: `#10b981` (تکمیل شده)
+- **Warning**: `#f59e0b` (در حال انجام)
+- **Info**: `#3b82f6` (متوقف)
+- **Primary**: `#667eea` (تکنولوژی‌ها)
+
+## Responsive Design
+
+### Breakpoints:
+
+- **Mobile**: < 576px
+- **Tablet**: < 768px
+- **Desktop**: > 768px
+
+### ویژگی‌های Responsive:
+
+- Grid layout تطبیقی
+- Modal responsive
+- Font size های متغیر
+- Padding و margin های تطبیقی
+
+## JavaScript Features
+
+### عملکردهای اضافه شده:
+
+- `addProject()` - اضافه کردن پروژه جدید
+- `getStatusColor()` - دریافت رنگ وضعیت
+- `getStatusText()` - دریافت متن وضعیت
+- مدیریت Modal
+- Validation فرم
+
+## نکات فنی
+
+### CSS Features:
+
+- `backdrop-filter: blur()` برای شفافیت
+- `transform` و `transition` برای انیمیشن
+- `gradient` برای رنگ‌بندی
+- `box-shadow` برای عمق
+- `border-radius` برای گوشه‌های گرد
+
+### Performance:
+
+- استفاده از CSS transforms به جای position changes
+- Lazy loading برای تصاویر
+- بهینه‌سازی انیمیشن‌ها
+- Minification CSS
 
 ---
 
-## 📂 Contents
-
-- `app.py` — Main Flask application (routes, models, upload handlers)
-- `templates/` — Jinja2 templates for pages and dashboard
-- `static/` — CSS, JS, images, and upload folders (`static/uploads/...`)
-- `requirements.txt` — Python dependencies
-
----
-
-## ✨ Key Features
-
-### Core
-
-- User authentication (`Flask-Login`)
-- Profile pictures (avatars) and extra fields (family name, phone)
-- Projects with ZIP upload and delete
-- Certificate upload & listing
-- Server-side charts (PNG & SVG) with `matplotlib`
-- Multilingual support via `Flask-Babel`
-
-### AI Hub (`/ai`)
-
-- **Chat Assistant**
-- **Image Generator**
-- **Code Assistant**
-- Modern gradient layout powered by **TailwindCSS**
-- Ready for integration with OpenAI or local AI APIs
-
----
-
-## ⚙️ Prerequisites
-
-- Python 3.8+
-- Recommended: use a virtual environment (`venv`)
-
----
-
-## 💻 Installation (Windows)
-
-1. Clone the repo:
-
-```powershell
-git clone https://github.com/amiryousef87/first-project-from-max.git
-cd first-project-from-max
-```
-
-2. Create & activate a virtual environment:
-
-```powershell
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-```
-
-3. Install dependencies:
-
-```powershell
-pip install -r requirements.txt
-```
-
----
-
-## 🚀 Running the App (Development)
-
-```powershell
-python app.py
-```
-
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
-**Notes:**
-
-- First run creates SQLite DB `users.db` and seeds default admin: `admin / 123456`
-- Make sure the virtual environment is active if import errors occur
-
----
-
-## 🗺️ Important Routes
-
-### Public Pages
-
-- `/` — Home
-- `/about` / `/contact` — Info pages
-- `/projects` — Public project listing
-- `/video` — Example videos
-- `/ai` — AI Hub
-
-### Dashboard (Login Required)
-
-- `/login` — Login / Register
-- `/dashboard` — Main dashboard
-- `/dashboard/projects` — Manage projects
-- `/certificates` — Upload/list certificates
-- `/profile` — Update avatar, family name, phone
-- `/charts` — Server-rendered charts
-
----
-
-## 📁 Uploads & Storage
-
-Folders under `static/uploads/`:
-
-- `projects/` — Project files
-- `certificates/` — Certificates
-- `avatars/` — Profile images
-
-> Make sure these directories exist and are writable.
-
----
-
-## 🗄️ Database & Migrations
-
-- SQLite DB: `sqlite:///users.db`
-- Auto-adds missing columns (avatar, family_name, project_file)
-- For production, consider **Alembic** for explicit migrations
-
----
-
-## 🔐 Security & Deployment
-
-- Replace `app.secret_key` with a strong key for production
-- Disable `debug=True` in production
-- Deploy with **Gunicorn + Nginx**
-- Always validate uploaded files
-
----
-
-## 💡 Development Tips
-
-- Reset DB: delete `users.db` and restart app
-- Clear browser cache after template/CSS changes
-- Default admin credentials available for dashboard login
-
----
-
-## 🤖 AI Integration Ideas
-
-The `/ai` page can support:
-
-- GPT-based chatbot
-- AI image generation
-- Code analysis & completion
-- REST API connection to local or cloud AI services
-
-Extend `ai.html` and Flask routes to connect to your AI backend.
-
----
-
-## 🤝 Contributing
-
-Contributions welcome!  
-If you add new routes or AI features, update this README accordingly.
-
----
-
-## 📜 License
-
-**MIT License**  
-© 2025 Amiryousef Tousi
+**توسعه‌دهنده**: Amiryousef Tousi  
+**تاریخ**: 2025  
+**نسخه**: 5.3
+**برند**: Max
