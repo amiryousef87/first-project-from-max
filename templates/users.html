@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>داشبورد کاربران آنلاین</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen">
+      <!-- منوی کناری -->
+      <aside class="w-64 bg-blue-800 text-white flex-shrink-0 flex flex-col">
+        <div class="p-6 font-bold text-2xl border-b border-blue-700">
+          <a
+            href="{{ url_for('admin') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            Admin Max
+          </a>
+        </div>
+        <nav class="mt-6 flex-1">
+          <a
+            href="{{ url_for('admin') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            <span class="material-icons mr-3">dashboard</span> داشبورد
+          </a>
+          <a
+            href="{{ url_for('users') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            <span class="material-icons mr-3">people</span> کاربران
+          </a>
+          <a
+            href="{{ url_for('setting') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            <span class="material-icons mr-3">settings</span> تنظیمات
+          </a>
+          <a
+            href="{{ url_for('logout') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors mt-auto"
+          >
+            <span class="material-icons mr-3">logout</span> خروج
+          </a>
+        </nav>
+      </aside>
+
+      <!-- محتوای اصلی -->
+      <main class="flex-1 overflow-y-auto p-8">
+        <!-- هدر بالای صفحه -->
+        <div class="flex items-center justify-between mb-8">
+          <h1 class="text-3xl font-bold text-gray-800">کاربران آنلاین</h1>
+
+          <!-- دکمه Go to Site و منوی کاربری -->
+          <div class="flex items-center space-x-4">
+            <a
+              href="{{ url_for('index') }}"
+              class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition"
+            >
+              <span class="material-icons mr-2">open_in_new</span> Go to Site
+            </a>
+
+            <div class="relative" id="userMenuContainer">
+              <a
+                id="userMenuButton"
+                class="flex items-center p-2 rounded-full hover:bg-gray-700 transition cursor-pointer"
+              >
+                {% if current_user.avatar %}
+                <img
+                  src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}"
+                  alt="avatar"
+                  class="rounded-full w-8 h-8 object-cover border-2 border-white/20"
+                />
+                {% else %}
+                <div
+                  class="rounded-full bg-indigo-500 text-white flex items-center justify-center w-8 h-8 text-sm border-2 border-white/20"
+                >
+                  {{ current_user.username[0]|upper }}
+                </div>
+                {% endif %}
+                <span class="ml-2 hidden sm:inline text-sm font-medium"
+                  >{{ current_user.username }}</span
+                >
+                <i class="fas fa-angle-down ml-2 text-xs"></i>
+              </a>
+
+              <ul
+                id="userDropdown"
+                class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden hidden z-50"
+              >
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm hover:bg-gray-100 transition"
+                    href="{{ url_for('profile') }}"
+                    >Profile</a
+                  >
+                </li>
+                <li><hr class="border-gray-100" /></li>
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm hover:bg-gray-100 transition text-red-500"
+                    href="{{ url_for('logout') }}"
+                    >Logout</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- کارت‌های کاربران آنلاین -->
+        <div class="grid md:grid-cols-2 gap-6">
+          {% set active_users = users|selectattr('is_active')|list %} {% if
+          active_users %} {% for user in active_users %}
+          <div
+            class="bg-white shadow-lg rounded-xl p-6 transition-transform hover:scale-105"
+          >
+            <div class="flex items-center space-x-4">
+              {% if user.avatar %}
+              <img
+                src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}"
+                alt="avatar"
+                class="w-12 h-12 rounded-full object-cover border-2 border-indigo-200"
+              />
+              {% else %}
+              <div
+                class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-semibold text-lg"
+              >
+                {{ user.username[0]|upper }}
+              </div>
+              {% endif %}
+
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800">
+                  {{ user.username }}
+                </h2>
+                <p class="text-gray-500 text-sm">{{ user.email }}</p>
+                <p class="text-green-600 text-sm font-medium mt-1">فعال</p>
+                {% if user.last_login %}
+                <p class="text-gray-400 text-xs mt-1">
+                  آخرین ورود: {{ user.last_login.strftime('%Y-%m-%d %H:%M:%S')
+                  }}
+                </p>
+                {% endif %}
+              </div>
+            </div>
+
+            {% if user.logs %}
+            <div
+              class="mt-4 bg-gray-50 p-3 rounded-lg max-h-40 overflow-y-auto"
+            >
+              <h3 class="text-sm font-semibold text-gray-600 mb-2">لاگ‌ها:</h3>
+              <ul class="text-gray-700 text-xs space-y-1">
+                {% for log in user.logs %}
+                <li>• {{ log }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %} {% else %}
+          <p class="text-center text-gray-500 col-span-3">
+            هیچ کاربری آنلاین نیست.
+          </p>
+          {% endif %}
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const userMenuButton = document.getElementById("userMenuButton");
+      const userDropdown = document.getElementById("userDropdown");
+      const userMenuContainer = document.getElementById("userMenuContainer");
+
+      userMenuButton.addEventListener("mouseenter", () => {
+        userDropdown.classList.remove("hidden");
+      });
+      userMenuContainer.addEventListener("mouseleave", () => {
+        userDropdown.classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>

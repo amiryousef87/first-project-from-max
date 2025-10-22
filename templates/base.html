@@ -121,18 +121,26 @@
 
         <!-- Account -->
         <div class="flex items-center gap-3">
-          {% if current_user and current_user.is_authenticated %}
+          {% if user and user.avatar %}
+          <img
+            src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}"
+            alt="avatar"
+            class="rounded-full w-8 h-8 object-cover border-2 border-white/20"
+          />
+          {% endif %} {% if current_user and current_user.is_authenticated %}
           <a
             href="{{ url_for('profile') }}"
             class="text-orange-600 hover:font-extrabold hover:scale-110"
-            >{{ current_user.username }}</a
           >
+            {{ current_user.username }}
+          </a>
           {% else %}
           <a
             href="{{ url_for('login') }}"
             class="text-orange-600 hover:font-extrabold hover:scale-110"
-            >Login</a
           >
+            Login
+          </a>
           {% endif %}
         </div>
       </div>

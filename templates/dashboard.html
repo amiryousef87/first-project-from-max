@@ -272,55 +272,68 @@
 
         <!-- Right side: User Menu (LTR) -->
         <div class="ml-auto">
-          <div class="relative group">
+          <div class="flex items-center space-x-4">
+            <!-- Go to Site Button -->
             <a
-              class="flex items-center p-2 rounded-full hover:bg-gray-700 transition cursor-pointer"
-              id="userMenu"
+              href="{{ url_for('index') }}"
+              class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors"
             >
-              <!-- User Avatar (Using Jinja logic) -->
-              {% if user and user.avatar %}
-              <img
-                src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}"
-                alt="avatar"
-                class="rounded-full w-8 h-8 object-cover border-2 border-white/20"
-              />
-              {% else %}
-              <div
-                class="rounded-full bg-indigo-500 text-white flex items-center justify-center w-8 h-8 text-sm border-2 border-white/20"
-              >
-                <i class="fas fa-user"></i>
-              </div>
-              {% endif %}
-
-              <!-- NOTE: Fixed Jinja error here -->
-              <span class="ml-2 hidden sm:inline text-sm font-medium"
-                >{{ user.username if user else 'Account' }}</span
-              >
-              <i class="fas fa-angle-down ml-2 text-xs"></i>
+              <span class="material-icons mr-2"></span>
+              Go to Site
             </a>
 
-            <!-- Dropdown Menu -->
-            <ul
-              class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden hidden group-hover:block transition duration-200 z-50"
-            >
-              <li>
-                <a
-                  class="block px-4 py-2 text-sm hover:bg-gray-100 transition"
-                  href="{{ url_for('profile') }}"
-                  ><i class="fas fa-user-circle mr-2"></i>Profile</a
+            <!-- User Menu -->
+            <div class="relative" id="userMenuContainer">
+              <a
+                class="flex items-center p-2 rounded-full hover:bg-gray-700 transition cursor-pointer"
+                id="userMenuButton"
+              >
+                <!-- User Avatar -->
+                {% if user and user.avatar %}
+                <img
+                  src="{{ url_for('static', filename='uploads/avatars/' ~ user.avatar) }}"
+                  alt="avatar"
+                  class="rounded-full w-8 h-8 object-cover border-2 border-white/20"
+                />
+                {% else %}
+                <div
+                  class="rounded-full bg-indigo-500 text-white flex items-center justify-center w-8 h-8 text-sm border-2 border-white/20"
                 >
-              </li>
-              <li>
-                <hr class="border-gray-100" />
-              </li>
-              <li>
-                <a
-                  class="block px-4 py-2 text-sm hover:bg-gray-100 transition text-red-500"
-                  href="{{ url_for('logout') }}"
-                  ><i class="fas fa-sign-out-alt mr-2"></i>Logout</a
+                  <i class="fas fa-user"></i>
+                </div>
+                {% endif %}
+                <span class="ml-2 hidden sm:inline text-sm font-medium"
+                  >{{ user.username if user else 'Account' }}</span
                 >
-              </li>
-            </ul>
+                <i class="fas fa-angle-down ml-2 text-xs"></i>
+              </a>
+
+              <!-- Dropdown Menu -->
+              <ul
+                id="userDropdown"
+                class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden hidden z-50"
+              >
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm hover:bg-gray-100 transition"
+                    href="{{ url_for('profile') }}"
+                  >
+                    <i class="fas fa-user-circle mr-2"></i>Profile
+                  </a>
+                </li>
+                <li>
+                  <hr class="border-gray-100" />
+                </li>
+                <li>
+                  <a
+                    class="block px-4 py-2 text-sm hover:bg-gray-100 transition text-red-500"
+                    href="{{ url_for('logout') }}"
+                  >
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -635,5 +648,21 @@
       async
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+
+    <script>
+      const userMenuButton = document.getElementById("userMenuButton");
+      const userDropdown = document.getElementById("userDropdown");
+      const userMenuContainer = document.getElementById("userMenuContainer");
+
+      // وقتی موس روی آواتار رفت، منو باز شود
+      userMenuButton.addEventListener("mouseenter", () => {
+        userDropdown.classList.remove("hidden");
+      });
+
+      // وقتی موس از container خارج شد، منو بسته شود
+      userMenuContainer.addEventListener("mouseleave", () => {
+        userDropdown.classList.add("hidden");
+      });
+    </script>
   </body>
 </html>

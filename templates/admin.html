@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>داشبورد ادمین</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex h-screen overflow-hidden">
+      <!-- منوی کناری -->
+      <aside class="w-64 bg-blue-800 text-white flex-shrink-0 flex flex-col">
+        <div class="p-6 font-bold text-2xl border-b border-blue-700">
+          <a
+            href="{{ url_for('admin') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            Admin Max
+          </a>
+        </div>
+        <nav class="mt-6 flex-1 overflow-y-auto">
+          <a
+            href="{{ url_for('users') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            <span class="material-icons mr-3">people</span> کاربران
+          </a>
+          <a
+            href="{{ url_for('setting') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            <span class="material-icons mr-3">settings</span> تنظیمات
+          </a>
+          <a
+            href="{{ url_for('logout') }}"
+            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+          >
+            <span class="material-icons mr-3">logout</span> خروج
+          </a>
+        </nav>
+      </aside>
+
+      <!-- بخش اصلی -->
+      <main class="flex-1 overflow-y-auto p-8">
+        <!-- هدر و منوی پروفایل -->
+        <div class="flex justify-end items-center mb-8 relative">
+          <div class="relative group">
+            <a
+              id="userMenuButton"
+              class="flex items-center p-2 rounded-full hover:bg-gray-200 transition cursor-pointer"
+            >
+              {% if current_user.avatar %}
+              <img
+                src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}"
+                alt="avatar"
+                class="rounded-full w-8 h-8 object-cover border-2 border-gray-300"
+              />
+              {% else %}
+              <div
+                class="rounded-full bg-indigo-500 text-white flex items-center justify-center w-8 h-8 text-sm border-2 border-gray-300"
+              >
+                {{ current_user.username[0]|upper }}
+              </div>
+              {% endif %}
+              <span class="ml-2 hidden sm:inline text-sm font-medium"
+                >{{ current_user.username }}</span
+              >
+              <i class="fas fa-angle-down ml-2 text-xs"></i>
+            </a>
+            <ul
+              class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden hidden group-hover:block z-50"
+            >
+              <li>
+                <a
+                  href="{{ url_for('profile') }}"
+                  class="block px-4 py-2 text-sm hover:bg-gray-100"
+                  >پروفایل</a
+                >
+              </li>
+              <li><hr class="border-gray-100" /></li>
+              <li>
+                <a
+                  href="{{ url_for('logout') }}"
+                  class="block px-4 py-2 text-sm hover:bg-gray-100 text-red-500"
+                  >خروج</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- کارت‌های آمار -->
+        <div class="grid md:grid-cols-3 gap-6 mb-10">
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-gray-500 font-semibold">کل کاربران</h2>
+            <p class="text-2xl font-bold text-blue-600">{{ users|length }}</p>
+          </div>
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-gray-500 font-semibold">کاربران فعال</h2>
+            <p class="text-2xl font-bold text-green-600">
+              {{ users|selectattr('is_active')|list|length }}
+            </p>
+          </div>
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-gray-500 font-semibold">کاربران غیرفعال</h2>
+            <p class="text-2xl font-bold text-red-600">
+              {{ users|rejectattr('is_active')|list|length }}
+            </p>
+          </div>
+        </div>
+
+        <!-- جدول کاربران -->
+        <div class="overflow-x-auto shadow-lg rounded-lg bg-white mb-10">
+          <table class="min-w-full text-gray-700">
+            <thead class="bg-blue-600 text-white">
+              <tr>
+                <th class="py-3 px-6 text-left">#</th>
+                <th class="py-3 px-6 text-left">نام کاربری</th>
+                <th class="py-3 px-6 text-left">ایمیل</th>
+                <th class="py-3 px-6 text-left">آخرین ورود</th>
+                <th class="py-3 px-6 text-left">وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr
+                class="border-b hover:bg-gray-50 transition-colors duration-200"
+              >
+                <td class="py-3 px-6">{{ loop.index }}</td>
+                <td class="py-3 px-6">{{ user.username }}</td>
+                <td class="py-3 px-6">{{ user.email }}</td>
+                <td class="py-3 px-6">{{ user.last_login or '---' }}</td>
+                <td class="py-3 px-6">
+                  {% if user.is_active %}
+                  <span class="text-green-600 font-semibold">فعال</span>
+                  {% else %}
+                  <span class="text-red-600 font-semibold">غیرفعال</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- پنل لاگ زنده -->
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-10">
+          <h2 class="text-xl font-semibold mb-4">لاگ‌های سیستم</h2>
+          <div
+            id="logContainer"
+            class="bg-gray-50 p-3 rounded-lg max-h-64 overflow-y-auto font-mono text-xs text-gray-700"
+          ></div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function fetchLogs() {
+        fetch("/api/logs")
+          .then((res) => res.json())
+          .then((data) => {
+            const container = document.getElementById("logContainer");
+            container.innerHTML = "";
+            data.forEach((line) => {
+              const p = document.createElement("p");
+              p.textContent = line;
+              container.appendChild(p);
+            });
+            container.scrollTop = container.scrollHeight;
+          });
+      }
+
+      setInterval(fetchLogs, 2000);
+      fetchLogs();
+    </script>
+  </body>
+</html>

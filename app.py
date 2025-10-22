@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import os
 from io import BytesIO
 import re
+import logging
 
-from flask import Flask, render_template, redirect, url_for, request, flash, Response
+from flask import Flask, render_template, redirect, url_for, request, flash, Response , jsonify
 from flask_babel import Babel, gettext as _
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -14,7 +15,7 @@ from flask_login import (
     current_user,
     UserMixin,
 )
-
+from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename, safe_join
@@ -72,6 +73,23 @@ login_manager.init_app(app)
 
 # Babel برای چند زبانه بودن
 app.config["LANGUAGES"] = ["en", "fa"]
+
+
+# تنظیم فایل لاگ
+logging.basicConfig(
+    filename='system.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(message)s',
+    datefmt='%d/%b/%Y %H:%M:%S'
+)
+
+# لاگ کردن هر درخواست
+
+
+@app.before_request
+def log_request_info():
+    logging.info(
+        f'{request.remote_addr} "{request.method} {request.path} {request.environ.get("SERVER_PROTOCOL")}"')
 
 
 def select_locale():
@@ -135,6 +153,18 @@ def about():
 @app.route("/shop")
 def shop():
     return render_template("shop.html")
+
+
+@app.route("/users")
+@login_required
+def users():
+    return render_template("users.html")
+
+
+@app.route("/setting")
+@login_required
+def setting():
+    return render_template("setting.html", user=current_user)
 
 
 @app.route("/projects")
@@ -214,6 +244,30 @@ def charts():
 @app.route("/ai")
 def ai():
     return render_template("ai.html", user=current_user)
+
+
+@app.route("/api/logs")
+@login_required
+def get_logs():
+    try:
+        with open('system.log', 'r', encoding='utf-8') as f:
+            logs = f.readlines()[-50:]
+    except FileNotFoundError:
+        logs = ["No log file found."]
+    return jsonify(logs)
+
+
+@app.route("/admin")
+@login_required
+def admin():
+    # آخرین 20 خط لاگ
+    with open('system.log', 'r', encoding='utf-8') as f:
+        logs = f.readlines()[-20:]
+    users = User.query.all()
+    return render_template("admin.html", users=users, current_user=current_user, logs=logs)
+
+
+
 
 
 @app.route("/dashboard/projects/add", methods=["POST"])
