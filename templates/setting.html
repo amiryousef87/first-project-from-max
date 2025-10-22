@@ -1,249 +1,345 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>داشبورد تنظیمات کاربر</title>
+    <title>تنظیمات حساب کاربری</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* تنظیمات RTL و فونت فارسی */
+      :root {
+        --sidebar-width: 16rem; /* 256px */
+      }
+      .sidebar {
+        width: var(--sidebar-width);
+      }
+      .sidebar a .material-icons-outlined,
+      .sidebar a .fa {
+        margin-left: 0.75rem; /* ml-3 در RTL */
+      }
+      .dropdown-menu {
+        right: 0;
+        left: auto; /* اطمینان از راست‌چین بودن منوی کشویی */
+      }
+      body {
+        font-family: Tahoma, "B Titr", "B Nazanin", Arial, sans-serif;
+        background-color: #f7f9fb; /* رنگ زمینه روشن‌تر */
+      }
+      /* استایل دهی به Checkbox/Toggle برای زیبایی بیشتر */
+      input[type="checkbox"] {
+        /* جایگزین Tailwind class */
+        @apply appearance-none h-6 w-11 bg-gray-300 rounded-full relative cursor-pointer transition-colors duration-300;
+      }
+      input[type="checkbox"]:checked {
+        @apply bg-emerald-500;
+      }
+      input[type="checkbox"]::after {
+        content: "";
+        @apply absolute top-0.5 right-0.5 h-5 w-5 bg-white rounded-full shadow transition-transform duration-300;
+        transform: translateX(0);
+      }
+      input[type="checkbox"]:checked::after {
+        transform: translateX(
+          -18px
+        ); /* 11px (w-11) - 6px (h-6) = 5px.  11-5=6. -18px is approx right for RTL */
+        /* برای RTL، بعد از چک شدن باید به سمت چپ (از دید مرورگر) حرکت کند */
+      }
+    </style>
   </head>
-  <body class="bg-gray-100">
-    <div class="flex h-screen">
-      <!-- منوی کناری -->
-      <aside class="w-64 bg-blue-800 text-white flex-shrink-0 flex flex-col">
-        <div class="p-6 font-bold text-2xl border-b border-blue-700">
-          <a
-            href="{{ url_for('admin') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
-          >
-            Admin Max
+  <body>
+    <div class="flex h-screen overflow-hidden">
+      <aside
+        class="sidebar bg-indigo-700 text-white flex-shrink-0 flex flex-col shadow-xl"
+      >
+        <div class="p-6 font-extrabold text-3xl border-b border-indigo-600">
+          <a href="{{ url_for('admin') }}" class="flex items-center text-white">
+            Admin <span class="text-indigo-300">Max</span>
           </a>
         </div>
-        <nav class="mt-6 flex-1">
+        <nav class="mt-4 flex-1 overflow-y-auto">
           <a
             href="{{ url_for('admin') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+            class="flex items-center px-6 py-3 hover:bg-indigo-600 transition-colors duration-200"
           >
-            <span class="material-icons mr-3">dashboard</span> داشبورد
+            <span class="material-icons-outlined">dashboard</span>
+            داشبورد
           </a>
           <a
             href="{{ url_for('users') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+            class="flex items-center px-6 py-3 hover:bg-indigo-600 transition-colors duration-200"
           >
-            <span class="material-icons mr-3">people</span> کاربران
+            <span class="material-icons-outlined">people_alt</span> کاربران
           </a>
           <a
             href="{{ url_for('setting') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors"
+            class="flex items-center px-6 py-3 bg-indigo-800 border-r-4 border-emerald-400 font-semibold transition-all duration-200"
           >
-            <span class="material-icons mr-3">settings</span> تنظیمات
-          </a>
-          <a
-            href="{{ url_for('logout') }}"
-            class="flex items-center px-6 py-3 hover:bg-blue-700 transition-colors mt-auto"
-          >
-            <span class="material-icons mr-3">logout</span> خروج
+            <span class="material-icons-outlined">settings</span> تنظیمات
           </a>
         </nav>
+        <div class="p-4 border-t border-indigo-600">
+          <a
+            href="{{ url_for('logout') }}"
+            class="flex items-center px-6 py-3 text-red-300 hover:bg-indigo-600 hover:text-red-100 transition-colors duration-200 rounded-lg"
+          >
+            <span class="material-icons-outlined">logout</span> خروج
+          </a>
+        </div>
       </aside>
 
-      <!-- محتوای اصلی -->
-      <main class="flex-1 overflow-y-auto p-8">
-        <!-- هدر بالای صفحه -->
-        <div class="flex items-center justify-between mb-8">
-          <h1 class="text-3xl font-bold text-gray-800">تنظیمات حساب کاربری</h1>
-          <div class="flex items-center space-x-4">
+      <main class="flex-1 overflow-y-auto p-6 md:p-10">
+        <div
+          class="flex items-center justify-between mb-8 pb-4 border-b border-gray-200"
+        >
+          <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+            <span
+              class="material-icons-outlined text-4xl ml-2 text-emerald-500 align-middle"
+            >
+              tune
+            </span>
+            مدیریت تنظیمات حساب کاربری
+          </h1>
+
+          <div class="flex items-center space-x-4 space-x-reverse">
             <a
               href="{{ url_for('index') }}"
-              class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition"
+              class="flex items-center px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors shadow-md text-sm"
             >
-              <span class="material-icons mr-2">open_in_new</span> Go to Site
+              <span class="material-icons-outlined ml-2">open_in_new</span>
+              مشاهده سایت
             </a>
-            <div class="relative" id="userMenuContainer">
-              <a
-                id="userMenuButton"
-                class="flex items-center p-2 rounded-full hover:bg-gray-700 transition cursor-pointer"
+
+            <div class="relative group" id="userMenuContainer"></div>
+          </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div
+            class="bg-white shadow-2xl rounded-xl p-8 border-t-4 border-indigo-500"
+          >
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+              <span class="material-icons-outlined ml-2 text-indigo-500"
+                >account_circle</span
               >
+              اطلاعات شخصی
+            </h2>
+            <form>
+              <div class="flex items-center mb-6 space-x-4 space-x-reverse">
                 {% if current_user.avatar %}
                 <img
                   src="{{ url_for('static', filename='uploads/avatars/' ~ current_user.avatar) }}"
                   alt="avatar"
-                  class="rounded-full w-8 h-8 object-cover border-2 border-white/20"
+                  class="w-20 h-20 rounded-full object-cover border-4 border-gray-200 shadow"
                 />
                 {% else %}
                 <div
-                  class="rounded-full bg-indigo-500 text-white flex items-center justify-center w-8 h-8 text-sm border-2 border-white/20"
+                  class="w-20 h-20 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-3xl border-4 border-gray-200 shadow"
                 >
                   {{ current_user.username[0]|upper }}
                 </div>
                 {% endif %}
-                <span class="ml-2 hidden sm:inline text-sm font-medium"
-                  >{{ current_user.username }}</span
+                <label
+                  class="block text-gray-600 cursor-pointer hover:text-indigo-600 transition"
                 >
-                <i class="fas fa-angle-down ml-2 text-xs"></i>
-              </a>
-
-              <ul
-                id="userDropdown"
-                class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-2xl overflow-hidden hidden z-50"
-              >
-                <li>
-                  <a
-                    class="block px-4 py-2 text-sm hover:bg-gray-100 transition"
-                    href="{{ url_for('profile') }}"
-                    >Profile</a
+                  <span class="material-icons-outlined align-middle ml-1"
+                    >upload_file</span
                   >
-                </li>
-                <li><hr class="border-gray-100" /></li>
-                <li>
-                  <a
-                    class="block px-4 py-2 text-sm hover:bg-gray-100 transition text-red-500"
-                    href="{{ url_for('logout') }}"
-                    >Logout</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+                  تغییر تصویر آواتار
+                  <input type="file" class="hidden" />
+                </label>
+              </div>
 
-        <!-- کارت‌های تنظیمات -->
-        <div class="grid md:grid-cols-2 gap-6">
-          <!-- اطلاعات پروفایل -->
-          <div class="bg-white shadow-lg rounded-xl p-6">
-            <h2 class="text-xl font-semibold mb-4">اطلاعات پروفایل</h2>
-            <form>
-              <div class="mb-4">
-                <label class="block text-gray-700 mb-2">نام کاربری</label>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >نام کاربری</label
+                >
                 <input
                   type="text"
                   value="{{ current_user.username }}"
-                  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 bg-gray-50"
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700 mb-2">ایمیل</label>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >ایمیل</label
+                >
                 <input
                   type="email"
                   value="{{ current_user.email }}"
-                  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 bg-gray-50"
+                  disabled
+                  title="ایمیل توسط ادمین قابل تغییر نیست."
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700 mb-2">آواتار</label>
-                <input
-                  type="file"
-                  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                />
-              </div>
+
               <button
                 type="submit"
-                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition"
+                class="mt-4 w-full bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold shadow-md shadow-indigo-200 flex items-center justify-center"
               >
+                <span class="material-icons-outlined ml-2">save</span>
                 ذخیره تغییرات
               </button>
             </form>
           </div>
 
-          <!-- تغییر رمز عبور -->
-          <div class="bg-white shadow-lg rounded-xl p-6">
-            <h2 class="text-xl font-semibold mb-4">تغییر رمز عبور</h2>
+          <div
+            class="bg-white shadow-2xl rounded-xl p-8 border-t-4 border-red-500"
+          >
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+              <span class="material-icons-outlined ml-2 text-red-500"
+                >lock</span
+              >
+              رمز عبور و امنیت
+            </h2>
             <form>
-              <div class="mb-4">
-                <label class="block text-gray-700 mb-2">رمز فعلی</label>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >رمز عبور فعلی</label
+                >
                 <input
                   type="password"
-                  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  placeholder="رمز فعلی خود را وارد کنید"
+                  class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150"
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700 mb-2">رمز جدید</label>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >رمز عبور جدید</label
+                >
                 <input
                   type="password"
-                  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  placeholder="رمز عبور جدید (حداقل ۸ کاراکتر)"
+                  class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150"
                 />
               </div>
-              <div class="mb-4">
-                <label class="block text-gray-700 mb-2">تکرار رمز جدید</label>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-2"
+                  >تکرار رمز عبور جدید</label
+                >
                 <input
                   type="password"
-                  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  placeholder="تکرار رمز عبور جدید"
+                  class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition duration-150"
                 />
               </div>
               <button
                 type="submit"
-                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition"
+                class="mt-4 w-full bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 transition-colors font-semibold shadow-md shadow-red-200 flex items-center justify-center"
               >
-                تغییر رمز
+                <span class="material-icons-outlined ml-2">vpn_key</span>
+                تغییر رمز عبور
               </button>
             </form>
           </div>
 
-          <!-- تنظیمات عمومی -->
-          <div class="bg-white shadow-lg rounded-xl p-6">
-            <h2 class="text-xl font-semibold mb-4">تنظیمات عمومی</h2>
-            <form>
-              <div class="mb-4 flex items-center justify-between">
-                <label class="text-gray-700">فعال کردن اعلان‌ها</label>
-                <input
-                  type="checkbox"
-                  class="h-5 w-5 text-indigo-600"
-                  checked
-                />
-              </div>
-              <div class="mb-4 flex items-center justify-between">
-                <label class="text-gray-700">تم تاریک</label>
-                <input type="checkbox" class="h-5 w-5 text-indigo-600" />
-              </div>
-              <button
-                type="submit"
-                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition"
+          <div
+            class="bg-white shadow-2xl rounded-xl p-8 border-t-4 border-emerald-500"
+          >
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+              <span class="material-icons-outlined ml-2 text-emerald-500"
+                >notifications_active</span
               >
-                ذخیره تنظیمات
-              </button>
-            </form>
+              اعلان‌ها و تم
+            </h2>
+
+            <div class="space-y-6">
+              <div
+                class="flex items-center justify-between p-3 rounded-lg bg-gray-50 border"
+              >
+                <label class="text-lg text-gray-700 font-medium"
+                  >فعال کردن اعلان‌های ایمیلی</label
+                >
+                <input type="checkbox" checked />
+              </div>
+              <div
+                class="flex items-center justify-between p-3 rounded-lg bg-gray-50 border"
+              >
+                <label class="text-lg text-gray-700 font-medium"
+                  >تم تاریک (Dark Mode)</label
+                >
+                <input type="checkbox" />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="mt-6 w-full bg-emerald-600 text-white px-4 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold shadow-md shadow-emerald-200 flex items-center justify-center"
+            >
+              <span class="material-icons-outlined ml-2">check_circle</span>
+              ذخیره تنظیمات عمومی
+            </button>
           </div>
 
-          <!-- امنیت و نشست‌ها -->
-          <div class="bg-white shadow-lg rounded-xl p-6">
-            <h2 class="text-xl font-semibold mb-4">امنیت و نشست‌ها</h2>
-            <ul class="space-y-2">
+          <div
+            class="bg-white shadow-2xl rounded-xl p-8 border-t-4 border-yellow-500"
+          >
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+              <span class="material-icons-outlined ml-2 text-yellow-500"
+                >security</span
+              >
+              مدیریت نشست‌ها
+            </h2>
+            <p class="text-gray-600 mb-4">
+              نشست‌های فعال شما در دستگاه‌های مختلف:
+            </p>
+            <ul class="space-y-3">
               <li
-                class="flex justify-between items-center p-2 border rounded-lg bg-gray-50"
+                class="flex justify-between items-center p-3 border rounded-xl bg-yellow-50"
               >
-                <span>آخرین نشست: دسکتاپ</span>
-                <button class="text-red-500 hover:underline text-sm">
-                  خروج
-                </button>
+                <span class="flex items-center text-gray-800">
+                  <span
+                    class="material-icons-outlined text-xl ml-2 text-yellow-600"
+                    >computer</span
+                  >
+                  دستگاه فعلی (ویندوز / کروم)
+                </span>
+                <span class="text-xs text-yellow-700 font-semibold"
+                  >نشست فعال</span
+                >
               </li>
               <li
-                class="flex justify-between items-center p-2 border rounded-lg bg-gray-50"
+                class="flex justify-between items-center p-3 border rounded-xl bg-gray-50"
               >
-                <span>آخرین نشست: موبایل</span>
-                <button class="text-red-500 hover:underline text-sm">
+                <span class="flex items-center text-gray-700">
+                  <span
+                    class="material-icons-outlined text-xl ml-2 text-gray-500"
+                    >smartphone</span
+                  >
+                  موبایل (اندروید / فایرفاکس) - ۱ ساعت پیش
+                </span>
+                <button
+                  class="text-red-500 hover:text-red-700 transition-colors text-sm font-semibold"
+                >
+                  <span class="material-icons-outlined text-base align-middle"
+                    >logout</span
+                  >
                   خروج
                 </button>
               </li>
             </ul>
+
+            <button
+              type="button"
+              class="mt-6 w-full text-red-600 bg-red-100 px-4 py-3 rounded-lg hover:bg-red-200 transition-colors font-semibold flex items-center justify-center border border-red-300"
+            >
+              <span class="material-icons-outlined ml-2">clear_all</span>
+              خروج از همه دستگاه‌ها
+            </button>
           </div>
         </div>
       </main>
     </div>
 
     <script>
-      const userMenuButton = document.getElementById("userMenuButton");
-      const userDropdown = document.getElementById("userDropdown");
-      const userMenuContainer = document.getElementById("userMenuContainer");
-
-      userMenuButton.addEventListener("mouseenter", () => {
-        userDropdown.classList.remove("hidden");
-      });
-      userMenuContainer.addEventListener("mouseleave", () => {
-        userDropdown.classList.add("hidden");
-      });
+      // اسکریپت منوی کشویی کاربر (که در این صفحه حذف شد)
     </script>
   </body>
 </html>
