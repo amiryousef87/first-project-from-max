@@ -19,7 +19,7 @@ from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename, safe_join
-from models import db, Project
+from models import db, Project, Product
 
 import numpy as np
 import matplotlib
@@ -153,7 +153,9 @@ def about():
 
 @app.route("/shop")
 def shop():
+    products = Product.query.all()
     return render_template("shop.html")
+    # , products=products
 
 
 @app.route("/users")

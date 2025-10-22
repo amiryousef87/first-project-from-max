@@ -5,6 +5,7 @@ db = SQLAlchemy()
 
 # جدول کاربران
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -14,6 +15,8 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True)  # ← اینو اضافه کن
 
 # جدول داده‌های داشبورد
+
+
 class DashboardData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -21,7 +24,8 @@ class DashboardData(db.Model):
     value = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref=db.backref('dashboard_data', lazy=True))
+    user = db.relationship(
+        'User', backref=db.backref('dashboard_data', lazy=True))
 
 
 class Project(db.Model):
@@ -29,3 +33,13 @@ class Project(db.Model):
     title = db.Column(db.String(100), nullable=False)
     desc = db.Column(db.Text, nullable=False)
     tech = db.Column(db.String(200), nullable=False)
+
+
+class Product(db.Model):
+    __tablename__ = 'products'  # نکته مهم! جمعش کن تا با تداخل نداشته باشه
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    image = db.Column(db.String(100), nullable=True)
