@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block content %}
+<section class="py-12 bg-gray-100">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-8">The Max Dev Team</h2>
+    <div class="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+      {% for member in team_members %}
+      <div class="bg-white rounded-lg shadow-md p-6 text-center">
+        <!-- مسیر عکس اصلاح شد -->
+        <img
+          src="{{ url_for('static', filename=member.photo) }}"
+          alt="{{ member.name }}"
+          class="w-32 h-32 mx-auto rounded-full object-cover mb-4"
+        />
+        <h3 class="text-xl font-semibold">{{ member.name }}</h3>
+        <p class="text-gray-600">{{ member.role }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

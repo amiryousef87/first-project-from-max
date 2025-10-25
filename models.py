@@ -6,6 +6,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+# جدول بچه های مکس
+
+
+class TeamMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(100), nullable=False)
+    photo = db.Column(db.String(100), nullable=False)
+
 #  جدول نشست های فعال
 
 
@@ -21,8 +30,8 @@ class Session(db.Model):
     def __repr__(self):
         return f"<Session {self.device} - {self.browser}>"
 
-
 # جدول کاربران
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,7 +64,6 @@ class DashboardData(db.Model):
 #     title = db.Column(db.String(100), nullable=False)
 #     desc = db.Column(db.Text, nullable=False)
 #     tech = db.Column(db.String(200), nullable=False)
-
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
