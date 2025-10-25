@@ -111,7 +111,7 @@ Folders under `static/uploads/`:
 - `certificates/` — Certificates
 - `avatars/` — Profile images
 
-> Make sure these directories exist and are writable.
+
 
 ---
 
@@ -163,4 +163,5 @@ If you add new routes or AI features, update this README accordingly.
 ## 📜 License
 
 **MIT License**  
-© 2025 Amiryousef Tousi
+© 2025  A . F . T
+

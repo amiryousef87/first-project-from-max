@@ -19,7 +19,7 @@ from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename, safe_join
-from models import db, Project, Product, User, Session
+from models import db, Project, Product, User, Session, TeamMember
 from user_agents import parse
 from datetime import datetime, timedelta
 from app import db
@@ -201,6 +201,13 @@ def charts():
 @app.route("/ai")
 def ai():
     return render_template("ai.html", user=current_user)
+
+
+@app.route("/team")
+def team():
+    team_members = TeamMember.query.all()  # اسم متغیر را team_members گذاشتیم
+    return render_template("team.html", team_members=team_members)
+
 
 
 @app.route("/api/logs")
