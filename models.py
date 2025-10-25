@@ -6,6 +6,22 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+#  جدول نشست های فعال
+
+
+class Session(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    device = db.Column(db.String(120))
+    browser = db.Column(db.String(120))
+    last_active = db.Column(db.DateTime, default=datetime.utcnow)
+    ip_address = db.Column(db.String(50))
+    is_current = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return f"<Session {self.device} - {self.browser}>"
+
+
 # جدول کاربران
 
 class User(UserMixin, db.Model):
@@ -48,6 +64,7 @@ class Project(db.Model):
     tech = db.Column(db.String(300), nullable=True)
     project_file = db.Column(db.String(300), nullable=True)
 
+
 class Product(db.Model):
     __tablename__ = 'products'  # نکته مهم! جمعش کن تا با تداخل نداشته باشه
 
@@ -56,5 +73,3 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=False)
     image = db.Column(db.String(100), nullable=True)
-
-

@@ -19,7 +19,11 @@ from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename, safe_join
-from models import db, Project, Product, User
+from models import db, Project, Product, User, Session
+from user_agents import parse
+from datetime import datetime, timedelta
+from app import db
+
 
 import numpy as np
 import matplotlib
@@ -110,11 +114,7 @@ def inject_direction():
     return {"current_lang": lang, "dir": "rtl" if lang == "fa" else "ltr"}
 
 
-
-
-
 # Project model for dashboard-managed projects
-
 
 
 @login_manager.user_loader
@@ -149,7 +149,10 @@ def users():
 @app.route("/setting")
 @login_required
 def setting():
-    return render_template("setting.html", user=current_user)
+    clean_expired_sessions(hours=24)
+    sessions = Session.query.filter_by(user_id=current_user.id).order_by(
+        Session.last_active.desc()).all()
+    return render_template("setting.html", user=current_user, sessions=sessions)
 
 
 @app.route("/projects")
@@ -221,7 +224,6 @@ def admin():
         logs = ["No log file found."]
     users = User.query.all()
     return render_template("admin.html", users=users, current_user=current_user, logs=logs)
-
 
 
 @app.route("/dashboard/projects/add", methods=["POST"])
@@ -468,15 +470,15 @@ def login():
         password = request.form.get("password")
         family_name = request.form.get("family_name")
         phone = request.form.get("phone")
+
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
-            # if optional family_name/phone provided on login, save them to profile
+
+            # اگر فیلدهای اختیاری وارد شده بود، در پروفایل ذخیره کن
             try:
                 updated = False
-                if family_name and (
-                    not user.family_name or user.family_name != family_name
-                ):
+                if family_name and (not user.family_name or user.family_name != family_name):
                     user.family_name = family_name
                     updated = True
                 if phone and (not user.phone or user.phone != phone):
@@ -486,11 +488,99 @@ def login():
                     db.session.commit()
             except Exception:
                 pass
+
+            # 🟢 شناسایی دقیق مرورگر و سیستم‌عامل
+            user_agent_str = request.headers.get("User-Agent", "Unknown")
+            parsed_ua = parse(user_agent_str)
+
+            os_info = f"{parsed_ua.os.family} {parsed_ua.os.version_string}" or "Unknown OS"
+            browser_info = f"{parsed_ua.browser.family} {parsed_ua.browser.version_string}" or "Unknown Browser"
+            ip_address = request.remote_addr or "Unknown"
+
+            # 🔴 نشست‌های قبلی غیرفعال کن
+            Session.query.filter_by(user_id=user.id, is_current=True).update(
+                {"is_current": False})
+
+            # 🟢 ساخت نشست جدید
+            new_session = Session(
+                user_id=user.id,
+                device=os_info,
+                browser=browser_info,
+                ip_address=ip_address,
+                last_active=datetime.utcnow(),
+                is_current=True
+            )
+            db.session.add(new_session)
+            db.session.commit()
+
+            print(
+                f"✅ Chrome session added successfully: <Session {os_info} - {browser_info}>")
+
             next_page = request.args.get("next")
             return redirect(next_page or url_for("dashboard"))
-        flash(_("Invalid username or password!"), "danger")
+
+        flash("نام کاربری یا رمز عبور اشتباه است!", "danger")
         return redirect(url_for("login"))
+
     return render_template("login.html")
+# خروج از نشست های فعال
+
+
+@app.route("/logout_all_sessions", methods=["POST"])
+@login_required
+def logout_all_sessions():
+    from models import Session  # اطمینان از ایمپورت مدل
+    Session.query.filter_by(user_id=current_user.id).delete()
+    db.session.commit()
+    return redirect(url_for('setting'))
+
+
+def clean_expired_sessions(hours=24):
+    """🧹 حذف نشست‌های منقضی شده (قدیمی‌تر از n ساعت)"""
+    expiry_time = datetime.utcnow() - timedelta(hours=hours)
+    expired_sessions = Session.query.filter(
+        Session.last_active < expiry_time).all()
+
+    if expired_sessions:
+        print(f"🧹 Removing {len(expired_sessions)} expired sessions...")
+        for s in expired_sessions:
+            db.session.delete(s)
+        db.session.commit()
+        print("✅ Expired sessions cleaned successfully.")
+    else:
+        print("ℹ️ No expired sessions found.")
+
+
+# @app.route("/login", methods=["GET", "POST"])
+# def login():
+#     if request.method == "POST":
+#         username = request.form.get("username")
+#         password = request.form.get("password")
+#         family_name = request.form.get("family_name")
+#         phone = request.form.get("phone")
+#         user = User.query.filter_by(username=username).first()
+#         if user and user.check_password(password):
+#             login_user(user)
+#             # if optional family_name/phone provided on login, save them to profile
+#             try:
+#                 updated = False
+#                 if family_name and (
+#                     not user.family_name or user.family_name != family_name
+#                 ):
+#                     user.family_name = family_name
+#                     updated = True
+#                 if phone and (not user.phone or user.phone != phone):
+#                     user.phone = phone
+#                     updated = True
+#                 if updated:
+#                     db.session.commit()
+#             except Exception:
+#                 pass
+#             next_page = request.args.get("next")
+#             return redirect(next_page or url_for("dashboard"))
+#         flash(_("Invalid username or password!"), "danger")
+#         return redirect(url_for("login"))
+#     return render_template("login.html")
 
 
 # داشبورد
