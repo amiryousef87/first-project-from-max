@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
     <style>
       /* --- Modern Color Variables --- */
       :root {
@@ -201,6 +202,33 @@
           padding: 15px;
         }
       }
+
+      .google-login {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        color: #444;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px 18px;
+        font-family: Arial, sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .google-login:hover {
+        background-color: #f7f7f7;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .google-icon {
+        font-size: 20px;
+        margin-right: 10px;
+      }
     </style>
   </head>
   <body>
@@ -336,6 +364,11 @@
               <button class="btn" type="submit">Create Account</button>
             </form>
           </div>
+          <br />
+          <a href="{{ google_login_url }}" class="google-login">
+            <i class="fab fa-google google-icon"></i>
+            Login with Google
+          </a>
         </div>
       </div>
     </div>

@@ -1,10 +1,20 @@
 import matplotlib.pyplot as plt
 import os
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 from io import BytesIO
 import re
 import logging
 
-from flask import Flask, render_template, redirect, url_for, request, flash, Response, jsonify
+from flask import (
+    Flask,
+    render_template,
+    redirect,
+    url_for,
+    request,
+    flash,
+    Response,
+    jsonify,
+)
 from flask_babel import Babel, gettext as _
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
@@ -23,6 +33,11 @@ from models import db, Project, Product, User, Session, TeamMember
 from user_agents import parse
 from datetime import datetime, timedelta
 from app import db
+from flask import session as flask_session
+from requests_oauthlib import OAuth2Session
+from google.oauth2 import id_token
+from google.auth.transport import requests as grequests
+import json
 
 
 import numpy as np
@@ -38,7 +53,7 @@ app = Flask(
 )
 app.secret_key = "your_secret_key_here"
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = "uploads"
 
 # مطمئن شو پوشه وجود دارد
 if not os.path.exists(UPLOAD_FOLDER):
@@ -66,11 +81,28 @@ AVATAR_ALLOWED_EXT = {".png", ".jpg", ".jpeg", ".gif"}
 if not os.path.exists(AVATAR_UPLOAD_FOLDER):
     os.makedirs(AVATAR_UPLOAD_FOLDER, exist_ok=True)
 
+
+# Google OAuth setup
+with open("client_secret.json") as f:
+    creds = json.load(f)["web"]
+
+CLIENT_ID = creds["client_id"]
+CLIENT_SECRET = creds["client_secret"]
+REDIRECT_URI = creds["redirect_uris"][0]
+AUTH_URI = creds["auth_uri"]
+TOKEN_URI = creds["token_uri"]
+SCOPE = [
+    "openid",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+]
+
 # دیتابیس SQLite
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 # مدیریت لاگین
 login_manager = LoginManager()
@@ -83,10 +115,10 @@ app.config["LANGUAGES"] = ["en", "fa"]
 
 # تنظیم فایل لاگ
 logging.basicConfig(
-    filename='system.log',
+    filename="system.log",
     level=logging.INFO,
-    format='%(asctime)s - %(message)s',
-    datefmt='%d/%b/%Y %H:%M:%S'
+    format="%(asctime)s - %(message)s",
+    datefmt="%d/%b/%Y %H:%M:%S",
 )
 
 # لاگ کردن هر درخواست
@@ -95,7 +127,8 @@ logging.basicConfig(
 @app.before_request
 def log_request_info():
     logging.info(
-        f'{request.remote_addr} "{request.method} {request.path} {request.environ.get("SERVER_PROTOCOL")}"')
+        f'{request.remote_addr} "{request.method} {request.path} {request.environ.get("SERVER_PROTOCOL")}"'
+    )
 
 
 def select_locale():
@@ -143,15 +176,19 @@ def shop():
 @app.route("/users")
 @login_required
 def users():
-    return render_template("users.html")
+    users = User.query.all()  # همه یوزرها
+    return render_template("users.html", users=users)
 
 
 @app.route("/setting")
 @login_required
 def setting():
     clean_expired_sessions(hours=24)
-    sessions = Session.query.filter_by(user_id=current_user.id).order_by(
-        Session.last_active.desc()).all()
+    sessions = (
+        Session.query.filter_by(user_id=current_user.id)
+        .order_by(Session.last_active.desc())
+        .all()
+    )
     return render_template("setting.html", user=current_user, sessions=sessions)
 
 
@@ -209,12 +246,11 @@ def team():
     return render_template("team.html", team_members=team_members)
 
 
-
 @app.route("/api/logs")
 @login_required
 def get_logs():
     try:
-        with open('system.log', 'r', encoding='utf-8', errors='ignore') as f:
+        with open("system.log", "r", encoding="utf-8", errors="ignore") as f:
             logs = f.readlines()[-50:]
     except FileNotFoundError:
         logs = ["No log file found."]
@@ -225,12 +261,14 @@ def get_logs():
 @login_required
 def admin():
     try:
-        with open('system.log', 'r', encoding='utf-8', errors='ignore') as f:
+        with open("system.log", "r", encoding="utf-8", errors="ignore") as f:
             logs = f.readlines()[-20:]
     except FileNotFoundError:
         logs = ["No log file found."]
     users = User.query.all()
-    return render_template("admin.html", users=users, current_user=current_user, logs=logs)
+    return render_template(
+        "admin.html", users=users, current_user=current_user, logs=logs
+    )
 
 
 @app.route("/dashboard/projects/add", methods=["POST"])
@@ -283,13 +321,13 @@ def delete_project(project_id):
     return redirect(url_for("projects_dashboard"))
 
 
-@app.route('/upload', methods=['POST'])
+@app.route("/upload", methods=["POST"])
 def upload():
-    file = request.files.get('video')
+    file = request.files.get("video")
     if file:
         file.save(f"uploads/{file.filename}")  # مسیر ذخیره فایل
         flash("Video uploaded successfully!")
-    return redirect(url_for('videos'))
+    return redirect(url_for("videos"))
 
 
 @app.route("/certificates", methods=["GET", "POST"])
@@ -348,8 +386,7 @@ def profile():
             # remove old avatar if exists
             try:
                 if current_user.avatar:
-                    old = os.path.join(AVATAR_UPLOAD_FOLDER,
-                                       current_user.avatar)
+                    old = os.path.join(AVATAR_UPLOAD_FOLDER, current_user.avatar)
                     if os.path.exists(old):
                         os.remove(old)
             except Exception:
@@ -384,8 +421,7 @@ def chart_png(chart_name):
         labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
         colors = ["#28a745", "#ffc107", "#dc3545"]
-        ax.pie(sizes, labels=labels, colors=colors,
-               autopct="%1.1f%%", startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
         ax.axis("equal")
         ax.set_title("Missions Today")
     else:
@@ -422,8 +458,7 @@ def chart_svg(chart_name):
         labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
         colors = ["#28a745", "#ffc107", "#dc3545"]
-        ax.pie(sizes, labels=labels, colors=colors,
-               autopct="%1.1f%%", startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
         ax.axis("equal")
         ax.set_title("Missions Today")
     else:
@@ -469,7 +504,12 @@ def register():
     return redirect(url_for("login"))
 
 
-# لاگین
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+# مسیر login عادی
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -482,46 +522,47 @@ def login():
         if user and user.check_password(password):
             login_user(user)
 
-            # اگر فیلدهای اختیاری وارد شده بود، در پروفایل ذخیره کن
-            try:
-                updated = False
-                if family_name and (not user.family_name or user.family_name != family_name):
-                    user.family_name = family_name
-                    updated = True
-                if phone and (not user.phone or user.phone != phone):
-                    user.phone = phone
-                    updated = True
-                if updated:
-                    db.session.commit()
-            except Exception:
-                pass
+            # به‌روزرسانی اطلاعات اختیاری
+            updated = False
+            if family_name and (
+                not user.family_name or user.family_name != family_name
+            ):
+                user.family_name = family_name
+                updated = True
+            if phone and (not user.phone or user.phone != phone):
+                user.phone = phone
+                updated = True
+            if updated:
+                db.session.commit()
 
-            # 🟢 شناسایی دقیق مرورگر و سیستم‌عامل
+            # شناسایی مرورگر و سیستم عامل
             user_agent_str = request.headers.get("User-Agent", "Unknown")
             parsed_ua = parse(user_agent_str)
-
-            os_info = f"{parsed_ua.os.family} {parsed_ua.os.version_string}" or "Unknown OS"
-            browser_info = f"{parsed_ua.browser.family} {parsed_ua.browser.version_string}" or "Unknown Browser"
+            os_info = (
+                f"{parsed_ua.os.family} {parsed_ua.os.version_string}" or "Unknown OS"
+            )
+            browser_info = (
+                f"{parsed_ua.browser.family} {parsed_ua.browser.version_string}"
+                or "Unknown Browser"
+            )
             ip_address = request.remote_addr or "Unknown"
 
-            # 🔴 نشست‌های قبلی غیرفعال کن
+            # غیرفعال کردن نشست‌های قبلی
             Session.query.filter_by(user_id=user.id, is_current=True).update(
-                {"is_current": False})
+                {"is_current": False}
+            )
 
-            # 🟢 ساخت نشست جدید
+            # ایجاد نشست جدید
             new_session = Session(
                 user_id=user.id,
                 device=os_info,
                 browser=browser_info,
                 ip_address=ip_address,
                 last_active=datetime.utcnow(),
-                is_current=True
+                is_current=True,
             )
             db.session.add(new_session)
             db.session.commit()
-
-            print(
-                f"✅ Chrome session added successfully: <Session {os_info} - {browser_info}>")
 
             next_page = request.args.get("next")
             return redirect(next_page or url_for("dashboard"))
@@ -529,24 +570,103 @@ def login():
         flash("نام کاربری یا رمز عبور اشتباه است!", "danger")
         return redirect(url_for("login"))
 
-    return render_template("login.html")
-# خروج از نشست های فعال
+    return render_template("login.html", google_login_url=url_for("google_login"))
 
 
-@app.route("/logout_all_sessions", methods=["POST"])
+# مسیر شروع OAuth گوگل
+@app.route("/google-login")
+def google_login():
+    google = OAuth2Session(CLIENT_ID, scope=SCOPE, redirect_uri=REDIRECT_URI)
+    authorization_url, state = google.authorization_url(
+        AUTH_URI, access_type="offline", prompt="select_account"
+    )
+    flask_session["oauth_state"] = state  # <-- استفاده از alias
+    return redirect(authorization_url)
+
+
+# مسیر callback گوگل
+@app.route("/oauth2callback")
+def oauth2callback():
+    google = OAuth2Session(
+        CLIENT_ID, redirect_uri=REDIRECT_URI, state=flask_session.get("oauth_state")
+    )
+    token = google.fetch_token(
+        TOKEN_URI, client_secret=CLIENT_SECRET, authorization_response=request.url
+    )
+
+    # گرفتن اطلاعات کاربر
+    idinfo = id_token.verify_oauth2_token(
+        token["id_token"], grequests.Request(), CLIENT_ID
+    )
+    email = idinfo.get("email")
+    name = idinfo.get("name")
+
+    # اگر کاربر از قبل نیست، ایجاد کن
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        user = User(username=email, email=email, family_name=name)
+        db.session.add(user)
+        db.session.commit()
+
+    login_user(user)
+
+    # نشست جدید برای کاربر گوگل
+    user_agent_str = request.headers.get("User-Agent", "Unknown")
+    parsed_ua = parse(user_agent_str)
+    os_info = f"{parsed_ua.os.family} {parsed_ua.os.version_string}" or "Unknown OS"
+    browser_info = (
+        f"{parsed_ua.browser.family} {parsed_ua.browser.version_string}"
+        or "Unknown Browser"
+    )
+    ip_address = request.remote_addr or "Unknown"
+
+    Session.query.filter_by(user_id=user.id, is_current=True).update(
+        {"is_current": False}
+    )
+    new_session = Session(
+        user_id=user.id,
+        device=os_info,
+        browser=browser_info,
+        ip_address=ip_address,
+        last_active=datetime.utcnow(),
+        is_current=True,
+    )
+    db.session.add(new_session)
+    db.session.commit()
+
+    return redirect(url_for("dashboard"))
+
+
+# ------------------------------
+# 🔹 LOGOUT ROUTE
+# ------------------------------
+@app.route("/logout_all", methods=["POST"], endpoint="logout_all_sessions")
 @login_required
 def logout_all_sessions():
-    from models import Session  # اطمینان از ایمپورت مدل
-    Session.query.filter_by(user_id=current_user.id).delete()
+    Session.query.filter_by(user_id=current_user.id, is_current=True).update(
+        {"is_current": False}
+    )
     db.session.commit()
-    return redirect(url_for('setting'))
+    logout_user()
+    return redirect(url_for("login"))
+
+
+# ------------------------------
+# 🔹 ACTIVE USERS ROUTE
+# ------------------------------
+@app.route("/active_users")
+@login_required
+def active_users():
+    active_sessions = Session.query.filter_by(is_current=True).all()
+    active_users = [s.user for s in active_sessions if s.user]
+    unique_users = {u.id: u for u in active_users}.values()
+    return render_template("active_users.html", users=unique_users)
 
 
 def clean_expired_sessions(hours=24):
     """🧹 حذف نشست‌های منقضی شده (قدیمی‌تر از n ساعت)"""
     expiry_time = datetime.utcnow() - timedelta(hours=hours)
-    expired_sessions = Session.query.filter(
-        Session.last_active < expiry_time).all()
+    expired_sessions = Session.query.filter(Session.last_active < expiry_time).all()
 
     if expired_sessions:
         print(f"🧹 Removing {len(expired_sessions)} expired sessions...")
@@ -556,38 +676,6 @@ def clean_expired_sessions(hours=24):
         print("✅ Expired sessions cleaned successfully.")
     else:
         print("ℹ️ No expired sessions found.")
-
-
-# @app.route("/login", methods=["GET", "POST"])
-# def login():
-#     if request.method == "POST":
-#         username = request.form.get("username")
-#         password = request.form.get("password")
-#         family_name = request.form.get("family_name")
-#         phone = request.form.get("phone")
-#         user = User.query.filter_by(username=username).first()
-#         if user and user.check_password(password):
-#             login_user(user)
-#             # if optional family_name/phone provided on login, save them to profile
-#             try:
-#                 updated = False
-#                 if family_name and (
-#                     not user.family_name or user.family_name != family_name
-#                 ):
-#                     user.family_name = family_name
-#                     updated = True
-#                 if phone and (not user.phone or user.phone != phone):
-#                     user.phone = phone
-#                     updated = True
-#                 if updated:
-#                     db.session.commit()
-#             except Exception:
-#                 pass
-#             next_page = request.args.get("next")
-#             return redirect(next_page or url_for("dashboard"))
-#         flash(_("Invalid username or password!"), "danger")
-#         return redirect(url_for("login"))
-#     return render_template("login.html")
 
 
 # داشبورد
@@ -623,8 +711,7 @@ def ensure_user_avatar_column():
             res = conn.execute(text("PRAGMA table_info('user')"))
             cols = [r[1] for r in res]
             if "avatar" not in cols:
-                conn.execute(
-                    text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
+                conn.execute(text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
     except Exception:
         pass
 
@@ -639,8 +726,7 @@ def ensure_user_contact_columns():
                     text("ALTER TABLE user ADD COLUMN family_name VARCHAR(150)")
                 )
             if "phone" not in cols:
-                conn.execute(
-                    text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
+                conn.execute(text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
     except Exception:
         pass
 

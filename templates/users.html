@@ -171,10 +171,8 @@
                 </div>
               </div>
             </div>
-
             <div class="grid lg:grid-cols-3 md:grid-cols-2 gap-6">
-              {% set active_users = users|selectattr('is_active')|list %} {% if
-              active_users %} {% for user in active_users %}
+              {% if users %} {% for user in users %}
               <div
                 class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 border-t-4 border-emerald-400 hover:shadow-2xl hover:scale-[1.02]"
               >
@@ -276,7 +274,7 @@
                   >sentiment_neutral</span
                 >
                 <p class="text-xl font-semibold text-gray-700">
-                  هیچ کاربری در حال حاضر فعال نیست.
+                  هیچ کاربری در حال حاضر وجود ندارد.
                 </p>
                 <p class="text-gray-500 mt-2">
                   لطفاً وضعیت را در زمان دیگری بررسی کنید.
