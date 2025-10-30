@@ -15,12 +15,17 @@ class TeamMember(db.Model):
     role = db.Column(db.String(100), nullable=False)
     photo = db.Column(db.String(100), nullable=False)
 
+
 #  جدول نشست های فعال
 
 
 class Session(db.Model):
+    __tablename__ = "session"
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey("user.id"), nullable=False
+    )  # ← اضافه شد
     device = db.Column(db.String(120))
     browser = db.Column(db.String(120))
     last_active = db.Column(db.DateTime, default=datetime.utcnow)
@@ -30,14 +35,22 @@ class Session(db.Model):
     def __repr__(self):
         return f"<Session {self.device} - {self.browser}>"
 
+
 # جدول کاربران
 
 
 class User(UserMixin, db.Model):
+    __tablename__ = "user"  # برای وضوح در رابطه‌ها
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
+    family_name = db.Column(db.String(100))
+    phone = db.Column(db.String(20))
+
+    # ارتباط با جدول Session
+    sessions = db.relationship("Session", backref="user", lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -45,18 +58,18 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 # جدول داده‌های داشبورد
 
 
 class DashboardData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     title = db.Column(db.String(100))
     value = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship(
-        'User', backref=db.backref('dashboard_data', lazy=True))
+    user = db.relationship("User", backref=db.backref("dashboard_data", lazy=True))
 
 
 # class Project(db.Model):
@@ -64,6 +77,7 @@ class DashboardData(db.Model):
 #     title = db.Column(db.String(100), nullable=False)
 #     desc = db.Column(db.Text, nullable=False)
 #     tech = db.Column(db.String(200), nullable=False)
+
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -74,7 +88,7 @@ class Project(db.Model):
 
 
 class Product(db.Model):
-    __tablename__ = 'products'  # نکته مهم! جمعش کن تا با تداخل نداشته باشه
+    __tablename__ = "products"  # نکته مهم! جمعش کن تا با تداخل نداشته باشه
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
