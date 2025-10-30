@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import os
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 from io import BytesIO
 import re
 import logging
@@ -28,7 +29,7 @@ from flask_login import (
 from flask_migrate import Migrate
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename, safe_join
+from werkzeug.utils import secure_filename, safe_join, secure_filename
 from models import db, Project, Product, User, Session, TeamMember
 from user_agents import parse
 from datetime import datetime, timedelta
@@ -80,6 +81,15 @@ AVATAR_UPLOAD_FOLDER = os.path.join(app.static_folder, "uploads", "avatars")
 AVATAR_ALLOWED_EXT = {".png", ".jpg", ".jpeg", ".gif"}
 if not os.path.exists(AVATAR_UPLOAD_FOLDER):
     os.makedirs(AVATAR_UPLOAD_FOLDER, exist_ok=True)
+# مسیر برای پروژه‌ها
+UPLOAD_PROJECTS_FOLDER = os.path.join(app.static_folder, "uploads", "projects")
+if not os.path.exists(UPLOAD_PROJECTS_FOLDER):
+    os.makedirs(UPLOAD_PROJECTS_FOLDER, exist_ok=True)
+
+
+def allowed_file(filename, allowed_ext):
+    ext = os.path.splitext(filename)[1].lower()
+    return ext in allowed_ext
 
 
 # Google OAuth setup
@@ -156,6 +166,28 @@ def load_user(user_id):
 
 
 # صفحات عمومی
+
+@app.route("/add_product", methods=["GET", "POST"])
+def add_product():
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description")
+        price = request.form.get("price")
+
+        new_product = Product(
+            name=title,
+            description=description,
+            price=float(price),
+            image=None
+        )
+        db.session.add(new_product)
+        db.session.commit()
+        return redirect(url_for("add_product"))
+
+    products = Product.query.order_by(Product.id.desc()).all()
+    return render_template("add_product.html", products=products)
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -169,7 +201,8 @@ def about():
 @app.route("/shop")
 def shop():
     products = Product.query.all()
-    return render_template("shop.html")
+    return render_template("shop.html", products=products)
+
     # , products=products
 
 
