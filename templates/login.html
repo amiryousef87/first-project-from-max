@@ -134,14 +134,15 @@
         margin-bottom: 2rem;
       }
       .social-icon {
+        font-size: 30px; /* اندازه ایکون */
+        color: #db4437; /* رنگ گوگل */
+        text-decoration: none;
         width: 2rem;
         height: 2rem;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
-        text-decoration: none;
         font-size: 1rem;
       }
       .facebook {
@@ -179,12 +180,17 @@
       }
 
       /* Hide elements */
-      #register-form,
-      #login-socials {
+      #register-form {
         display: block; /* Default to login */
       }
       #register-socials {
         display: none;
+      }
+      #login-socials {
+        display: flex;
+        justify-content: center; /* وسط چین افقی */
+        align-items: center; /* وسط چین عمودی، اگر ارتفاع مشخصی دارد */
+        margin-top: 20px; /* اختیاری برای فاصله از بالا */
       }
 
       /* Mobile responsiveness */
@@ -243,21 +249,16 @@
                   ></i>
                 </div>
               </div>
-              <a href="#" class="forgot-password">Forgot password?</a>
+              <a class="forgot-password">Forgot password?</a>
               <button class="btn" type="submit">Login</button>
             </form>
             <p class="or-text">Or Log In Using</p>
             <div class="social-logins" id="login-socials">
-              <a href="#" class="social-icon facebook"
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a href="#" class="social-icon twitter"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a href="{{ google_login_url }}" class="social-icon google"
-                ><i class="fab fa-google"></i
-              ></a>
+              <a href="{{ google_login_url }}">
+                <i class="fab fa-google"></i>
+              </a>
             </div>
+
             <a onclick="switchTab('register')" class="switch-link">Sign Up</a>
           </div>
 
