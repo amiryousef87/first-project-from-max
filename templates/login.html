@@ -11,14 +11,13 @@
     />
 
     <style>
-      /* --- Modern Color Variables --- */
+      /* --- Color Variables --- */
       :root {
-        --primary: #5a00ff; /* Deep Purple */
-        --secondary: #008cff; /* Bright Blue */
-        --bg-light: #f0f4f8; /* Light warm gray */
-        --text-dark: #2c3e50; /* Dark, readable text */
-        --shadow-light: rgba(90, 0, 255, 0.2);
-        --shadow-dark: rgba(0, 0, 0, 0.1);
+        --primary: #22d3ee; /* Cyan */
+        --secondary: #d946ef; /* Purple-pink */
+        --text-gray: #6b7280;
+        --border-gray: #d1d5db;
+        --shadow-dark: rgba(0, 0, 0, 0.05);
       }
       * {
         box-sizing: border-box;
@@ -29,81 +28,40 @@
           sans-serif;
       }
       body {
-        background: var(--bg-light);
+        background: linear-gradient(to bottom, #a855f7, #3b82f6);
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
         padding: 20px;
-        direction: ltr; /* Left-to-right direction */
+        direction: ltr;
       }
       .container {
         width: 100%;
-        max-width: 420px;
+        max-width: 360px;
         background: #fff;
-        border-radius: 20px; /* More rounded corners */
-        box-shadow: 0 10px 40px var(--shadow-dark),
-          0 0 0 3px var(--shadow-light); /* Enhanced shadow */
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px var(--shadow-dark);
         overflow: hidden;
-        transition: transform 0.4s ease-out;
-      }
-      .container:hover {
-        transform: scale(1.02);
-      }
-      .header {
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
-        color: #fff;
-        text-align: center;
-        padding: 30px 15px;
-      }
-      .header h1 {
-        font-size: 1.8rem;
-        letter-spacing: 1px;
-      }
-      .tab-container {
-        display: flex;
-        border-bottom: 1px solid #ddd;
-      }
-      .tab {
-        flex: 1;
-        text-align: center;
-        padding: 18px;
-        cursor: pointer;
-        color: #666;
-        font-weight: 600;
-        transition: 0.3s;
-        position: relative;
-        overflow: hidden;
-      }
-      .tab::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 3px;
-        width: 0;
-        background: var(--primary);
-        transition: width 0.3s ease-out;
-      }
-      .tab.active {
-        color: var(--primary);
-      }
-      .tab.active::after {
-        width: 100%;
       }
       .content {
-        padding: 25px;
+        padding: 2rem 1.5rem;
+      }
+      #title {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #111827;
       }
       .form-group {
-        margin-bottom: 20px;
-        position: relative;
+        margin-bottom: 1rem;
       }
       .form-group label {
         display: block;
-        margin-bottom: 8px;
-        font-weight: 500;
-        color: var(--text-dark);
-        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+        font-size: 0.875rem;
+        color: var(--text-gray);
       }
       .form-control-wrapper {
         position: relative;
@@ -112,141 +70,145 @@
       }
       .form-control {
         width: 100%;
-        padding: 14px 15px;
-        padding-left: 45px; /* Space for the icon */
-        border: 2px solid #ddd;
-        border-radius: 12px;
+        padding: 0.5rem 0 0.5rem 2rem;
+        border: none;
+        border-bottom: 1px solid var(--border-gray);
         font-size: 1rem;
-        transition: border-color 0.3s, box-shadow 0.3s;
-        background: #fafafa;
+        background: transparent;
+        transition: border-color 0.3s;
       }
       .form-control:focus {
-        border-color: var(--primary);
+        border-bottom-color: var(--primary);
         outline: none;
-        box-shadow: 0 0 5px rgba(90, 0, 255, 0.2);
-        background: #fff;
       }
       .input-icon {
         position: absolute;
-        left: 15px;
-        color: #aaa;
-        transition: color 0.3s;
-      }
-      .form-control:focus + .input-icon {
-        color: var(--primary);
+        left: 0;
+        color: var(--text-gray);
+        font-size: 1rem;
       }
       .password-toggle {
         position: absolute;
-        right: 15px;
+        right: 0;
         cursor: pointer;
-        color: #aaa;
-        font-size: 1.1rem;
-        transition: color 0.3s;
-        z-index: 10;
+        color: var(--text-gray);
+        font-size: 1rem;
       }
       .password-toggle:hover {
-        color: var(--secondary);
+        color: var(--primary);
       }
-
+      .forgot-password {
+        display: block;
+        text-align: right;
+        font-size: 0.875rem;
+        color: var(--text-gray);
+        text-decoration: none;
+        margin-bottom: 1rem;
+      }
       .btn {
         width: 100%;
-        padding: 15px;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 0.75rem;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
         color: #fff;
         border: none;
-        border-radius: 12px;
+        border-radius: 50px;
         cursor: pointer;
         font-weight: 600;
-        font-size: 1.1rem;
-        letter-spacing: 1px;
-        transition: 0.3s;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        font-size: 1rem;
+        text-transform: uppercase;
+        transition: opacity 0.3s;
       }
       .btn:hover {
-        opacity: 0.95;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        opacity: 0.9;
+      }
+      .or-text {
+        text-align: center;
+        color: var(--text-gray);
+        font-size: 0.875rem;
+        margin: 1.5rem 0 0.75rem;
+      }
+      .social-logins {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .social-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-decoration: none;
+        font-size: 1rem;
+      }
+      .facebook {
+        background: #3b5998;
+      }
+      .twitter {
+        background: #1da1f2;
+      }
+      .google {
+        background: #db4437;
+      }
+      .switch-link {
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        color: #111827;
+        text-decoration: none;
+        font-size: 1rem;
+        text-transform: uppercase;
       }
       .alert {
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        font-size: 0.95rem;
-        font-weight: 500;
-        text-align: left;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        text-align: center;
       }
       .alert-danger {
-        background: #fee;
-        color: #c00;
-        border-left: 5px solid #c00;
+        background: #fee2e2;
+        color: #b91c1c;
       }
       .alert-success {
-        background: #eff;
-        color: #080;
-        border-left: 5px solid #080;
+        background: #dcfce7;
+        color: #15803d;
+      }
+
+      /* Hide elements */
+      #register-form,
+      #login-socials {
+        display: block; /* Default to login */
+      }
+      #register-socials {
+        display: none;
       }
 
       /* Mobile responsiveness */
       @media (max-width: 500px) {
-        body {
-          padding: 10px;
-        }
         .container {
-          box-shadow: none;
           border-radius: 0;
         }
-        .header {
-          padding: 20px 10px;
-        }
         .content {
-          padding: 15px;
+          padding: 1.5rem 1rem;
         }
-      }
-
-      .google-login {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #fff;
-        color: #444;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 12px 18px;
-        font-family: Arial, sans-serif;
-        font-weight: 600;
-        font-size: 1rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      .google-login:hover {
-        background-color: #f7f7f7;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .google-icon {
-        font-size: 20px;
-        margin-right: 10px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <div class="header"><h1>MAX Login & Sign Up</h1></div>
-
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %} {% for category, message in messages %}
       <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endfor %} {% endif %} {% endwith %}
 
       <div id="auth-section">
-        <div class="tab-container">
-          <div class="tab active" onclick="switchTab('login')">Login</div>
-          <div class="tab" onclick="switchTab('register')">Register</div>
-        </div>
-
         <div class="content">
+          <h1 id="title">Login</h1>
+
           <div id="login-form">
             <form method="POST" action="{{ url_for('login') }}">
               <div class="form-group">
@@ -258,7 +220,7 @@
                     name="username"
                     class="form-control"
                     required
-                    placeholder="Enter your username"
+                    placeholder="Type your username"
                   />
                   <i class="fas fa-user input-icon"></i>
                 </div>
@@ -272,7 +234,7 @@
                     name="password"
                     class="form-control"
                     required
-                    placeholder="Password"
+                    placeholder="Type your password"
                   />
                   <i class="fas fa-lock input-icon"></i>
                   <i
@@ -281,8 +243,22 @@
                   ></i>
                 </div>
               </div>
-              <button class="btn" type="submit">Log In</button>
+              <a href="#" class="forgot-password">Forgot password?</a>
+              <button class="btn" type="submit">Login</button>
             </form>
+            <p class="or-text">Or Log In Using</p>
+            <div class="social-logins" id="login-socials">
+              <a href="#" class="social-icon facebook"
+                ><i class="fab fa-facebook-f"></i
+              ></a>
+              <a href="#" class="social-icon twitter"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="{{ google_login_url }}" class="social-icon google"
+                ><i class="fab fa-google"></i
+              ></a>
+            </div>
+            <a onclick="switchTab('register')" class="switch-link">Sign Up</a>
           </div>
 
           <div id="register-form" style="display: none">
@@ -361,35 +337,32 @@
                   <i class="fas fa-envelope input-icon"></i>
                 </div>
               </div>
-              <button class="btn" type="submit">Create Account</button>
+              <button class="btn" type="submit">Sign Up</button>
             </form>
+            <p class="or-text">Or Log In</p>
+            <a onclick="switchTab('login')" class="switch-link">Log In</a>
           </div>
-          <br />
-          <a href="{{ google_login_url }}" class="google-login">
-            <i class="fab fa-google google-icon"></i>
-            Login with Google
-          </a>
         </div>
       </div>
     </div>
 
     <script>
       function switchTab(tab) {
-        const loginTab = document.querySelectorAll(".tab")[0];
-        const registerTab = document.querySelectorAll(".tab")[1];
         const loginForm = document.getElementById("login-form");
         const registerForm = document.getElementById("register-form");
+        const title = document.getElementById("title");
+        const loginSocials = document.getElementById("login-socials");
 
         if (tab === "login") {
-          loginTab.classList.add("active");
-          registerTab.classList.remove("active");
+          title.textContent = "Login";
           loginForm.style.display = "block";
           registerForm.style.display = "none";
+          if (loginSocials) loginSocials.style.display = "flex";
         } else {
-          loginTab.classList.remove("active");
-          registerTab.classList.add("active");
+          title.textContent = "Sign Up";
           loginForm.style.display = "none";
           registerForm.style.display = "block";
+          if (loginSocials) loginSocials.style.display = "none";
         }
       }
 

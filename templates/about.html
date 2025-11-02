@@ -136,44 +136,6 @@
     </div>
   </div>
 </section>
-
-<!-- Team Section -->
-<section
-  class="py-20 flex justify-center gap-8 max-w-6xl mx-auto px-6 flex-wrap"
->
-  {% for member in [ {'name': 'A . F . T', 'role': 'Lead Developer', 'photo':
-  'amiryouseftousi.jpg'} ] %}
-  <div
-    class="text-orange-400 rounded-2xl p-6 max-w-xs mx-auto flex flex-col items-center"
-  >
-    <div class="w-24 h-24 rounded-full overflow-hidden mb-4 shadow-md">
-      {% if member.photo %}
-      <img
-        src="{{ url_for('static', filename='img/' ~ member.photo) }}"
-        alt="{{ member.name }}"
-        class="w-full h-full object-cover"
-      />
-      {% else %}
-      <div
-        class="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center"
-      >
-        <i class="fas fa-user text-white text-2xl"></i>
-      </div>
-      {% endif %}
-    </div>
-    <h3 class="text-xl font-semibold mb-1">{{ member.name }}</h3>
-    <p class="font-medium mb-4">{{ member.role }}</p>
-    <a href="/contact">
-      <button
-        class="bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition-colors"
-      >
-        Contact Me
-      </button>
-    </a>
-  </div>
-  {% endfor %}
-</section>
-
 <!-- Call to Action -->
 <section
   class="text-center py-20 mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl shadow-2xl px-6"

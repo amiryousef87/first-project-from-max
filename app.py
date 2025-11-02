@@ -33,7 +33,7 @@ from werkzeug.utils import secure_filename, safe_join, secure_filename
 from models import db, Project, Product, User, Session, TeamMember
 from user_agents import parse
 from datetime import datetime, timedelta
-from app import db
+# from app import db
 from flask import session as flask_session
 from requests_oauthlib import OAuth2Session
 from google.oauth2 import id_token
