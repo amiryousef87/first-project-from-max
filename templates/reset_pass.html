@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reset Password</title>
+    <style>
+      /* Modern Style */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+
+      .container {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 30px;
+        color: #2c3e50;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+      }
+
+      li.success {
+        color: #27ae60;
+        background-color: #e8f5e9;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+
+      li.error {
+        color: #e74c3c;
+        background-color: #f9ebea;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        text-align: left;
+      }
+
+      label {
+        font-size: 16px;
+        color: #2c3e50;
+      }
+
+      input[type="email"] {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      input[type="email"]:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      button[type="submit"] {
+        padding: 12px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #2980b9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Reset Password</h2>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <ul>
+        {% for category, message in messages %}
+        <li class="{{ 'success' if category == 'success' else 'error' }}">
+          {{ message }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %} {% endwith %}
+
+      <form method="POST">
+        <label>Email:</label>
+        <input type="email" name="email" required />
+        <button type="submit">Send Reset Link</button>
+      </form>
+    </div>
+  </body>
+</html>
