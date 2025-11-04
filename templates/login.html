@@ -28,7 +28,9 @@
           sans-serif;
       }
       body {
-        background: linear-gradient(to bottom, #a855f7, #3b82f6);
+        background: linear-gradient(-45deg, #e6e6e6, #f0f0f0, #e4e4e4, #f8f8f8);
+        background-size: 400% 400%;
+        animation: gradientMove 15s ease infinite;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -200,6 +202,18 @@
         }
         .content {
           padding: 1.5rem 1rem;
+        }
+      }
+
+      @keyframes gradientMove {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
         }
       }
     </style>
