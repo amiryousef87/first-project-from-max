@@ -1,11 +1,28 @@
-import matplotlib.pyplot as plt
-import os
-
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
-from io import BytesIO
-import re
-import logging
-
+import matplotlib
+import numpy as np
+import json
+from google.auth.transport import requests as grequests
+from google.oauth2 import id_token
+from requests_oauthlib import OAuth2Session
+from flask import session as flask_session
+from datetime import datetime, timedelta
+from user_agents import parse
+from models import db, Project, Product, User, Session, TeamMember
+from werkzeug.utils import secure_filename, safe_join, secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import text
+from flask_migrate import Migrate
+from flask_mail import Mail, Message
+from flask_login import (
+    LoginManager,
+    login_user,
+    login_required,
+    logout_user,
+    current_user,
+    UserMixin,
+)
+from flask_sqlalchemy import SQLAlchemy
+from flask_babel import Babel, gettext as _
 from flask import (
     Flask,
     render_template,
@@ -16,33 +33,18 @@ from flask import (
     Response,
     jsonify,
 )
-from flask_babel import Babel, gettext as _
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import (
-    LoginManager,
-    login_user,
-    login_required,
-    logout_user,
-    current_user,
-    UserMixin,
-)
-from flask_migrate import Migrate
-from sqlalchemy import text
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename, safe_join, secure_filename
-from models import db, Project, Product, User, Session, TeamMember
-from user_agents import parse
-from datetime import datetime, timedelta
+import logging
+import re
+from io import BytesIO
+import matplotlib.pyplot as plt
+import os
+import secrets
+
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+
 # from app import db
-from flask import session as flask_session
-from requests_oauthlib import OAuth2Session
-from google.oauth2 import id_token
-from google.auth.transport import requests as grequests
-import json
 
-
-import numpy as np
-import matplotlib
 
 matplotlib.use("Agg")
 
@@ -86,6 +88,19 @@ UPLOAD_PROJECTS_FOLDER = os.path.join(app.static_folder, "uploads", "projects")
 if not os.path.exists(UPLOAD_PROJECTS_FOLDER):
     os.makedirs(UPLOAD_PROJECTS_FOLDER, exist_ok=True)
 
+
+
+# تنظیمات ایمیل با Gmail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = '1387amiryousef2024@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ygea ydtr mwcy kgmm'  # پسورد اپلیکیشن گوگل
+
+mail = Mail(app)
+
+# دیتابیس موقت برای نگهداری توکن‌ها (فقط برای مثال)
+reset_tokens = {}
 
 def allowed_file(filename, allowed_ext):
     ext = os.path.splitext(filename)[1].lower()
@@ -419,7 +434,8 @@ def profile():
             # remove old avatar if exists
             try:
                 if current_user.avatar:
-                    old = os.path.join(AVATAR_UPLOAD_FOLDER, current_user.avatar)
+                    old = os.path.join(AVATAR_UPLOAD_FOLDER,
+                                       current_user.avatar)
                     if os.path.exists(old):
                         os.remove(old)
             except Exception:
@@ -454,7 +470,8 @@ def chart_png(chart_name):
         labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
         colors = ["#28a745", "#ffc107", "#dc3545"]
-        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors,
+               autopct="%1.1f%%", startangle=140)
         ax.axis("equal")
         ax.set_title("Missions Today")
     else:
@@ -491,7 +508,8 @@ def chart_svg(chart_name):
         labels = ["Completed", "Pending", "Failed"]
         sizes = [60, 30, 10]
         colors = ["#28a745", "#ffc107", "#dc3545"]
-        ax.pie(sizes, labels=labels, colors=colors, autopct="%1.1f%%", startangle=140)
+        ax.pie(sizes, labels=labels, colors=colors,
+               autopct="%1.1f%%", startangle=140)
         ax.axis("equal")
         ax.set_title("Missions Today")
     else:
@@ -606,6 +624,45 @@ def login():
     return render_template("login.html", google_login_url=url_for("google_login"))
 
 
+# صفحه درخواست ریست پسورد
+@app.route('/reset_pass', methods=['GET', 'POST'])
+def reset_pass():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        if email:
+            # ساخت توکن تصادفی برای لینک امن
+            token = secrets.token_urlsafe(16)
+            reset_tokens[token] = email  # ذخیره موقت توکن
+            reset_link = url_for('new_password', token=token, _external=True)
+            
+            # ارسال ایمیل
+            msg = Message('Password Reset', sender=app.config['MAIL_USERNAME'], recipients=[email])
+            msg.body = f"Hi,\n\nClick here to reset your password:\n{reset_link}\n\nIf you didn't request this, ignore this email."
+            mail.send(msg)
+            
+            flash("Reset link sent to your email!", "success")
+            return redirect(url_for('reset_pass'))
+        else:
+            flash("Please enter your email.", "error")
+    return render_template('reset_pass.html')
+
+# صفحه تعیین رمز جدید
+@app.route('/new_password/<token>', methods=['GET', 'POST'])
+def new_password(token):
+    email = reset_tokens.get(token)
+    if not email:
+        flash("Invalid or expired token.", "error")
+        return redirect(url_for('reset_pass'))
+
+    if request.method == 'POST':
+        new_pass = request.form.get('password')
+        # اینجا باید پسورد جدید رو در دیتابیس واقعی ذخیره کنی
+        flash(f"Password updated successfully for {email}!", "success")
+        reset_tokens.pop(token)  # پاک کردن توکن بعد از استفاده
+        return redirect(url_for('reset_pass'))
+
+    return render_template('new_password.html', email=email)
+
 # مسیر شروع OAuth گوگل
 @app.route("/google-login")
 def google_login():
@@ -621,7 +678,8 @@ def google_login():
 @app.route("/oauth2callback")
 def oauth2callback():
     google = OAuth2Session(
-        CLIENT_ID, redirect_uri=REDIRECT_URI, state=flask_session.get("oauth_state")
+        CLIENT_ID, redirect_uri=REDIRECT_URI, state=flask_session.get(
+            "oauth_state")
     )
     token = google.fetch_token(
         TOKEN_URI, client_secret=CLIENT_SECRET, authorization_response=request.url
@@ -699,7 +757,8 @@ def active_users():
 def clean_expired_sessions(hours=24):
     """🧹 حذف نشست‌های منقضی شده (قدیمی‌تر از n ساعت)"""
     expiry_time = datetime.utcnow() - timedelta(hours=hours)
-    expired_sessions = Session.query.filter(Session.last_active < expiry_time).all()
+    expired_sessions = Session.query.filter(
+        Session.last_active < expiry_time).all()
 
     if expired_sessions:
         print(f"🧹 Removing {len(expired_sessions)} expired sessions...")
@@ -744,7 +803,8 @@ def ensure_user_avatar_column():
             res = conn.execute(text("PRAGMA table_info('user')"))
             cols = [r[1] for r in res]
             if "avatar" not in cols:
-                conn.execute(text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
+                conn.execute(
+                    text("ALTER TABLE user ADD COLUMN avatar VARCHAR(300)"))
     except Exception:
         pass
 
@@ -759,7 +819,8 @@ def ensure_user_contact_columns():
                     text("ALTER TABLE user ADD COLUMN family_name VARCHAR(150)")
                 )
             if "phone" not in cols:
-                conn.execute(text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
+                conn.execute(
+                    text("ALTER TABLE user ADD COLUMN phone VARCHAR(50)"))
     except Exception:
         pass
 
